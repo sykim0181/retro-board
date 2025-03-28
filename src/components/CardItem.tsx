@@ -1,60 +1,63 @@
-import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
+import { useSortable } from "@dnd-kit/sortable";
 import { RiThumbUpLine } from "react-icons/ri";
 import { IoClose } from "react-icons/io5";
 import { IoMdMore } from "react-icons/io";
 import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
-import { TCard, TColumnType } from "@/types/types";
+import { TCard } from "@/types/types";
 import { deleteCard, useAppDispatch } from "@/lib/boardStore";
 
 interface CardProps {
   card: TCard;
-  type: TColumnType;
 }
 
 const CardItem = (props: CardProps) => {
-  const { card, type } = props;
+  const { card } = props;
 
-  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    setActivatorNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
     id: card.id,
+    data: card,
   });
 
   const dispatch = useAppDispatch();
 
-  const deleteCardItem = (e: React.MouseEvent) => {
-    e.stopPropagation();
-
-    console.log("click");
+  const deleteCardItem = () => {
     dispatch(
-      deleteCard({
-        type,
-        cardId: card.id,
-      })
+      deleteCard({ card })
     );
   };
 
   const cursorStyle = isDragging ? "cursor-grabbing" : "cursor-grab";
+  const styleByDrag = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
 
   return (
     <Card
       ref={setNodeRef}
       {...attributes}
       className={`w-full p-[.5rem] gap-[.5rem]`}
-      style={{
-        transform: CSS.Translate.toString(transform),
-      }}
+      style={styleByDrag}
     >
       <CardHeader className="flex">
-        <div {...listeners} className={`${cursorStyle}`}>
+        <div
+          ref={setActivatorNodeRef}
+          {...listeners}
+          className={`${cursorStyle}`}
+        >
           <IoMdMore />
         </div>
         <div className="flex-1" />
-        <button
-          className="hover:text-gray-500"
-          onClick={deleteCardItem}
-          onMouseDown={(e) => e.stopPropagation()}
-          onMouseDownCapture={(e) => e.stopPropagation()}
-        >
+        <button className="hover:text-gray-500" onClick={deleteCardItem}>
           <IoClose />
         </button>
       </CardHeader>

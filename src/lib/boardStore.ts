@@ -1,9 +1,10 @@
-import { TCard, TColumnType } from "@/types/types";
 import { createClient } from "@liveblocks/client";
 import { liveblocksEnhancer } from "@liveblocks/redux";
 import { configureStore, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import { TBoard, TCard, TColumnType } from "@/types/types";
 
+/* liveblocks client */
 const client = createClient({
   publicApiKey: import.meta.env.VITE_LIVEBLOCKS_PUBLIC_KEY,
 });
@@ -23,101 +24,141 @@ type LiveblocksState = {
   others: User[];
 };
 
-type Column = {
-  cards: TCard[];
+type EditingInfo = {
+  board: TBoard;
+  card: TCard;
 };
 
-export type State = {
+type State = {
   liveblocks: LiveblocksState | null;
-  start: Column;
-  end: Column;
-  continue: Column;
+  board: TBoard;
+  editingInfo: EditingInfo | null;
   typingState: TypingState;
 };
 
-const initialColumnState: Column = {
-  cards: [],
+const initialBoard = {
+  start: [],
+  end: [],
+  continue: [],
 };
 
 const initialState: State = {
   liveblocks: null,
-  start: initialColumnState,
-  end: initialColumnState,
-  continue: initialColumnState,
+  board: initialBoard,
+  editingInfo: null,
   typingState: {
     isTyping: false,
     column: null,
   },
 };
 
+/* Reducer Interface */
 interface AddCardInterface {
-  type: TColumnType;
   card: TCard;
 }
 
 interface DeleteCardInterface {
-  type: TColumnType;
-  cardId: string;
+  card: TCard;
+}
+
+interface SetIsTypingTrueInterface {
+  column: TColumnType;
+}
+
+interface StartEditingBoardInterface {
+  card: TCard;
+}
+
+interface SetEditingBoardInterface {
+  board: TBoard;
+  card: TCard;
+}
+
+interface StopEditingBoardInterface {
+  board?: TBoard;
 }
 
 const slice = createSlice({
   name: "state",
   initialState,
   reducers: {
+    /* 카드 추가 */
     addCard: (state, action: PayloadAction<AddCardInterface>) => {
-      switch (action.payload.type) {
-        case "START": {
-          state.start.cards.push(action.payload.card);
-          break;
-        }
-        case "END": {
-          state.end.cards.push(action.payload.card);
-          break;
-        }
-        case "CONTINUE": {
-          state.continue.cards.push(action.payload.card);
-          break;
-        }
-        default: {
-          break;
-        }
-      }
+      const card = action.payload.card;
+      const column = card.category;
+      state.board = {
+        ...state.board,
+        [column]: [...state.board[column], card],
+      };
+      resetTypingState();
+    },
+    /* 카드 삭제 */
+    deleteCard: (state, action: PayloadAction<DeleteCardInterface>) => {
+      const card = action.payload.card;
+      const cardId = card.id;
+      const column = card.category;
+      state.board = {
+        ...state.board,
+        [column]: state.board[column].filter((value) => value.id !== cardId),
+      };
+    },
+    /* 타이핑 상태 리셋 */
+    resetTypingState: (state) => {
       state.typingState.column = null;
       state.typingState.isTyping = false;
     },
-    deleteCard: (state, action: PayloadAction<DeleteCardInterface>) => {
-      const cardId = action.payload.cardId;
-      switch (action.payload.type) {
-        case "START": {
-          const prevCards = state.start.cards;
-          console.log("prevCards", prevCards);
-          state.start.cards = prevCards.filter((card) => card.id !== cardId);
-          console.log("curCards", state.start.cards);
-          break;
-        }
-        case "END": {
-          const prevCards = state.end.cards;
-          state.end.cards = prevCards.filter((card) => card.id !== cardId);
-          break;
-        }
-        case "CONTINUE": {
-          const prevCards = state.continue.cards;
-          state.continue.cards = prevCards.filter((card) => card.id !== cardId);
-          break;
-        }
-        default: {
-          break;
-        }
-      }
-    },
-    setTypingState: (state, action: PayloadAction<TypingState>) => {
-      state.typingState.isTyping = action.payload.isTyping;
+    /* 타이핑 상태 설정 */
+    setIsTypingTrue: (
+      state,
+      action: PayloadAction<SetIsTypingTrueInterface>
+    ) => {
+      state.typingState.isTyping = true;
       state.typingState.column = action.payload.column;
+    },
+    /* 보드 편집(카드 드래그) 시작 */
+    startEditingBoard: (
+      state,
+      action: PayloadAction<StartEditingBoardInterface>
+    ) => {
+      state.editingInfo = {
+        board: state.board,
+        card: action.payload.card,
+      };
+    },
+    /* 편집 중 보드 설정 */
+    setEditingBoard: (
+      state,
+      action: PayloadAction<SetEditingBoardInterface>
+    ) => {
+      state.editingInfo = {
+        board: action.payload.board,
+        card: action.payload.card,
+      };
+    },
+    /* 보드 편집(카드 드래그) 끝 */
+    stopEditingBoard: (
+      state,
+      action: PayloadAction<StopEditingBoardInterface>
+    ) => {
+      if (action.payload.board) {
+        state.board = action.payload.board;
+      } else if (state.editingInfo) {
+        state.board = state.editingInfo.board;
+      }
+      state.editingInfo = null;
     },
   },
 });
 
-export const { addCard, deleteCard, setTypingState } = slice.actions;
+export const {
+  addCard,
+  deleteCard,
+  resetTypingState,
+  setIsTypingTrue,
+  startEditingBoard,
+  setEditingBoard,
+  stopEditingBoard,
+} = slice.actions;
 
 const store = configureStore({
   reducer: slice.reducer,
@@ -126,7 +167,7 @@ const store = configureStore({
 
     const newLiveblocksEnhancer = liveblocksEnhancer<State>({
       client,
-      storageMapping: { start: true, end: true, continue: true },
+      storageMapping: { board: true },
       presenceMapping: { typingState: true },
     });
 

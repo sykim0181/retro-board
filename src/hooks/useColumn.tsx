@@ -8,23 +8,6 @@ interface usecolumnProps {
 const useColumn = (props: usecolumnProps) => {
   const { type } = props;
 
-  const cards = useAppSelector((state) => {
-    switch (type) {
-      case "START": {
-        return state.start.cards;
-      }
-      case "END": {
-        return state.end.cards;
-      }
-      case "CONTINUE": {
-        return state.continue.cards;
-      }
-      default: {
-        return [];
-      }
-    }
-  });
-
   const someoneIsTyping = useAppSelector((state) =>
     state.liveblocks?.others.some((user) => {
       const typingState = user.presence?.typingState;
@@ -36,7 +19,6 @@ const useColumn = (props: usecolumnProps) => {
   );
 
   return {
-    cards,
     someoneIsTyping,
   };
 };

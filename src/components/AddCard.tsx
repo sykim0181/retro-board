@@ -1,11 +1,16 @@
 import { v4 as uuidv4 } from "uuid";
 import { useEffect, useState } from "react";
-import { Card, CardContent, CardFooter } from "./ui/card";
-import { TCard, TColumnType } from "@/types/types";
-import { addCard, setTypingState, useAppDispatch } from "@/lib/boardStore";
 import { IoMdCheckmark } from "react-icons/io";
 import { IoClose } from "react-icons/io5";
+import { Card, CardContent, CardFooter } from "./ui/card";
 import { Textarea } from "./ui/textarea";
+import { TCard, TColumnType } from "@/types/types";
+import {
+  addCard,
+  resetTypingState,
+  setIsTypingTrue,
+  useAppDispatch,
+} from "@/lib/boardStore";
 
 interface AddCardProps {
   columnType: TColumnType;
@@ -22,35 +27,20 @@ const AddCard = (props: AddCardProps) => {
   const addCardToColumn = () => {
     const newCard: TCard = {
       id: uuidv4(),
+      category: columnType,
       content: draft,
       likes: 0,
     };
-
-    dispatch(
-      addCard({
-        type: columnType,
-        card: newCard,
-      })
-    );
+    dispatch(addCard({ card: newCard }));
 
     setDraft("");
   };
 
   useEffect(() => {
     if (draft !== "") {
-      dispatch(
-        setTypingState({
-          isTyping: true,
-          column: columnType,
-        })
-      );
+      dispatch(setIsTypingTrue({ column: columnType }));
     } else {
-      dispatch(
-        setTypingState({
-          isTyping: false,
-          column: null,
-        })
-      );
+      dispatch(resetTypingState());
     }
   }, [draft]);
 
