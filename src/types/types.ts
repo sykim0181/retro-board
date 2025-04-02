@@ -10,3 +10,7 @@ export type TCard = {
 export type TBoard = {
   [key in TColumnType]: TCard[];
 };
+
+export type TUser = {
+  name: string;
+};
