@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { getUser } from "@/utils";
 import Avvvatars from "avvvatars-react";
+import { NavLink } from "react-router";
 
 const Home = () => {
   const user = getUser();
@@ -15,7 +16,11 @@ const Home = () => {
           <Avvvatars value={user.name} />
           <p className="text-[1.2rem]">{user.name}</p>
         </div>
-        <Button className="py-[1.5rem]">시작하기</Button>
+        <Button className="py-[1.5rem]">
+          <NavLink to="/dashboard" className="block w-full h-fit">
+            Start
+          </NavLink>
+        </Button>
       </Card>
     </main>
   );
