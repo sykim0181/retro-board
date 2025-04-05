@@ -1,25 +1,31 @@
 import { DragEndEvent, DragOverEvent, DragStartEvent } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
-import {
-  setEditingBoard,
-  startEditingBoard,
-  stopEditingBoard,
-  useAppDispatch,
-  useAppSelector,
-} from "@/lib/boardStore";
-import { TCard, TColumnType } from "@/types/types";
+import { useMutation, useStorage } from "@liveblocks/react/suspense";
+import { useMemo } from "react";
+import { resetEditingInfo, setEditingBoard } from "@/store/boardSlice";
+import { useAppDispatch, useAppSelector } from "@/store/store";
+import { TBoard, TCard, TColumnType } from "@/types/types";
 
 const useBoard = () => {
   const dispatch = useAppDispatch();
 
-  const board = useAppSelector((state) => state.board);
-  const editingInfo = useAppSelector((state) => state.editingInfo);
+  const board = useStorage((root) => root.board) as TBoard;
+  const editingInfo = useAppSelector((state) => state.board.editingInfo);
 
-  const currentBoard = editingInfo !== null ? editingInfo.board : board;
+  const currentBoard = useMemo(() => {
+    if (editingInfo !== null) {
+      return editingInfo.board;
+    }
+    return board;
+  }, [board, editingInfo]);
+
+  const updateBoard = useMutation(({ storage }, board: TBoard) => {
+    storage.set("board", board);
+  } ,[]);
 
   const handleDragStart = (event: DragStartEvent) => {
     const card = event.active.data.current as TCard;
-    dispatch(startEditingBoard({ card }));
+    dispatch(setEditingBoard({ board, card }));
   };
 
   const handleDragOver = (event: DragOverEvent) => {
@@ -137,11 +143,10 @@ const useBoard = () => {
             overIndex
           ),
         };
-        dispatch(stopEditingBoard({ board: newBoard }));
-        return;
+        updateBoard(newBoard);
       }
     }
-    dispatch(stopEditingBoard({}));
+    dispatch(resetEditingInfo());
   };
 
   return {

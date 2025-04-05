@@ -1,20 +1,21 @@
+import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import { collection, doc, getDocs, setDoc } from "firebase/firestore";
-import { v4 as uuidv4 } from "uuid";
+import { nanoid } from "nanoid";
+import { TRoom } from "@/types/types";
 
 export async function createRoom(roomName: string) {
-  const roomId = uuidv4();
-  const boardRef = doc(db, "board", roomId);
+  const roomId = nanoid();
+  const roomRef = doc(db, "room", roomId);
   const newRoom = {
     id: roomId,
     name: roomName,
   };
-  await setDoc(boardRef, newRoom);
+  await setDoc(roomRef, newRoom);
 }
 
-export async function getAllRooms() {
-  const boardRef = collection(db, "board");
-  const querySnapShot = await getDocs(boardRef);
+export async function getAllRooms(): Promise<TRoom[]> {
+  const roomRef = collection(db, "room");
+  const querySnapShot = await getDocs(roomRef);
   return querySnapShot.docs.map((doc) => {
     const data = doc.data();
     return {
@@ -22,4 +23,14 @@ export async function getAllRooms() {
       name: data.name,
     };
   });
+}
+
+export async function getRoomById(roomId: string): Promise<TRoom> {
+  const docRef = doc(db, "room", roomId);
+  const docSnap = await getDoc(docRef);
+
+  if (!docSnap.exists()) {
+    throw new Error("No such room.");
+  }
+  return docSnap.data() as TRoom;
 }

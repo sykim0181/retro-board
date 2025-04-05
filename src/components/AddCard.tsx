@@ -1,16 +1,10 @@
-import { v4 as uuidv4 } from "uuid";
-import { useEffect, useState } from "react";
-import { IoMdCheckmark } from "react-icons/io";
-import { IoClose } from "react-icons/io5";
+import { useState } from "react";
+import { XIcon, CheckIcon } from "lucide-react";
+import { useMutation } from "@liveblocks/react/suspense";
+import { nanoid } from "nanoid";
 import { Card, CardContent, CardFooter } from "./ui/card";
 import { Textarea } from "./ui/textarea";
-import { TCard, TColumnType } from "@/types/types";
-import {
-  addCard,
-  resetTypingState,
-  setIsTypingTrue,
-  useAppDispatch,
-} from "@/lib/boardStore";
+import { TBoard, TCard, TColumnType } from "@/types/types";
 
 interface AddCardProps {
   columnType: TColumnType;
@@ -22,30 +16,32 @@ const AddCard = (props: AddCardProps) => {
 
   const [draft, setDraft] = useState("");
 
-  const dispatch = useAppDispatch();
-
-  const addCardToColumn = () => {
+  const addCard = useMutation(({ storage }) => {
+    const prev = storage.get("board") as TBoard;
     const newCard: TCard = {
-      id: uuidv4(),
+      id: nanoid(),
       category: columnType,
       content: draft,
-      likes: 0,
-    };
-    dispatch(addCard({ card: newCard }));
+      likes: 0
+    }
+    const newBoard: TBoard = {
+      ...prev,
+      [columnType]: [...prev[columnType], newCard]
+    }
 
+    storage.set("board", newBoard);
+  }, [draft]);
+
+  const addCardToColumn = () => {
+    if (draft === "") {
+      return;
+    }
+    addCard();
     setDraft("");
   };
 
-  useEffect(() => {
-    if (draft !== "") {
-      dispatch(setIsTypingTrue({ column: columnType }));
-    } else {
-      dispatch(resetTypingState());
-    }
-  }, [draft]);
-
   return (
-    <Card className="w-full p-[.5rem] gap-[.5rem] mb-[1rem]">
+    <Card className="w-full p-[.5rem] gap-[.5rem]">
       <CardContent>
         <Textarea
           id="content"
@@ -56,11 +52,14 @@ const AddCard = (props: AddCardProps) => {
       </CardContent>
 
       <CardFooter className="justify-end gap-[.5rem]">
-        <button onClick={close} className="border hover:border-black">
-          <IoClose />
+        <button onClick={close} className="text-(--border) hover:text-black">
+          <XIcon width="1rem" />
         </button>
-        <button onClick={addCardToColumn} className="border hover:border-black">
-          <IoMdCheckmark />
+        <button
+          onClick={addCardToColumn}
+          className="text-(--border) hover:text-black"
+        >
+          <CheckIcon width="1rem" />
         </button>
       </CardFooter>
     </Card>

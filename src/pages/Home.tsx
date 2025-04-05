@@ -16,8 +16,8 @@ const Home = () => {
           <Avvvatars value={user.name} />
           <p className="text-[1.2rem]">{user.name}</p>
         </div>
-        <Button className="py-[1.5rem]">
-          <NavLink to="/dashboard" className="block w-full h-fit">
+        <Button className="py-[1.5rem] box-border relative">
+          <NavLink to="/dashboard" className="flex w-full h-full absolute justify-center items-center">
             Start
           </NavLink>
         </Button>

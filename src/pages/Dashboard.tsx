@@ -1,20 +1,30 @@
+import Avvvatars from "avvvatars-react";
 import CreateRoomDialog from "@/components/dashboard/CreateRoomDialog";
 import RoomList from "@/components/dashboard/RoomList";
-import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { getUser } from "@/utils";
 
 const Dashboard = () => {
-  return (
-    <main className="p-[2rem]">
-      <h1>Rooms</h1>
+  const user = getUser();
 
-      <div>
-        <div className="flex justify-end">
-          <CreateRoomDialog trigger={<Button>Create room</Button>} />
+  return (
+    <>
+      <h1 className="text-start font-bold text-[2rem]">Dashboard</h1>
+
+      <div className="flex items-center gap-[1rem]">
+        <Avvvatars value={user.name} />
+        <p>{user.name}</p>
+      </div>
+
+      <Card className="p-[2rem]">
+        <div className="flex items-center">
+          <h2 className="text-start font-bold block flex-1">Rooms</h2>
+          <CreateRoomDialog />
         </div>
 
         <RoomList />
-      </div>
-    </main>
+      </Card>
+    </>
   );
 };
 

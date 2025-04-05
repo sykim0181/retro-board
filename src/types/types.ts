@@ -14,3 +14,8 @@ export type TBoard = {
 export type TUser = {
   name: string;
 };
+
+export type TRoom = {
+  name: string;
+  id: string;
+};

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -8,33 +9,28 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import { Button } from "../ui/button";
+import { Button, buttonVariants } from "../ui/button";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { createRoom } from "@/api/room";
+import { cn } from "@/lib/utils";
 
-interface CreateRoomDialogProps {
-  trigger: React.ReactNode;
-}
-
-const CreateRoomDialog = (props: CreateRoomDialogProps) => {
-  const { trigger } = props;
-
+const CreateRoomDialog = () => {
   const [name, setName] = useState("");
-  const [open, setOpen] = useState(false);
 
-  const submit = async () => {
+  const onClickSaveButton = async (e: React.MouseEvent) => {
     if (name === "") {
+      e.stopPropagation();
       return;
     }
 
+    // 방 생성
     await createRoom(name);
-    setOpen(false);
-  };
+  }
 
   return (
-    <Dialog open={open}>
-      <DialogTrigger onClick={() => setOpen(true)}>{trigger}</DialogTrigger>
+    <Dialog>
+      <DialogTrigger className={cn(buttonVariants())}>Create room</DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Create room</DialogTitle>
@@ -56,7 +52,9 @@ const CreateRoomDialog = (props: CreateRoomDialogProps) => {
         </div>
 
         <DialogFooter>
-          <Button onClick={submit}>Save</Button>
+          <DialogClose>
+            <Button onClick={onClickSaveButton}>Save</Button>
+          </DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>

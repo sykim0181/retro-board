@@ -1,11 +1,9 @@
 import { CSS } from "@dnd-kit/utilities";
 import { useSortable } from "@dnd-kit/sortable";
-import { RiThumbUpLine } from "react-icons/ri";
-import { IoClose } from "react-icons/io5";
-import { IoMdMore } from "react-icons/io";
+import { useMutation } from "@liveblocks/react/suspense";
+import { ThumbsUpIcon, EllipsisVerticalIcon, XIcon } from "lucide-react";
 import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
-import { TCard } from "@/types/types";
-import { deleteCard, useAppDispatch } from "@/lib/boardStore";
+import { TBoard, TCard } from "@/types/types";
 
 interface CardProps {
   card: TCard;
@@ -27,13 +25,15 @@ const CardItem = (props: CardProps) => {
     data: card,
   });
 
-  const dispatch = useAppDispatch();
-
-  const deleteCardItem = () => {
-    dispatch(
-      deleteCard({ card })
-    );
-  };
+  const deleteCardItem = useMutation(({ storage }) => {
+    const column = card.category;
+    const board = storage.get("board") as TBoard;
+    const newBoard: TBoard = {
+      ...board,
+      [column]: board[column].filter((val) => val.id !== card.id),
+    };
+    storage.set("board", newBoard);
+  }, [card]);
 
   const cursorStyle = isDragging ? "cursor-grabbing" : "cursor-grab";
   const styleByDrag = {
@@ -45,20 +45,23 @@ const CardItem = (props: CardProps) => {
     <Card
       ref={setNodeRef}
       {...attributes}
-      className={`w-full p-[.5rem] gap-[.5rem]`}
+      className="w-full p-[.5rem] gap-[.5rem]"
       style={styleByDrag}
     >
       <CardHeader className="flex">
         <div
           ref={setActivatorNodeRef}
           {...listeners}
-          className={`${cursorStyle}`}
+          className={`${cursorStyle} text-gray-500`}
         >
-          <IoMdMore />
+          <EllipsisVerticalIcon width="1rem" />
         </div>
         <div className="flex-1" />
-        <button className="hover:text-gray-500" onClick={deleteCardItem}>
-          <IoClose />
+        <button
+          className="text-gray-500 hover:text-black"
+          onClick={deleteCardItem}
+        >
+          <XIcon width="1rem" />
         </button>
       </CardHeader>
 
@@ -68,8 +71,8 @@ const CardItem = (props: CardProps) => {
 
       <CardFooter className="text-sm justify-end gap-[1rem]">
         <div className="flex gap-[.5rem] items-center">
-          <button className="hover:text-gray-500">
-            <RiThumbUpLine />
+          <button className="text-gray-500 hover:text-black">
+            <ThumbsUpIcon width="1rem" />
           </button>
           <p>{card.likes}</p>
         </div>

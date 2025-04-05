@@ -24,7 +24,7 @@ const ColumnCardContainer = (props: ColumnCardsProps) => {
       <div
         id={`column-${columnType}-droppable`}
         ref={setNodeRef}
-        className="flex flex-col gap-[1rem] flex-1"
+        className="flex flex-col gap-[1rem] h-full"
       >
         {cards.map((card) => (
           <CardItem key={card.id} card={card} />
