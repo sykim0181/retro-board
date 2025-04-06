@@ -17,7 +17,7 @@ const initialStorage: {
 
 const RoomLayout = () => {
   const params = useParams();
-  const roomId = params.id;
+  const roomId = params.roomId;
 
   if (!roomId) {
     throw new Error("Invalid room id");

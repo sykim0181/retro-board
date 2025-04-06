@@ -2,9 +2,9 @@ import { useState } from "react";
 import { XIcon, CheckIcon } from "lucide-react";
 import { useMutation } from "@liveblocks/react/suspense";
 import { nanoid } from "nanoid";
-import { Card, CardContent, CardFooter } from "./ui/card";
-import { Textarea } from "./ui/textarea";
 import { TBoard, TCard, TColumnType } from "@/types/types";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Textarea } from "@/components/ui/textarea";
 
 interface AddCardProps {
   columnType: TColumnType;
@@ -16,21 +16,24 @@ const AddCard = (props: AddCardProps) => {
 
   const [draft, setDraft] = useState("");
 
-  const addCard = useMutation(({ storage }) => {
-    const prev = storage.get("board") as TBoard;
-    const newCard: TCard = {
-      id: nanoid(),
-      category: columnType,
-      content: draft,
-      likes: 0
-    }
-    const newBoard: TBoard = {
-      ...prev,
-      [columnType]: [...prev[columnType], newCard]
-    }
+  const addCard = useMutation(
+    ({ storage }) => {
+      const prev = storage.get("board") as TBoard;
+      const newCard: TCard = {
+        id: nanoid(),
+        category: columnType,
+        content: draft,
+        likes: 0,
+      };
+      const newBoard: TBoard = {
+        ...prev,
+        [columnType]: [...prev[columnType], newCard],
+      };
 
-    storage.set("board", newBoard);
-  }, [draft]);
+      storage.set("board", newBoard);
+    },
+    [draft]
+  );
 
   const addCardToColumn = () => {
     if (draft === "") {

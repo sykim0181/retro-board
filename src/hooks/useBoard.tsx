@@ -9,7 +9,7 @@ import { TBoard, TCard, TColumnType } from "@/types/types";
 const useBoard = () => {
   const dispatch = useAppDispatch();
 
-  const board = useStorage((root) => root.board) as TBoard;
+  const board = useStorage((root) => root.board as TBoard);
   const editingInfo = useAppSelector((state) => state.board.editingInfo);
 
   const currentBoard = useMemo(() => {
@@ -21,7 +21,7 @@ const useBoard = () => {
 
   const updateBoard = useMutation(({ storage }, board: TBoard) => {
     storage.set("board", board);
-  } ,[]);
+  }, []);
 
   const handleDragStart = (event: DragStartEvent) => {
     const card = event.active.data.current as TCard;

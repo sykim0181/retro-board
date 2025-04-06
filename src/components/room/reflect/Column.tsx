@@ -3,7 +3,7 @@ import { PlusIcon } from "lucide-react";
 import { TCard, TColumnType } from "@/types/types";
 import AddCard from "./AddCard";
 import ColumnCardContainer from "./ColumnCardContainer";
-import { Card } from "./ui/card";
+import { Card } from "../../ui/card";
 
 interface ColumnProps {
   type: TColumnType;

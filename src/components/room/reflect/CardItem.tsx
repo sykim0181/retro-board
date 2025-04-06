@@ -2,8 +2,13 @@ import { CSS } from "@dnd-kit/utilities";
 import { useSortable } from "@dnd-kit/sortable";
 import { useMutation } from "@liveblocks/react/suspense";
 import { ThumbsUpIcon, EllipsisVerticalIcon, XIcon } from "lucide-react";
-import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
 import { TBoard, TCard } from "@/types/types";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
 
 interface CardProps {
   card: TCard;
@@ -25,15 +30,18 @@ const CardItem = (props: CardProps) => {
     data: card,
   });
 
-  const deleteCardItem = useMutation(({ storage }) => {
-    const column = card.category;
-    const board = storage.get("board") as TBoard;
-    const newBoard: TBoard = {
-      ...board,
-      [column]: board[column].filter((val) => val.id !== card.id),
-    };
-    storage.set("board", newBoard);
-  }, [card]);
+  const deleteCardItem = useMutation(
+    ({ storage }) => {
+      const column = card.category;
+      const board = storage.get("board") as TBoard;
+      const newBoard: TBoard = {
+        ...board,
+        [column]: board[column].filter((val) => val.id !== card.id),
+      };
+      storage.set("board", newBoard);
+    },
+    [card]
+  );
 
   const cursorStyle = isDragging ? "cursor-grabbing" : "cursor-grab";
   const styleByDrag = {
@@ -65,7 +73,7 @@ const CardItem = (props: CardProps) => {
         </button>
       </CardHeader>
 
-      <CardContent className="px-[.5rem] text-start">
+      <CardContent className="px-[.5rem] text-start break-words">
         {card.content}
       </CardContent>
 

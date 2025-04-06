@@ -4,7 +4,8 @@ import DefaultLayout from "./components/layout/DefaultLayout";
 import Dashboard from "./pages/Dashboard";
 import { getRoomById } from "./api/room";
 import RoomLayout from "./components/layout/RoomLayout";
-import Reflect from "./pages/Reflect";
+import Reflect from "./pages/room/Reflect";
+import Discuss from "./pages/room/Discuss";
 
 const router = createBrowserRouter([
   {
@@ -17,14 +18,15 @@ const router = createBrowserRouter([
         children: [{ index: true, Component: Dashboard }],
       },
       {
-        path: "room/:id",
+        path: "room/:roomId",
         Component: RoomLayout,
         children: [
           { index: true, element: <Navigate to="reflect" /> },
-          { path: "reflect", Component: Reflect }
+          { path: "reflect", Component: Reflect },
+          { path: "discuss/:cardIdx", Component: Discuss },
         ],
         loader: async ({ params }) => {
-          const roomId = params.id;
+          const roomId = params.roomId;
           if (!roomId) {
             throw new Error("Invalid room id");
           }
