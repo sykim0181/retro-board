@@ -21,7 +21,7 @@ export type TRoom = {
 export type TChat = {
   user: TUser;
   content: string;
-  createdAt: Date;
+  createdAt: string;
   replies: Array<TChat>;
 };
 
