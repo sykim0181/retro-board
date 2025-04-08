@@ -1,6 +1,6 @@
-import { useStorage } from "@liveblocks/react";
+import { useStorage } from "@liveblocks/react/suspense";
 import { NavLink, useParams } from "react-router";
-import { TBoard, TCard, TColumnType } from "@/types/types";
+import { TCard, TColumnType } from "@/types/types";
 import {
   SidebarMenuSub,
   SidebarMenuSubButton,
@@ -15,29 +15,34 @@ const RoomSidebarDiscussSub = () => {
     throw new Error("Invalid room id");
   }
 
-  const cards = useStorage((root) => {
-    let result: TCard[] = [];
-    const board = root.board as TBoard;
+  const taskList = useStorage((root) => {
+    let ids: string[] = [];
+    const board = root.board;
     const columns: TColumnType[] = ["start", "end", "continue"];
     columns.forEach((column) => {
-      const items = board[column];
-      result = [...result, ...items];
+      const cards = board.get(column) ?? [];
+      ids = [...ids, ...cards];
+    });
+
+    const tasks = root.tasks;
+    let result: TCard[] = [];
+    ids.forEach((id) => {
+      const task = tasks.get(id);
+      if (task !== undefined) {
+        result = [...result, task.card as TCard];
+      }
     });
     return result;
   });
 
-  if (!cards || cards.length === 0) {
-    return null;
-  }
-
   return (
     <SidebarMenuSub>
-      {cards.map((card, idx) => (
-        <SidebarMenuSubItem key={card.id}>
+      {taskList.map((task, idx) => (
+        <SidebarMenuSubItem key={task.id}>
           <NavLink to={`/room/${roomId}/discuss/${idx + 1}`}>
             {({ isActive }) => (
               <SidebarMenuSubButton isActive={isActive}>
-                <span>{card.content}</span>
+                <span>{task.content}</span>
               </SidebarMenuSubButton>
             )}
           </NavLink>

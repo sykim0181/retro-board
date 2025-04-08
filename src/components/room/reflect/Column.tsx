@@ -1,17 +1,19 @@
-import { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { PlusIcon } from "lucide-react";
-import { TCard, TColumnType } from "@/types/types";
+import { TColumnType } from "@/types/types";
 import AddCard from "./AddCard";
 import ColumnCardContainer from "./ColumnCardContainer";
 import { Card } from "../../ui/card";
+import useColumn from "@/hooks/useColumn";
 
 interface ColumnProps {
   type: TColumnType;
-  cards: TCard[];
 }
 
 const Column = (props: ColumnProps) => {
-  const { type, cards } = props;
+  const { type } = props;
+
+  const { cardIdList } = useColumn({ type });
 
   const [showAddCard, setShowAddCard] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -42,13 +44,16 @@ const Column = (props: ColumnProps) => {
 
       <div className="flex-1 flex flex-col gap-[1rem] p-[1rem]">
         {showAddCard && (
-          <AddCard columnType={type} close={() => setShowAddCard(false)} />
+          <AddCard column={type} close={() => setShowAddCard(false)} />
         )}
 
-        <ColumnCardContainer columnType={type} cards={cards} />
+        <ColumnCardContainer
+          columnType={type}
+          cardIdList={cardIdList as string[]}
+        />
       </div>
     </Card>
   );
 };
 
-export default Column;
+export default React.memo(Column);

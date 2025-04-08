@@ -1,5 +1,5 @@
 import { useStorage } from "@liveblocks/react/suspense";
-import { TBoard, TCard, TColumnType } from "@/types/types";
+import { TCard, TColumnType } from "@/types/types";
 
 interface useDiscussProps {
   cardIdx: number;
@@ -9,19 +9,30 @@ const useDiscuss = (props: useDiscussProps) => {
   const { cardIdx } = props;
 
   const card = useStorage((root) => {
-    let result: TCard[] = [];
-    const board = root.board as TBoard;
+    const idx = cardIdx - 1;
+
+    let ids: string[] = [];
+    const board = root.board;
     const columns: TColumnType[] = ["start", "end", "continue"];
     columns.forEach((column) => {
-      const items = board[column];
-      result = [...result, ...items];
+      const cards = board.get(column) ?? [];
+      ids = [...ids, ...cards];
     });
 
-    if (cardIdx > result.length - 1) {
+    const tasks = root.tasks;
+    let result: TCard[] = [];
+    ids.forEach((id) => {
+      const task = tasks.get(id);
+      if (task !== undefined) {
+        result = [...result, task.card as TCard];
+      }
+    });
+
+    if (idx >= result.length) {
       return null;
     }
 
-    return result[cardIdx];
+    return result[idx];
   });
 
   return {

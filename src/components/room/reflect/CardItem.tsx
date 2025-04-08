@@ -1,21 +1,25 @@
 import { CSS } from "@dnd-kit/utilities";
 import { useSortable } from "@dnd-kit/sortable";
-import { useMutation } from "@liveblocks/react/suspense";
 import { ThumbsUpIcon, EllipsisVerticalIcon, XIcon } from "lucide-react";
-import { TBoard, TCard } from "@/types/types";
+import React from "react";
+import { TColumnType } from "@/types/types";
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
+import useCard from "@/hooks/useCard";
 
 interface CardProps {
-  card: TCard;
+  cardId: string;
+  column: TColumnType;
 }
 
 const CardItem = (props: CardProps) => {
-  const { card } = props;
+  const { cardId, column } = props;
+
+  const { task, deleteCard } = useCard({ cardId, column });
 
   const {
     attributes,
@@ -26,28 +30,21 @@ const CardItem = (props: CardProps) => {
     transition,
     isDragging,
   } = useSortable({
-    id: card.id,
-    data: card,
-  });
-
-  const deleteCardItem = useMutation(
-    ({ storage }) => {
-      const column = card.category;
-      const board = storage.get("board") as TBoard;
-      const newBoard: TBoard = {
-        ...board,
-        [column]: board[column].filter((val) => val.id !== card.id),
-      };
-      storage.set("board", newBoard);
+    id: cardId,
+    data: {
+      column,
     },
-    [card]
-  );
+  });
 
   const cursorStyle = isDragging ? "cursor-grabbing" : "cursor-grab";
   const styleByDrag = {
     transform: CSS.Transform.toString(transform),
     transition,
   };
+
+  if (!task) {
+    return null;
+  }
 
   return (
     <Card
@@ -65,16 +62,13 @@ const CardItem = (props: CardProps) => {
           <EllipsisVerticalIcon width="1rem" />
         </div>
         <div className="flex-1" />
-        <button
-          className="text-gray-500 hover:text-black"
-          onClick={deleteCardItem}
-        >
+        <button className="text-gray-500 hover:text-black" onClick={deleteCard}>
           <XIcon width="1rem" />
         </button>
       </CardHeader>
 
       <CardContent className="px-[.5rem] text-start break-words">
-        {card.content}
+        {task.card.content}
       </CardContent>
 
       <CardFooter className="text-sm justify-end gap-[1rem]">
@@ -82,11 +76,11 @@ const CardItem = (props: CardProps) => {
           <button className="text-gray-500 hover:text-black">
             <ThumbsUpIcon width="1rem" />
           </button>
-          <p>{card.likes}</p>
+          <p>{task.card.likes}</p>
         </div>
       </CardFooter>
     </Card>
   );
 };
 
-export default CardItem;
+export default React.memo(CardItem);

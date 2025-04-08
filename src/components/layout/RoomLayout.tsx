@@ -1,18 +1,18 @@
-import { RoomProvider } from "@liveblocks/react";
+import { RoomProvider } from "@liveblocks/react/suspense";
 import { Outlet, useParams } from "react-router";
+import { LiveList, LiveMap } from "@liveblocks/client";
 import { SidebarProvider } from "../ui/sidebar";
 import RoomSidebar from "../room/RoomSidebar";
 import { Card } from "../ui/card";
-import { TBoard } from "@/types/types";
+import { Storage } from "@/types/liveblocks";
 
-const initialStorage: {
-  board: TBoard;
-} = {
-  board: {
-    start: [],
-    end: [],
-    continue: [],
-  },
+const initialStorage: Storage = {
+  board: new LiveMap([
+    ["start", new LiveList([])],
+    ["end", new LiveList([])],
+    ["continue", new LiveList([])],
+  ]),
+  tasks: new LiveMap(),
 };
 
 const RoomLayout = () => {

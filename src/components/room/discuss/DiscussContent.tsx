@@ -1,10 +1,10 @@
+import Avvvatars from "avvvatars-react";
+import { ArrowUpIcon } from "lucide-react";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import useDiscuss from "@/hooks/useDiscuss";
 import { getUser } from "@/utils";
-import Avvvatars from "avvvatars-react";
-import { ArrowUpIcon } from "lucide-react";
 
 interface DiscussContentProps {
   cardIdx: number;
@@ -22,7 +22,7 @@ const DiscussContent = (props: DiscussContentProps) => {
   const user = getUser();
 
   return (
-    <div className="h-full flex flex-col gap-[2rem]">
+    <div className="h-full flex flex-col gap-[2rem] md:bg-amber-50">
       <div className="flex justify-center gap-[2rem]">
         <span>{card.content}</span>
         <div className="py-[0.2rem] px-[1rem] rounded-2xl bg-gray-400 text-white">
@@ -30,9 +30,10 @@ const DiscussContent = (props: DiscussContentProps) => {
         </div>
       </div>
 
-      <div className="flex-1 flex">
-        <div className="flex-1">
-          <Card className="p-[1rem] max-w-[300px] gap-[0.5rem]">
+      <div className="flex-1 flex flex-col md:flex-row gap-[1rem]">
+        {/* 카드 */}
+        <div className="md:flex-1">
+          <Card className="p-[1rem] w-[300px] md:w-full lg:w-[300px] gap-[0.5rem] mx-auto md:mx-0">
             <CardContent className="break-words">
               {card.content}
             </CardContent>
@@ -42,8 +43,9 @@ const DiscussContent = (props: DiscussContentProps) => {
           </Card>
         </div>
 
-        <div className="flex-1 flex justify-center h-full">
-          <Card className="min-w-[400px] gap-0">
+        {/* 채팅 */}
+        <div className="flex-1 flex justify-center md:h-full">
+          <Card className="w-full lg:w-[350px] gap-0">
             <CardHeader className="p-[1rem]">Discussion</CardHeader>
             <Separator />
             <CardContent className="flex-1 p-[1rem] flex flex-col">

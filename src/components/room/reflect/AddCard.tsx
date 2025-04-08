@@ -1,47 +1,22 @@
-import { useState } from "react";
 import { XIcon, CheckIcon } from "lucide-react";
-import { useMutation } from "@liveblocks/react/suspense";
-import { nanoid } from "nanoid";
-import { TBoard, TCard, TColumnType } from "@/types/types";
+import { TColumnType } from "@/types/types";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
+import useAddCard from "@/hooks/useAddCard";
 
 interface AddCardProps {
-  columnType: TColumnType;
+  column: TColumnType;
   close: () => void;
 }
 
 const AddCard = (props: AddCardProps) => {
-  const { columnType, close } = props;
+  const { column, close } = props;
 
-  const [draft, setDraft] = useState("");
-
-  const addCard = useMutation(
-    ({ storage }) => {
-      const prev = storage.get("board") as TBoard;
-      const newCard: TCard = {
-        id: nanoid(),
-        category: columnType,
-        content: draft,
-        likes: 0,
-      };
-      const newBoard: TBoard = {
-        ...prev,
-        [columnType]: [...prev[columnType], newCard],
-      };
-
-      storage.set("board", newBoard);
-    },
-    [draft]
-  );
-
-  const addCardToColumn = () => {
-    if (draft === "") {
-      return;
-    }
-    addCard();
-    setDraft("");
-  };
+  const {
+    draft,
+    onChangeTextArea,
+    addCard 
+  } = useAddCard({ column })
 
   return (
     <Card className="w-full p-[.5rem] gap-[.5rem]">
@@ -50,7 +25,7 @@ const AddCard = (props: AddCardProps) => {
           id="content"
           placeholder="type something"
           value={draft}
-          onChange={(e) => setDraft(e.target.value)}
+          onChange={onChangeTextArea}
         />
       </CardContent>
 
@@ -59,7 +34,7 @@ const AddCard = (props: AddCardProps) => {
           <XIcon width="1rem" />
         </button>
         <button
-          onClick={addCardToColumn}
+          onClick={addCard}
           className="text-(--border) hover:text-black"
         >
           <CheckIcon width="1rem" />

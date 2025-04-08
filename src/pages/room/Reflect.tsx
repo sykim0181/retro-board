@@ -1,4 +1,4 @@
-import { ClientSideSuspense } from "@liveblocks/react";
+import { ClientSideSuspense } from "@liveblocks/react/suspense";
 import { Spinner } from "../../components/ui/spinner";
 import Board from "@/components/room/reflect/Board";
 

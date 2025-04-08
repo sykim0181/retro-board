@@ -1,49 +1,56 @@
-import { DragEndEvent, DragOverEvent, DragStartEvent } from "@dnd-kit/core";
-import { arrayMove } from "@dnd-kit/sortable";
-import { useMutation, useStorage } from "@liveblocks/react/suspense";
-import { useMemo } from "react";
-import { resetEditingInfo, setEditingBoard } from "@/store/boardSlice";
-import { useAppDispatch, useAppSelector } from "@/store/store";
-import { TBoard, TCard, TColumnType } from "@/types/types";
+import { DragEndEvent, DragOverEvent } from "@dnd-kit/core";
+import { useMutation } from "@liveblocks/react/suspense";
+import { TColumnType } from "@/types/types";
 
 const useBoard = () => {
-  const dispatch = useAppDispatch();
+  const moveCardColumn = useMutation(
+    (
+      { storage },
+      cardId: string,
+      prevColumn: TColumnType,
+      nextColumn: TColumnType,
+      nextCardId?: string // 뒤에 올 카드 아이디
+    ) => {
+      const board = storage.get("board");
 
-  const board = useStorage((root) => root.board as TBoard);
-  const editingInfo = useAppSelector((state) => state.board.editingInfo);
+      if (prevColumn === nextColumn && nextCardId !== undefined) {
+        const container = board.get(prevColumn);
+        if (container === undefined) {
+          return;
+        }
 
-  const currentBoard = useMemo(() => {
-    if (editingInfo !== null) {
-      return editingInfo.board;
-    }
-    return board;
-  }, [board, editingInfo]);
+        const prevIdx = container.findIndex(val => val === cardId);
+        const nextIdx = container.findIndex(val => val === nextCardId)
+        container.move(prevIdx, nextIdx);
 
-  const updateBoard = useMutation(({ storage }, board: TBoard) => {
-    storage.set("board", board);
-  }, []);
+        return;
+      }
 
-  const handleDragStart = (event: DragStartEvent) => {
-    const card = event.active.data.current as TCard;
-    dispatch(setEditingBoard({ board, card }));
-  };
+      const prevContainer = board.get(prevColumn);
+      const nextContainer = board.get(nextColumn);
+
+      if (!prevContainer || !nextContainer) {
+        return;
+      }
+
+      const index = prevContainer.findIndex((val) => val === cardId);
+      prevContainer.delete(index);
+
+      let targetIdx = nextContainer.length;
+      if (nextCardId !== undefined) {
+        targetIdx = nextContainer.findIndex((val) => val === nextCardId);
+      }
+      nextContainer.insert(cardId, targetIdx);
+    },
+    []
+  );
 
   const handleDragOver = (event: DragOverEvent) => {
     const { active, over } = event;
-    const card = active.data.current as TCard;
 
-    if (editingInfo === null) {
-      return;
-    }
-    const editingBoard = editingInfo.board;
-    const editingCard = editingInfo.card;
-
-    if (card.id !== editingCard.id) {
-      return;
-    }
-
-    const activeColumn = editingCard.category;
-    const activeContainer = editingBoard[activeColumn];
+    const activeId = active.id as string;
+    const activeData = active.data.current;
+    const activeColumn = activeData!.column as TColumnType;
 
     if (!over || active.id === over.id) {
       return;
@@ -53,105 +60,48 @@ const useBoard = () => {
     if (overId.startsWith("column-")) {
       // 다른 컬럼 영역에 들어감 -> 컬럼 제일 마지막에 추가
       const overColumn = overId.slice("column-".length) as TColumnType;
-      const overContainer = editingBoard[overColumn];
-
-      const newCard: TCard = {
-        ...card,
-        category: overColumn,
-      };
-      const newEditingBoard = {
-        ...editingBoard,
-        [activeColumn]: activeContainer.filter((value) => value.id !== card.id),
-        [overColumn]: [...overContainer, newCard],
-      };
-      dispatch(
-        setEditingBoard({
-          board: newEditingBoard,
-          card: newCard,
-        })
-      );
+      moveCardColumn(activeId, activeColumn, overColumn);
     } else {
       // 다른 컬럼의 "카드 영역"에 들어감 -> 해당 컬럼 앞에 추가
-      const overCard = over.data.current as TCard;
-      const overColumn = overCard.category;
+      const overData = over.data.current;
+      const overColumn = overData!.column as TColumnType;
 
       if (overColumn === activeColumn) {
         return;
       }
 
-      const overContainer = editingBoard[overColumn];
-      const overIndex = overContainer.findIndex(
-        (value) => value.id === overCard.id
-      );
-
-      const newCard: TCard = {
-        ...card,
-        category: overColumn,
-      };
-      const newEditingBoard = {
-        ...editingBoard,
-        [activeColumn]: activeContainer.filter((value) => value.id !== card.id),
-        [overColumn]: [
-          ...overContainer.slice(0, overIndex),
-          newCard,
-          ...overContainer.slice(overIndex),
-        ],
-      };
-      dispatch(
-        setEditingBoard({
-          board: newEditingBoard,
-          card: newCard,
-        })
-      );
+      moveCardColumn(activeId, activeColumn,overColumn, overId);
     }
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
-    const card = active.data.current as TCard;
 
-    if (editingInfo === null) {
-      return;
-    }
-    const editingBoard = editingInfo.board;
-    const editingCard = editingInfo.card;
+    const activeId = active.id as string;
+    const activeData = active.data.current;
+    const activeColumn = activeData!.column as TColumnType;
 
-    if (card.id !== editingCard.id) {
+    if (over === null) {
       return;
     }
 
-    const activeColumn = editingCard.category;
-    const activeContainer = editingBoard[activeColumn];
-    const activeIndex = activeContainer.findIndex(
-      (value) => value.id === card.id
-    );
-
-    if (over && !(over.id as string).startsWith("column-")) {
-      const overCard = over.data.current as TCard;
-      const overColumn = overCard.category;
-      if (activeColumn === overColumn) {
-        // 같은 컬럼 내의 카드와 순서 변경
-        const overIndex = editingBoard[overColumn].findIndex(
-          (value) => value.id === overCard.id
-        );
-
-        const newBoard = {
-          ...editingBoard,
-          [activeColumn]: arrayMove(
-            editingBoard[activeColumn],
-            activeIndex,
-            overIndex
-          ),
-        };
-        updateBoard(newBoard);
-      }
+    const overId = over.id as string;
+    if (overId.startsWith("column-")) {
+      return;
     }
-    dispatch(resetEditingInfo());
+
+    const overData = over.data.current;
+    const overColumn = overData!.column as TColumnType;
+
+    if (activeColumn !== overColumn) {
+      return;
+    }
+
+    // 같은 컬럼 내의 카드와 순서 변경
+    moveCardColumn(activeId, activeColumn, overColumn, overId);
   };
 
   return {
-    currentBoard,
-    handleDragStart,
     handleDragOver,
     handleDragEnd,
   };

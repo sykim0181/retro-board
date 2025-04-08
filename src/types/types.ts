@@ -7,9 +7,7 @@ export type TCard = {
   likes: number;
 };
 
-export type TBoard = {
-  [key in TColumnType]: TCard[];
-};
+export type TBoard = Map<TColumnType, Array<string>>;
 
 export type TUser = {
   name: string;
@@ -18,4 +16,16 @@ export type TUser = {
 export type TRoom = {
   name: string;
   id: string;
+};
+
+export type TChat = {
+  user: TUser;
+  content: string;
+  createdAt: Date;
+  replies: Array<TChat>;
+};
+
+export type TTask = {
+  card: TCard;
+  chats: Array<TChat>;
 };

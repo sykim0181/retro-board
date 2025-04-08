@@ -16,10 +16,11 @@ import {
 import { TRoom } from "@/types/types";
 import { getUser } from "@/utils";
 import RoomSidebarDiscussSub from "./RoomSidebarDiscussSub";
+import { ClientSideSuspense } from "@liveblocks/react";
 
 type TItem = {
   title: string;
-  url: string;
+  url?: string;
   icon?: LucideIcon;
 };
 
@@ -31,7 +32,6 @@ const items: TItem[] = [
   },
   {
     title: "Discuss",
-    url: "discuss",
     icon: MessageSquareTextIcon,
   },
 ];
@@ -50,7 +50,11 @@ const RoomSidebar = () => {
   const getSubItems = useCallback(async (item: TItem) => {
     switch (item.title) {
       case "Discuss": {
-        return <RoomSidebarDiscussSub />;
+        return (
+          <ClientSideSuspense fallback={null}>
+            <RoomSidebarDiscussSub />
+          </ClientSideSuspense>
+        );
       }
       default: {
         return null;
@@ -70,14 +74,21 @@ const RoomSidebar = () => {
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <NavLink to={`/room/${roomId}/${item.url}`}>
-                    {({ isActive }) => (
-                      <SidebarMenuButton isActive={isActive}>
-                        {item.icon && <item.icon />}
-                        <span>{item.title}</span>
-                      </SidebarMenuButton>
-                    )}
-                  </NavLink>
+                  {item.url ? (
+                    <NavLink to={`/room/${roomId}/${item.url}`}>
+                      {({ isActive }) => (
+                        <SidebarMenuButton isActive={isActive}>
+                          {item.icon && <item.icon />}
+                          <span>{item.title}</span>
+                        </SidebarMenuButton>
+                      )}
+                    </NavLink>
+                  ) : (
+                    <SidebarMenuButton>
+                      {item.icon && <item.icon />}
+                      <span>{item.title}</span>
+                    </SidebarMenuButton>
+                  )}
                   {getSubItems(item)}
                 </SidebarMenuItem>
               ))}
