@@ -10,6 +10,7 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import useCard from "@/hooks/useCard";
+import CardItemLike from "./CardItemLike";
 
 interface CardProps {
   cardId: string;
@@ -19,7 +20,7 @@ interface CardProps {
 const CardItem = (props: CardProps) => {
   const { cardId, column } = props;
 
-  const { task, deleteCard } = useCard({ cardId, column });
+  const { content, deleteCard } = useCard({ cardId, column });
 
   const {
     attributes,
@@ -42,7 +43,7 @@ const CardItem = (props: CardProps) => {
     transition,
   };
 
-  if (!task) {
+  if (!content) {
     return null;
   }
 
@@ -68,16 +69,11 @@ const CardItem = (props: CardProps) => {
       </CardHeader>
 
       <CardContent className="px-[.5rem] text-start break-words">
-        {task.card.content}
+        {content}
       </CardContent>
 
       <CardFooter className="text-sm justify-end gap-[1rem]">
-        <div className="flex gap-[.5rem] items-center">
-          <button className="text-gray-500 hover:text-black">
-            <ThumbsUpIcon width="1rem" />
-          </button>
-          <p>{task.card.likes}</p>
-        </div>
+        <CardItemLike cardId={cardId} />
       </CardFooter>
     </Card>
   );

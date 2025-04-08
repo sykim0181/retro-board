@@ -4,8 +4,12 @@ export type TCard = {
   id: string;
   category: TColumnType;
   content: string;
-  likes: number;
+  likes: TLike[];
 };
+
+export type TLike = {
+  user: TUser;
+}
 
 export type TBoard = Map<TColumnType, Array<string>>;
 

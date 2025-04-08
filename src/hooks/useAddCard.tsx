@@ -2,7 +2,7 @@ import { useMutation } from "@liveblocks/react";
 import { LiveList, LiveObject } from "@liveblocks/client";
 import { nanoid } from "nanoid";
 import { useState } from "react";
-import { TColumnType } from "@/types/types";
+import { TColumnType, TLike } from "@/types/types";
 import { Card, Chat, Task } from "@/types/liveblocks";
 
 interface useAddCardProps {
@@ -25,7 +25,7 @@ const useAddCard = (props: useAddCardProps) => {
         id: newId,
         category: column,
         content: draft,
-        likes: 0,
+        likes: new Array<TLike>(),
       });
 
       const container = storage.get("board").get(column);

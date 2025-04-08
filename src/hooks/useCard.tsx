@@ -9,7 +9,7 @@ interface useCardProps {
 const useCard = (props: useCardProps) => {
   const { cardId, column } = props;
 
-  const task = useStorage((root) => root.tasks.get(cardId));
+  const content = useStorage((root) => root.tasks.get(cardId)?.card.content);
 
   const deleteCard = useMutation(({ storage }) => {
     const cards = storage.get("board").get(column);
@@ -22,7 +22,7 @@ const useCard = (props: useCardProps) => {
   }, [cardId, column]);
 
   return {
-    task,
+    content,
     deleteCard
   };
 };
