@@ -9,7 +9,7 @@ export type TCard = {
 
 export type TLike = {
   user: TUser;
-}
+};
 
 export type TBoard = Map<TColumnType, Array<string>>;
 
@@ -32,4 +32,14 @@ export type TChat = {
 export type TTask = {
   card: TCard;
   chats: Array<TChat>;
+};
+
+export type TEmoji = {
+  unified: string;
+  name: string;
+};
+
+export type TReaction = {
+  emoji: TEmoji;
+  users: TUser[];
 };

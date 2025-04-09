@@ -1,11 +1,11 @@
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { ThumbsUpIcon } from "lucide-react";
 import useDiscuss from "@/hooks/useDiscuss";
 import ChatBox from "./ChatBox";
-import { ThumbsUpIcon } from "lucide-react";
+import DiscussTaskCard from "./DiscussTaskCard";
 
 interface DiscussContentProps {
   cardIdx: number;
-} 
+}
 
 const DiscussContent = (props: DiscussContentProps) => {
   const { cardIdx } = props;
@@ -29,15 +29,7 @@ const DiscussContent = (props: DiscussContentProps) => {
       <div className="flex-1 flex flex-col md:flex-row gap-[1rem] overflow-y-hidden">
         {/* 카드 */}
         <div className="flex-initial md:flex-1">
-          <Card className="p-[1rem] w-[300px] md:w-full lg:w-[300px] gap-[0.5rem] mx-auto md:mx-0">
-            <CardContent className="break-words flex flex-col gap-[0.5rem]">
-              <div className="text-white bg-gray-400 w-fit text-[0.8rem] px-[0.6rem] rounded-md">{card.category}</div>
-              <span>{card.content}</span>
-            </CardContent>
-            <CardFooter>
-              {/* 이모지 */}
-            </CardFooter>
-          </Card>
+          <DiscussTaskCard taskId={card.id} />
         </div>
 
         {/* 채팅 */}
@@ -46,8 +38,7 @@ const DiscussContent = (props: DiscussContentProps) => {
         </div>
       </div>
     </div>
-  )
-
-}
+  );
+};
 
 export default DiscussContent;

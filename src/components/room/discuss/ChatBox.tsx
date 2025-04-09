@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Card,
   CardContent,
@@ -30,4 +31,4 @@ const ChatBox = (props: ChatBoxProps) => {
   );
 };
 
-export default ChatBox;
+export default React.memo(ChatBox);

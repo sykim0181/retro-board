@@ -1,5 +1,5 @@
 import { useMutation } from "@liveblocks/react";
-import { LiveList, LiveObject } from "@liveblocks/client";
+import { LiveList, LiveMap, LiveObject } from "@liveblocks/client";
 import { nanoid } from "nanoid";
 import { useState } from "react";
 import { TColumnType, TLike } from "@/types/types";
@@ -34,6 +34,7 @@ const useAddCard = (props: useAddCardProps) => {
       const tasks = storage.get("tasks");
       const newTask: Task = new LiveObject({
         card: newCard,
+        reactions: new LiveMap(),
         chats: new LiveList<Chat>([]),
       });
       tasks.set(newId, newTask);

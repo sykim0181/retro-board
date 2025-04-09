@@ -19,8 +19,8 @@ const useBoard = () => {
           return;
         }
 
-        const prevIdx = container.findIndex(val => val === cardId);
-        const nextIdx = container.findIndex(val => val === nextCardId)
+        const prevIdx = container.findIndex((val) => val === cardId);
+        const nextIdx = container.findIndex((val) => val === nextCardId);
         container.move(prevIdx, nextIdx);
 
         return;
@@ -70,7 +70,7 @@ const useBoard = () => {
         return;
       }
 
-      moveCardColumn(activeId, activeColumn,overColumn, overId);
+      moveCardColumn(activeId, activeColumn, overColumn, overId);
     }
   };
 
