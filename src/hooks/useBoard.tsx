@@ -11,6 +11,11 @@ const useBoard = () => {
       nextColumn: TColumnType,
       nextCardId?: string // 뒤에 올 카드 아이디
     ) => {
+      const phase = storage.get("phase");
+      if (phase !== "REFLECT") {
+        return;
+      }
+
       const board = storage.get("board");
 
       if (prevColumn === nextColumn && nextCardId !== undefined) {
