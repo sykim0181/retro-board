@@ -10,16 +10,16 @@ interface useCardItemLikeProps {
 const useCardItemLike = (props: useCardItemLikeProps) => {
   const { cardId } = props;
 
-  const likes = useStorage((root) => root.tasks.get(cardId)?.card.likes) ?? [];
+  const likes = useStorage((root) => root.cards.get(cardId)?.likes) ?? [];
 
   const hasLiked = useMemo(() => {
     const user = getUser();
-    return likes.some((like) => like.user.name === user.name);
+    return likes.some((like) => like.user.id === user.id);
   }, [likes]);
 
   const onClickLikeButton = useMutation(
     ({ storage }) => {
-      const card = storage.get("tasks").get(cardId)?.get("card");
+      const card = storage.get("cards").get(cardId);
 
       if (!card) {
         return;
@@ -30,7 +30,7 @@ const useCardItemLike = (props: useCardItemLikeProps) => {
       if (hasLiked) {
         card.set(
           "likes",
-          likes.filter((like) => like.user.name !== user.name)
+          likes.filter((like) => like.user.id !== user.id)
         );
       } else {
         const newLike: TLike = {

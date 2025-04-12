@@ -1,19 +1,21 @@
 import EmojiPicker, { EmojiStyle, EmojiClickData } from "emoji-picker-react";
 import { SmilePlusIcon } from "lucide-react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import useDiscussTaskCard from "@/hooks/useDiscussTaskCard";
 import EmojiReaction from "./EmojiReaction";
+import { TCard } from "@/types/types";
 
 interface DiscussTaskCardProps {
-  taskId: string;
+  taskIdx: number;
+  card: TCard;
 }
 
 const DiscussTaskCard = (props: DiscussTaskCardProps) => {
-  const { taskId } = props;
+  const { taskIdx, card } = props;
 
-  const { task, reactions, handleEmojiClicked } = useDiscussTaskCard({
-    taskId,
+  const { reactions, handleEmojiClicked } = useDiscussTaskCard({
+    taskIdx,
   });
 
   const [isOpen, setIsOpen] = useState(false);
@@ -34,24 +36,27 @@ const DiscussTaskCard = (props: DiscussTaskCardProps) => {
     <Card className="p-[1rem] w-[300px] md:w-full lg:w-[300px] gap-[0.5rem] mx-auto md:mx-0">
       <CardContent className="break-words flex flex-col gap-[0.5rem]">
         <div className="text-white bg-gray-400 w-fit text-[0.8rem] px-[0.6rem] rounded-md">
-          {task?.card.category}
+          {card.category}
         </div>
-        <span>{task?.card.content}</span>
+        <span>{card.content}</span>
       </CardContent>
+
       <CardFooter className="flex gap-[1rem]">
-        <div className="flex gap-[0.5rem]">
-          {reactions.map((reaction) => (
-            <EmojiReaction
-              key={reaction.emoji.unified}
-              reaction={reaction}
-              handleEmojiClicked={handleEmojiClicked}
-            />
-          ))}
-        </div>
+        {reactions.length > 0 && (
+          <div className="flex gap-[0.5rem]">
+            {reactions.map((reaction) => (
+              <EmojiReaction
+                key={reaction.emoji.unified}
+                reaction={reaction}
+                handleEmojiClicked={handleEmojiClicked}
+              />
+            ))}
+          </div>
+        )}
         <div className="relative">
           <button
             onClick={onClickButton}
-            className="flex justify-center items-center text-gray-400 hover:text-black"
+            className="flex justify-center items-center text-gray-400 hover:text-black cursor-pointer"
           >
             <SmilePlusIcon width="1rem" />
           </button>
@@ -70,4 +75,4 @@ const DiscussTaskCard = (props: DiscussTaskCardProps) => {
   );
 };
 
-export default DiscussTaskCard;
+export default React.memo(DiscussTaskCard);

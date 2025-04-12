@@ -1,7 +1,3 @@
 #root {
   --max-width: 1280px;
 }
-
-button {
-  cursor: pointer;
-}

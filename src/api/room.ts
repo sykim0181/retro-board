@@ -1,14 +1,15 @@
 import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase";
 import { nanoid } from "nanoid";
+import { db } from "@/lib/firebase";
 import { TRoom } from "@/types/types";
 
-export async function createRoom(roomName: string) {
+export async function createRoom(roomName: string, ownerId: string) {
   const roomId = nanoid();
   const roomRef = doc(db, "room", roomId);
   const newRoom = {
     id: roomId,
     name: roomName,
+    ownerId,
   };
   await setDoc(roomRef, newRoom);
 }
@@ -21,6 +22,7 @@ export async function getAllRooms(): Promise<TRoom[]> {
     return {
       id: data.id,
       name: data.name,
+      ownerId: data.ownerId,
     };
   });
 }

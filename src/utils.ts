@@ -6,6 +6,7 @@ import {
 } from "unique-names-generator";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import { nanoid } from "nanoid";
 import { TUser } from "./types/types";
 
 dayjs.extend(relativeTime);
@@ -18,6 +19,7 @@ export function generateUser(): TUser {
   });
 
   return {
+    id: nanoid(),
     name: randomName,
   };
 }

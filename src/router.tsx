@@ -1,20 +1,22 @@
 import { createBrowserRouter, Navigate } from "react-router";
 import Home from "./pages/Home";
-import DefaultLayout from "./components/layout/DefaultLayout";
+import DashboardLayout from "./components/layout/DashboardLayout";
 import Dashboard from "./pages/Dashboard";
 import { getRoomById } from "./api/room";
 import RoomLayout from "./components/layout/RoomLayout";
 import Reflect from "./pages/room/Reflect";
 import Discuss from "./pages/room/Discuss";
+import DefaultLayout from "./components/layout/DefaultLayout";
 
 const router = createBrowserRouter([
   {
     path: "/",
+    Component: DefaultLayout,
     children: [
       { index: true, Component: Home },
       {
         path: "dashboard",
-        Component: DefaultLayout,
+        Component: DashboardLayout,
         children: [{ index: true, Component: Dashboard }],
       },
       {
@@ -23,7 +25,7 @@ const router = createBrowserRouter([
         children: [
           { index: true, element: <Navigate to="reflect" /> },
           { path: "reflect", Component: Reflect },
-          { path: "discuss/:cardIdx", Component: Discuss },
+          { path: "discuss/:taskIdx", Component: Discuss },
         ],
         loader: async ({ params }) => {
           const roomId = params.roomId;

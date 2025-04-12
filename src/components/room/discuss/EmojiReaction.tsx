@@ -18,7 +18,7 @@ const EmojiReaction = (props: EmojiReactionProps) => {
   return (
     <div className="relative">
       <button
-        className="flex gap-[0.5rem]"
+        className="flex gap-[0.5rem] cursor-pointer"
         onClick={() => handleEmojiClicked(reaction.emoji)}
         onMouseEnter={() => setShowInfo(true)}
         onMouseLeave={() => setShowInfo(false)}
@@ -35,7 +35,7 @@ const EmojiReaction = (props: EmojiReactionProps) => {
         <div className="absolute left-[50%] text-[0.8rem] bg-gray-700 text-white px-[0.5rem] py-[0.2rem] text-center transform-[translateX(-50%)] rounded-sm">
           <span className="font-bold">
             {reaction.users
-              .map((val) => (val.name === user.name ? "You" : val.name))
+              .map((val) => (val.id === user.id ? "You" : val.name))
               .join(", ")}
           </span>
           <span className="whitespace-nowrap">{` reacted with ${reaction.emoji.name}`}</span>

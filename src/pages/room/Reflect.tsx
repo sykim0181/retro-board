@@ -1,8 +1,13 @@
+import { useOutletContext } from "react-router";
 import { ClientSideSuspense } from "@liveblocks/react/suspense";
 import { Spinner } from "../../components/ui/spinner";
 import Board from "@/components/room/reflect/Board";
+import PhaseInfo from "@/components/room/common/PhaseInfo";
+import { TRoom } from "@/types/types";
 
 const Reflect = () => {
+  const { room } = useOutletContext<{ room: TRoom }>();
+
   return (
     <div className="h-full flex flex-col gap-[2rem]">
       <div className="flex flex-col gap-[.5rem]">
@@ -12,7 +17,7 @@ const Reflect = () => {
         </p>
       </div>
 
-      <div className="flex-1 overflow-y-hidden">
+      <div className="flex-1 overflow-y-hidden flex flex-col">
         <ClientSideSuspense
           fallback={
             <div className="w-full flex justify-center items-center">
@@ -20,6 +25,7 @@ const Reflect = () => {
             </div>
           }
         >
+          <PhaseInfo pagePhase="REFLECT" room={room} />
           <Board />
         </ClientSideSuspense>
       </div>

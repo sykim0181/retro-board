@@ -2,19 +2,10 @@ import { ThumbsUpIcon } from "lucide-react";
 import useDiscuss from "@/hooks/useDiscuss";
 import ChatBox from "./ChatBox";
 import DiscussTaskCard from "./DiscussTaskCard";
+import { TCard } from "@/types/types";
 
-interface DiscussContentProps {
-  cardIdx: number;
-}
-
-const DiscussContent = (props: DiscussContentProps) => {
-  const { cardIdx } = props;
-
-  const { card } = useDiscuss({ cardIdx });
-
-  if (card === null) {
-    throw new Error("Not Available Card");
-  }
+const DiscussContent = () => {
+  const { taskIdx, card } = useDiscuss();
 
   return (
     <div className="h-full flex flex-col gap-[2rem]">
@@ -29,12 +20,12 @@ const DiscussContent = (props: DiscussContentProps) => {
       <div className="flex-1 flex flex-col md:flex-row gap-[1rem] overflow-y-hidden">
         {/* 카드 */}
         <div className="flex-initial md:flex-1">
-          <DiscussTaskCard taskId={card.id} />
+          <DiscussTaskCard taskIdx={taskIdx} card={card as TCard} />
         </div>
 
         {/* 채팅 */}
         <div className="flex-1 flex justify-center md:h-full overflow-y-hidden">
-          <ChatBox taskId={card.id} />
+          <ChatBox taskIdx={taskIdx} />
         </div>
       </div>
     </div>

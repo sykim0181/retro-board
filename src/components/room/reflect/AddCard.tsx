@@ -30,12 +30,14 @@ const AddCard = (props: AddCardProps) => {
       </CardContent>
 
       <CardFooter className="justify-end gap-[.5rem]">
-        <button onClick={close} className="text-(--border) hover:text-black">
+        <button 
+          onClick={close} 
+          className="text-(--border) hover:text-black cursor-pointer">
           <XIcon width="1rem" />
         </button>
         <button
           onClick={addCard}
-          className="text-(--border) hover:text-black"
+          className="text-(--border) hover:text-black cursor-pointer"
         >
           <CheckIcon width="1rem" />
         </button>

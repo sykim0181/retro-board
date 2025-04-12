@@ -1,4 +1,5 @@
 import useCardItemLike from "@/hooks/useCardItemLike";
+import { cn } from "@/lib/utils";
 import { ThumbsUpIcon } from "lucide-react";
 
 interface CardItemLikeProps {
@@ -13,7 +14,11 @@ const CardItemLike = (props: CardItemLikeProps) => {
   return (
     <div className="flex gap-[.5rem] items-center">
       <button
-        className={`${hasLiked ? "text-black" : "text-gray-500"} hover:text-black`}
+        className={cn([
+          hasLiked ? "text-black" : "text-gray-500",
+          "hover:text-black",
+          "cursor-pointer",
+        ])}
         onClick={onClickLikeButton}
       >
         <ThumbsUpIcon width="1rem" fill={hasLiked ? "black" : "none"} />

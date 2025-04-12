@@ -14,12 +14,14 @@ export type TLike = {
 export type TBoard = Map<TColumnType, Array<string>>;
 
 export type TUser = {
+  id: string;
   name: string;
 };
 
 export type TRoom = {
   name: string;
   id: string;
+  ownerId: string;
 };
 
 export type TChat = {
@@ -31,6 +33,7 @@ export type TChat = {
 
 export type TTask = {
   card: TCard;
+  reactions: Map<string, TReaction>;
   chats: Array<TChat>;
 };
 
@@ -43,3 +46,5 @@ export type TReaction = {
   emoji: TEmoji;
   users: TUser[];
 };
+
+export type TRoomPhase = "REFLECT" | "DISCUSS";

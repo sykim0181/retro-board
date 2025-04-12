@@ -12,25 +12,30 @@ import {
 import { Button, buttonVariants } from "../ui/button";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-import { createRoom } from "@/api/room";
 import { cn } from "@/lib/utils";
+import { getUser } from "@/utils";
+import useCreateRoomMutation from "@/hooks/useCreateRoomMutation";
 
 const CreateRoomDialog = () => {
   const [name, setName] = useState("");
+
+  const { mutate } = useCreateRoomMutation();
 
   const onClickSaveButton = async (e: React.MouseEvent) => {
     if (name === "") {
       e.stopPropagation();
       return;
     }
-
+    const user = getUser();
     // 방 생성
-    await createRoom(name);
-  }
+    mutate({ userId: user.id, roomName: name });
+  };
 
   return (
     <Dialog>
-      <DialogTrigger className={cn(buttonVariants())}>Create room</DialogTrigger>
+      <DialogTrigger className={cn(buttonVariants())}>
+        Create room
+      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Create room</DialogTitle>

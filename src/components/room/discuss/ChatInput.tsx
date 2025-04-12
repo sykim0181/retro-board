@@ -4,14 +4,14 @@ import { Input } from "@/components/ui/input";
 import useChatInput from "@/hooks/useChatInput";
 
 interface ChatInputProps {
-  taskId: string;
+  taskIdx: number;
 }
 
 const ChatInput = (props: ChatInputProps) => {
-  const { taskId } = props;
+  const { taskIdx } = props;
 
   const { user, draft, onChangeInput, onKeyDownInput, sendChat } = useChatInput(
-    { taskId }
+    { taskIdx }
   );
 
   return (
@@ -24,7 +24,7 @@ const ChatInput = (props: ChatInputProps) => {
         onKeyDown={onKeyDownInput}
       />
       <button
-        className="bg-gray-400 text-white rounded-[50%] w-[32px] h-[32px] flex justify-center items-center"
+        className="bg-gray-400 hover:opacity-80 text-white rounded-[50%] w-[32px] h-[32px] flex justify-center items-center cursor-pointer"
         onClick={sendChat}
       >
         <ArrowUpIcon width="1rem" />

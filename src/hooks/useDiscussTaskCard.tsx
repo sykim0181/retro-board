@@ -1,29 +1,30 @@
 import { LiveObject } from "@liveblocks/client";
-import { useMutation, useStorage } from "@liveblocks/react";
+import { useMutation, useStorage } from "@liveblocks/react/suspense";
 import { useMemo } from "react";
 import { TEmoji, TReaction } from "@/types/types";
 import { getUser } from "@/utils";
 
 interface useDiscussTaskCardProps {
-  taskId: string;
+  taskIdx: number;
 }
 
 const useDiscussTaskCard = (props: useDiscussTaskCardProps) => {
-  const { taskId } = props;
+  const { taskIdx } = props;
 
-  const task = useStorage((root) => root.tasks.get(taskId));
+  const reactionMap = useStorage((root) => root.tasks.at(taskIdx)?.reactions);
 
   const reactions = useMemo(() => {
     let result: TReaction[] = [];
-    task?.reactions.forEach((reaction) => {
+    reactionMap?.forEach((reaction) => {
       result = [...result, reaction];
     });
     return result;
-  }, [task]);
+  }, [reactionMap]);
 
   const handleEmojiClicked = useMutation(
     ({ storage }, emoji: TEmoji) => {
-      const taskReactions = storage.get("tasks").get(taskId)?.get("reactions");
+      const task = storage.get("tasks").get(taskIdx);
+      const taskReactions = task?.get("reactions");
 
       if (taskReactions === undefined) {
         return;
@@ -33,12 +34,12 @@ const useDiscussTaskCard = (props: useDiscussTaskCardProps) => {
       const emojiReactions = taskReactions.get(emoji.unified);
       if (
         emojiReactions !== undefined &&
-        emojiReactions.get("users").some((val) => val.name === user.name)
+        emojiReactions.get("users").some((val) => val.id === user.id)
       ) {
         // 이모지 취소
         const newUsers = emojiReactions
           .get("users")
-          .filter((val) => val.name !== user.name);
+          .filter((val) => val.id !== user.id);
         if (newUsers.length === 0) {
           taskReactions.delete(emoji.unified);
         } else {
@@ -57,11 +58,10 @@ const useDiscussTaskCard = (props: useDiscussTaskCardProps) => {
         }
       }
     },
-    [taskId]
+    [taskIdx]
   );
 
   return {
-    task,
     reactions,
     handleEmojiClicked,
   };

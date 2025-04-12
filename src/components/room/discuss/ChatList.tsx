@@ -3,13 +3,13 @@ import ChatItem from "./ChatItem";
 import { TChat } from "@/types/types";
 
 interface ChatListProps {
-  taskId: string;
+  taskIdx: number;
 }
 
 const ChatList = (props: ChatListProps) => {
-  const { taskId } = props;
+  const { taskIdx } = props;
 
-  const { chats } = useChatList({ taskId });
+  const { chats } = useChatList({ taskIdx });
 
   return (
     <ul className="h-full flex flex-col gap-[1.5rem] overflow-y-scroll">

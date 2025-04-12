@@ -63,7 +63,9 @@ const CardItem = (props: CardProps) => {
           <EllipsisVerticalIcon width="1rem" />
         </div>
         <div className="flex-1" />
-        <button className="text-gray-500 hover:text-black" onClick={deleteCard}>
+        <button 
+          className="text-gray-500 hover:text-black cursor-pointer" 
+          onClick={deleteCard}>
           <XIcon width="1rem" />
         </button>
       </CardHeader>

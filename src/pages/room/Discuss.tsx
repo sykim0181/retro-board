@@ -1,17 +1,8 @@
 import { ClientSideSuspense } from "@liveblocks/react/suspense";
 import { Spinner } from "@/components/ui/spinner";
-import { useParams } from "react-router";
 import DiscussContent from "@/components/room/discuss/DiscussContent";
 
 const Discuss = () => {
-  const params = useParams();
-
-  if (!params.cardIdx) {
-    throw new Error("Invalid Card Index");
-  }
-
-  const cardIdx = Number(params.cardIdx);
-
   return (
     <div className="h-full flex flex-col gap-[2rem]">
       <div className="flex flex-col gap-[.5rem]">
@@ -29,7 +20,7 @@ const Discuss = () => {
             </div>
           }
         >
-          <DiscussContent cardIdx={cardIdx} />
+          <DiscussContent />
         </ClientSideSuspense>
       </div>
     </div>
