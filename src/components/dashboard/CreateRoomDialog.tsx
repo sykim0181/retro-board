@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
   Dialog,
   DialogClose,
@@ -13,23 +13,26 @@ import { Button, buttonVariants } from "../ui/button";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
-import { getUser } from "@/utils";
 import useCreateRoomMutation from "@/hooks/useCreateRoomMutation";
+import { useAppSelector } from "@/store/store";
 
 const CreateRoomDialog = () => {
   const [name, setName] = useState("");
 
   const { mutate } = useCreateRoomMutation();
+  const user = useAppSelector((state) => state.user.user);
 
-  const onClickSaveButton = async (e: React.MouseEvent) => {
-    if (name === "") {
-      e.stopPropagation();
-      return;
-    }
-    const user = getUser();
-    // 방 생성
-    mutate({ userId: user.id, roomName: name });
-  };
+  const onClickSaveButton = useCallback(
+    async (e: React.MouseEvent) => {
+      if (name === "") {
+        e.stopPropagation();
+        return;
+      }
+      // 방 생성
+      mutate({ userId: user.id, roomName: name });
+    },
+    [name, mutate, user]
+  );
 
   return (
     <Dialog>

@@ -8,6 +8,7 @@ import { Storage } from "@/types/liveblocks";
 import { TRoom } from "@/types/types";
 import { cn } from "@/lib/utils";
 import RoomAlert from "../room/common/RoomAlert";
+import RoomErrorBoundary from "../room/common/RoomErrorBoundary";
 
 const initialStorage: Storage = {
   board: new LiveMap([
@@ -34,13 +35,11 @@ const RoomLayout = () => {
     <RoomProvider id={roomId} initialStorage={initialStorage}>
       <SidebarProvider className="h-dvh">
         <RoomSidebar />
-        <SidebarInset
-          className={cn(["overflow-hidden"])}
-        >
-          <Card 
-            className={cn(["h-full", "p-[1rem]"])}
-          >
-            <Outlet context={{ room }} />
+        <SidebarInset className={cn(["overflow-hidden"])}>
+          <Card className={cn(["h-full", "p-[1rem]"])}>
+            <RoomErrorBoundary>
+              <Outlet context={{ room }} />
+            </RoomErrorBoundary>
           </Card>
         </SidebarInset>
       </SidebarProvider>

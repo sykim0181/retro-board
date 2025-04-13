@@ -2,7 +2,7 @@ import { Emoji, EmojiStyle } from "emoji-picker-react";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { TEmoji, TReaction } from "@/types/types";
-import { getUser } from "@/utils";
+import { useAppSelector } from "@/store/store";
 
 interface EmojiReactionProps {
   reaction: TReaction;
@@ -15,7 +15,7 @@ const EmojiReaction = (props: EmojiReactionProps) => {
   const [showInfo, setShowInfo] = useState(false);
   const ref = useRef<HTMLButtonElement>(null);
 
-  const user = useMemo(() => getUser(), []);
+  const user = useAppSelector(state => state.user.user);
 
   const getButtonPosition = useCallback(() => {
     if (!ref.current) {

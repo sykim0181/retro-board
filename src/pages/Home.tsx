@@ -1,11 +1,14 @@
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { getUser } from "@/utils";
 import Avvvatars from "avvvatars-react";
 import { NavLink } from "react-router";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { useAppSelector } from "@/store/store";
+import EditProfileDialog from "@/components/common/EditProfileDialog";
+import { DialogTrigger } from "@/components/ui/dialog";
+import { cn } from "@/lib/utils";
 
 const Home = () => {
-  const user = getUser();
+  const user = useAppSelector((state) => state.user.user);
 
   return (
     <main className="min-h-dvh flex flex-col justify-center items-center gap-[2rem] p-[2rem]">
@@ -16,11 +19,25 @@ const Home = () => {
           <Avvvatars value={user.name} />
           <p className="text-[1.2rem]">{user.name}</p>
         </div>
-        <Button className="py-[1.5rem] box-border relative">
-          <NavLink to="/dashboard" className="flex w-full h-full absolute justify-center items-center">
-            Start
-          </NavLink>
-        </Button>
+        <div className="flex flex-col gap-[0.5rem]">
+          <EditProfileDialog
+            trigger={
+              <DialogTrigger
+                className={cn([buttonVariants(), "cursor-pointer py-[1.5rem]"])}
+              >
+                Edit
+              </DialogTrigger>
+            }
+          />
+          <Button className="py-[1.5rem] box-border relative">
+            <NavLink
+              to="/dashboard"
+              className="flex w-full h-full absolute justify-center items-center"
+            >
+              Start
+            </NavLink>
+          </Button>
+        </div>
       </Card>
     </main>
   );

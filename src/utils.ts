@@ -26,15 +26,15 @@ export function generateUser(): TUser {
 
 export function getUser(): TUser {
   const key = "retro-user";
-  // const user = localStorage.getItem(key);
-  const user = sessionStorage.getItem(key);
+  const user = localStorage.getItem(key);
+  // const user = sessionStorage.getItem(key);
   if (user) {
     return JSON.parse(user);
   }
 
   const newUser = generateUser();
-  // localStorage.setItem(key, JSON.stringify(newUser));
-  sessionStorage.setItem(key, JSON.stringify(newUser));
+  localStorage.setItem(key, JSON.stringify(newUser));
+  // sessionStorage.setItem(key, JSON.stringify(newUser));
   return newUser;
 }
 

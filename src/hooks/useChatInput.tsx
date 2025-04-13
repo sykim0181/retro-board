@@ -2,7 +2,7 @@ import { LiveList, LiveObject } from "@liveblocks/client";
 import { useMutation } from "@liveblocks/react";
 import { RefObject, useState } from "react";
 import { Chat } from "@/types/liveblocks";
-import { getUser } from "@/utils";
+import { useAppSelector } from "@/store/store";
 
 interface useChatInputProps {
   taskIdx: number;
@@ -14,6 +14,8 @@ const useChatInput = (props: useChatInputProps) => {
 
   const [draft, setDraft] = useState("");
 
+  const user = useAppSelector((state) => state.user.user);
+
   const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDraft(e.target.value);
   };
@@ -23,8 +25,6 @@ const useChatInput = (props: useChatInputProps) => {
       sendChat();
     }
   };
-
-  const user = getUser();
 
   const sendChat = useMutation(
     ({ storage }) => {
@@ -51,11 +51,10 @@ const useChatInput = (props: useChatInputProps) => {
         });
       }, 0);
     },
-    [taskIdx, draft]
+    [taskIdx, draft, user]
   );
 
   return {
-    user,
     draft,
     onChangeInput,
     onKeyDownInput,

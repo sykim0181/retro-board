@@ -2,7 +2,7 @@ import { LiveObject } from "@liveblocks/client";
 import { useMutation, useStorage } from "@liveblocks/react/suspense";
 import { useMemo } from "react";
 import { TEmoji, TReaction } from "@/types/types";
-import { getUser } from "@/utils";
+import { useAppSelector } from "@/store/store";
 
 interface useDiscussTaskCardProps {
   taskIdx: number;
@@ -12,6 +12,7 @@ const useDiscussTaskCard = (props: useDiscussTaskCardProps) => {
   const { taskIdx } = props;
 
   const reactionMap = useStorage((root) => root.tasks.at(taskIdx)?.reactions);
+  const user = useAppSelector((state) => state.user.user);
 
   const reactions = useMemo(() => {
     let result: TReaction[] = [];
@@ -30,7 +31,6 @@ const useDiscussTaskCard = (props: useDiscussTaskCardProps) => {
         return;
       }
 
-      const user = getUser();
       const emojiReactions = taskReactions.get(emoji.unified);
       if (
         emojiReactions !== undefined &&
@@ -58,7 +58,7 @@ const useDiscussTaskCard = (props: useDiscussTaskCardProps) => {
         }
       }
     },
-    [taskIdx]
+    [taskIdx, user]
   );
 
   return {

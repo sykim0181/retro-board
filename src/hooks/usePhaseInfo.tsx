@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { TRoom, TRoomPhase } from "@/types/types";
-import { getUser } from "@/utils";
 import usePhase from "./usePhase";
+import { useAppSelector } from "@/store/store";
 
 interface usePhaseInfoProps {
   pagePhase: TRoomPhase;
@@ -11,7 +11,7 @@ interface usePhaseInfoProps {
 const usePhaseInfo = (props: usePhaseInfoProps) => {
   const { pagePhase, room } = props;
 
-  const user = useMemo(() => getUser(), []);
+  const user = useAppSelector((state) => state.user.user);
   const isOwnerOfRoom = useMemo(() => user.id === room?.ownerId, [user, room]);
 
   const { phase, changePhase } = usePhase();

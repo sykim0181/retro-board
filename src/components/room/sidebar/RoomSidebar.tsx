@@ -1,16 +1,21 @@
 import Avvvatars from "avvvatars-react";
 import { ClientSideSuspense } from "@liveblocks/react";
+import { useMemo } from "react";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
 } from "../../ui/sidebar";
-import useRoomSidebar from "@/hooks/useRoomSidebar";
 import RoomSidebarContent from "./RoomSidebarContent";
+import { useLoaderData } from "react-router";
+import { TRoom } from "@/types/types";
+import { useAppSelector } from "@/store/store";
 
 const RoomSidebar = () => {
-  const { room, user, isOwnerOfRoom } = useRoomSidebar();
+  const room = useLoaderData() as TRoom;
+  const user = useAppSelector((state) => state.user.user);
+  const isOwnerOfRoom = useMemo(() => user.id === room.ownerId, [user, room]);
 
   return (
     <Sidebar variant="inset">

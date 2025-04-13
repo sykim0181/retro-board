@@ -2,10 +2,10 @@ import Avvvatars from "avvvatars-react";
 import CreateRoomDialog from "@/components/dashboard/CreateRoomDialog";
 import RoomList from "@/components/dashboard/RoomList";
 import { Card } from "@/components/ui/card";
-import { getUser } from "@/utils";
+import { useAppSelector } from "@/store/store";
 
 const Dashboard = () => {
-  const user = getUser();
+  const user = useAppSelector((state) => state.user.user);
 
   return (
     <>

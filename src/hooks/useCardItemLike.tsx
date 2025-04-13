@@ -1,7 +1,7 @@
 import { useMutation, useStorage } from "@liveblocks/react/suspense";
 import { useMemo } from "react";
 import { TLike } from "@/types/types";
-import { getUser } from "@/utils";
+import { useAppSelector } from "@/store/store";
 
 interface useCardItemLikeProps {
   cardId: string;
@@ -11,11 +11,11 @@ const useCardItemLike = (props: useCardItemLikeProps) => {
   const { cardId } = props;
 
   const likes = useStorage((root) => root.cards.get(cardId)?.likes) ?? [];
+  const user = useAppSelector((state) => state.user.user);
 
   const hasLiked = useMemo(() => {
-    const user = getUser();
     return likes.some((like) => like.user.id === user.id);
-  }, [likes]);
+  }, [likes, user]);
 
   const onClickLikeButton = useMutation(
     ({ storage }) => {
@@ -24,8 +24,6 @@ const useCardItemLike = (props: useCardItemLikeProps) => {
       if (!card) {
         return;
       }
-
-      const user = getUser();
 
       if (hasLiked) {
         card.set(
@@ -39,7 +37,7 @@ const useCardItemLike = (props: useCardItemLikeProps) => {
         card.set("likes", [...likes, newLike]);
       }
     },
-    [hasLiked, likes]
+    [hasLiked, likes, user]
   );
 
   return {

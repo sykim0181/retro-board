@@ -3,6 +3,7 @@ import { ArrowUpIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import useChatInput from "@/hooks/useChatInput";
 import { RefObject } from "react";
+import { useAppSelector } from "@/store/store";
 
 interface ChatInputProps {
   taskIdx: number;
@@ -12,9 +13,11 @@ interface ChatInputProps {
 const ChatInput = (props: ChatInputProps) => {
   const { taskIdx, chatListRef } = props;
 
-  const { user, draft, onChangeInput, onKeyDownInput, sendChat } = useChatInput(
-    { taskIdx, chatListRef }
-  );
+  const { draft, onChangeInput, onKeyDownInput, sendChat } = useChatInput({
+    taskIdx,
+    chatListRef,
+  });
+  const user = useAppSelector((state) => state.user.user);
 
   return (
     <>
