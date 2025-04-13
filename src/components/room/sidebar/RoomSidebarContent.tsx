@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/sidebar";
 import useRoomSidebarContent from "@/hooks/useRoomSidebarContent";
 import { TRoom } from "@/types/types";
+import InviteDialog from "./InviteDialog";
 
 interface RoomSidebarContentProps {
   room: TRoom;
@@ -82,6 +83,16 @@ const RoomSidebarContent = (props: RoomSidebarContentProps) => {
                 )}
               </SidebarMenuItem>
             ))}
+          </SidebarMenu>
+        </SidebarGroupContent>
+      </SidebarGroup>
+
+      <SidebarGroup className="mt-auto">
+        <SidebarGroupContent>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <InviteDialog roomId={room.id} />
+            </SidebarMenuItem>
           </SidebarMenu>
         </SidebarGroupContent>
       </SidebarGroup>
