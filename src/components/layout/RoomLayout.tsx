@@ -1,4 +1,4 @@
-import { RoomProvider } from "@liveblocks/react/suspense";
+import { ClientSideSuspense, RoomProvider } from "@liveblocks/react/suspense";
 import { Outlet, useLoaderData, useParams } from "react-router";
 import { LiveList, LiveMap } from "@liveblocks/client";
 import { SidebarInset, SidebarProvider } from "../ui/sidebar";
@@ -7,6 +7,7 @@ import { Card } from "../ui/card";
 import { Storage } from "@/types/liveblocks";
 import { TRoom } from "@/types/types";
 import { cn } from "@/lib/utils";
+import RoomAlert from "../room/common/RoomAlert";
 
 const initialStorage: Storage = {
   board: new LiveMap([
@@ -43,6 +44,10 @@ const RoomLayout = () => {
           </Card>
         </SidebarInset>
       </SidebarProvider>
+
+      <ClientSideSuspense fallback={null}>
+        <RoomAlert roomId={room.id} />
+      </ClientSideSuspense>
     </RoomProvider>
   );
 };

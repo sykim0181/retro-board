@@ -10,6 +10,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { Task } from "@/types/liveblocks";
 import { TRoom, TRoomPhase } from "@/types/types";
+import usePhase from "./usePhase";
 
 export type TItem = {
   title: string;
@@ -50,12 +51,13 @@ const useRoomSidebarContent = (props: useRoomSidebarContentProps) => {
 
   const [items, setItems] = useState<TItem[]>(initialItems);
 
-  const phase = useStorage((root) => root.phase);
   const taskCards = useStorage(
     (root) => root.tasks.map((task) => task.card),
     shallow
   );
   const hasCard = useStorage((root) => root.cards.size > 0, shallow);
+
+  const { phase, changePhase } = usePhase();
 
   const navigate = useNavigate();
 
@@ -123,9 +125,9 @@ const useRoomSidebarContent = (props: useRoomSidebarContentProps) => {
     setItems(newItems);
   }, [phase, taskCards, isAccessibleItem]);
 
-  const initiateVote = useMutation(({ storage }) => {
-    storage.set("phase", "VOTE");
-  }, []);
+  const initiateVote = () => {
+    changePhase("VOTE");
+  };
 
   const initiateDiscussion = useMutation(({ storage }) => {
     // cards -> task 리스트
@@ -141,7 +143,7 @@ const useRoomSidebarContent = (props: useRoomSidebarContentProps) => {
     });
     const newTasks = new LiveList(tasks);
     storage.set("tasks", newTasks);
-    storage.set("phase", "DISCUSS");
+    changePhase("DISCUSS");
   }, []);
 
   const onClickMenuItem = useCallback(

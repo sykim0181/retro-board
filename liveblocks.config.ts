@@ -1,5 +1,6 @@
 // Define Liveblocks types for your application
 // https://liveblocks.io/docs/api-reference/liveblocks-react#Typing-your-data
+import { TRoomPhase } from "@/types/types";
 import { Storage } from "./src/types/liveblocks";
 
 declare global {
@@ -24,7 +25,7 @@ declare global {
     };
 
     // Custom events, for useBroadcastEvent, useEventListener
-    RoomEvent: {};
+    RoomEvent: { type: "PHASE_CHANGE"; phase: TRoomPhase };
     // Example has two events, using a union
     // | { type: "PLAY" }
     // | { type: "REACTION"; emoji: "🔥" };

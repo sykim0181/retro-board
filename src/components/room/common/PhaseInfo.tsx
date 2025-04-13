@@ -17,7 +17,7 @@ const PhaseInfo = (props: PhaseInfoProps) => {
   });
 
   const onClickEditButton = () => {
-    changePhase();
+    changePhase(pagePhase);
   };
 
   return (

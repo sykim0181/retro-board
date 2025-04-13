@@ -24,9 +24,10 @@ const router = createBrowserRouter([
         path: "room/:roomId",
         Component: RoomLayout,
         children: [
-          { index: true, element: <Navigate to="reflect" /> },
+          { index: true, element: <Navigate to="reflect" replace /> },
           { path: "reflect", Component: Reflect },
           { path: "vote", Component: Vote },
+          { path: "discuss", element: <Navigate to="1" replace /> },
           { path: "discuss/:taskIdx", Component: Discuss },
         ],
         loader: async ({ params }) => {

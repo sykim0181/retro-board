@@ -1,7 +1,7 @@
-import { useMutation, useStorage } from "@liveblocks/react/suspense";
 import { useMemo } from "react";
 import { TRoom, TRoomPhase } from "@/types/types";
 import { getUser } from "@/utils";
+import usePhase from "./usePhase";
 
 interface usePhaseInfoProps {
   pagePhase: TRoomPhase;
@@ -14,7 +14,7 @@ const usePhaseInfo = (props: usePhaseInfoProps) => {
   const user = useMemo(() => getUser(), []);
   const isOwnerOfRoom = useMemo(() => user.id === room?.ownerId, [user, room]);
 
-  const phase = useStorage((root) => root.phase);
+  const { phase, changePhase } = usePhase();
 
   const isCompleted = useMemo(() => {
     switch (pagePhase) {
@@ -35,13 +35,6 @@ const usePhaseInfo = (props: usePhaseInfoProps) => {
       }
     }
   }, [pagePhase, phase]);
-
-  const changePhase = useMutation(
-    ({ storage }) => {
-      storage.set("phase", pagePhase);
-    },
-    [pagePhase]
-  );
 
   return {
     isCompleted,
