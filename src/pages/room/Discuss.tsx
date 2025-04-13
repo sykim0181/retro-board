@@ -1,16 +1,17 @@
 import { ClientSideSuspense } from "@liveblocks/react/suspense";
 import { Spinner } from "@/components/ui/spinner";
 import DiscussContent from "@/components/room/discuss/DiscussContent";
+import ContentHeader from "@/components/room/common/ContentHeader";
 
 const Discuss = () => {
   return (
     <div className="h-full flex flex-col gap-[2rem]">
-      <div className="flex flex-col gap-[.5rem]">
-        <h1 className="font-bold">Discuss</h1>
-        <p className="text-gray-500 text-[0.9rem]">
+      <ContentHeader.Wrapper>
+        <ContentHeader.Title>Discuss</ContentHeader.Title>
+        <ContentHeader.Description>
           Start the conversation about the task card.
-        </p>
-      </div>
+        </ContentHeader.Description>
+      </ContentHeader.Wrapper>
 
       <div className="flex-1 overflow-y-hidden">
         <ClientSideSuspense

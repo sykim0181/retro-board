@@ -2,16 +2,18 @@ import Avvvatars from "avvvatars-react";
 import { ArrowUpIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import useChatInput from "@/hooks/useChatInput";
+import { RefObject } from "react";
 
 interface ChatInputProps {
   taskIdx: number;
+  chatListRef: RefObject<HTMLUListElement | null>;
 }
 
 const ChatInput = (props: ChatInputProps) => {
-  const { taskIdx } = props;
+  const { taskIdx, chatListRef } = props;
 
   const { user, draft, onChangeInput, onKeyDownInput, sendChat } = useChatInput(
-    { taskIdx }
+    { taskIdx, chatListRef }
   );
 
   return (

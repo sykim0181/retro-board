@@ -1,11 +1,12 @@
 import { RoomProvider } from "@liveblocks/react/suspense";
 import { Outlet, useLoaderData, useParams } from "react-router";
 import { LiveList, LiveMap } from "@liveblocks/client";
-import { SidebarProvider } from "../ui/sidebar";
+import { SidebarInset, SidebarProvider } from "../ui/sidebar";
 import RoomSidebar from "../room/sidebar/RoomSidebar";
 import { Card } from "../ui/card";
 import { Storage } from "@/types/liveblocks";
 import { TRoom } from "@/types/types";
+import { cn } from "@/lib/utils";
 
 const initialStorage: Storage = {
   board: new LiveMap([
@@ -30,14 +31,17 @@ const RoomLayout = () => {
 
   return (
     <RoomProvider id={roomId} initialStorage={initialStorage}>
-      <SidebarProvider>
+      <SidebarProvider className="h-dvh">
         <RoomSidebar />
-
-        <main className="flex-1 h-dvh p-[0.5rem] box-border">
-          <Card className="h-full p-[2rem] box-border">
+        <SidebarInset
+          className={cn(["overflow-hidden"])}
+        >
+          <Card 
+            className={cn(["h-full", "p-[1rem]"])}
+          >
             <Outlet context={{ room }} />
           </Card>
-        </main>
+        </SidebarInset>
       </SidebarProvider>
     </RoomProvider>
   );

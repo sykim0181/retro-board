@@ -11,9 +11,9 @@ const DiscussContent = () => {
     <div className="h-full flex flex-col gap-[2rem]">
       <div className="flex justify-center gap-[2rem]">
         <span>{card.content}</span>
-        <div className="flex gap-[0.5rem] py-[0.2rem] px-[1rem] rounded-2xl bg-gray-400 text-white">
-          <ThumbsUpIcon width="1rem" />
-          <span>{card.likes.length}</span>
+        <div className="flex gap-[0.5rem] py-[0.1rem] px-[1rem] rounded-xl bg-gray-400 text-white">
+          <ThumbsUpIcon width="0.9rem" />
+          <span className="text-[0.9rem]">{card.likes.length}</span>
         </div>
       </div>
 

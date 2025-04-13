@@ -32,7 +32,7 @@ const Column = (props: ColumnProps) => {
       className="relative h-full box-border flex flex-col gap-0 overflow-y-scroll hide-scrollbar"
       ref={ref}
     >
-      <div className="sticky top-0 left-0 flex items-center p-[1rem] bg-white">
+      <div className="sticky top-0 left-0 flex items-center p-[1rem] bg-[rgba(255,255,255,0.8)]">
         <p className="block flex-1 text-start font-bold">{type}</p>
         <button
           className="cursor-pointer hover:text-gray-500"

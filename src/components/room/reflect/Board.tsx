@@ -6,15 +6,15 @@ const Board = () => {
   const { handleDragOver, handleDragEnd } = useBoard();
 
   return (
-    <div className="h-full grid grid-cols-3 gap-[1rem]">
+    <div className="flex-1 grid grid-cols-3 gap-[1rem] overflow-hidden">
       <DndContext
         onDragOver={handleDragOver}
         onDragEnd={handleDragEnd}
         collisionDetection={closestCorners}
       >
-          <Column type="start" />
-          <Column type="end" />
-          <Column type="continue" />
+        <Column type="start" />
+        <Column type="end" />
+        <Column type="continue" />
       </DndContext>
     </div>
   );

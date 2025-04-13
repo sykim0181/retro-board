@@ -1,15 +1,16 @@
 import { LiveList, LiveObject } from "@liveblocks/client";
 import { useMutation } from "@liveblocks/react";
-import { useState } from "react";
+import { RefObject, useState } from "react";
 import { Chat } from "@/types/liveblocks";
 import { getUser } from "@/utils";
 
 interface useChatInputProps {
   taskIdx: number;
+  chatListRef: RefObject<HTMLUListElement | null>;
 }
 
 const useChatInput = (props: useChatInputProps) => {
-  const { taskIdx } = props;
+  const { taskIdx, chatListRef } = props;
 
   const [draft, setDraft] = useState("");
 
@@ -42,6 +43,13 @@ const useChatInput = (props: useChatInputProps) => {
       taskChats?.push(newChat);
 
       setDraft("");
+
+      setTimeout(() => {
+        chatListRef.current?.scrollTo({
+          top: chatListRef.current.scrollHeight,
+          behavior: "smooth",
+        });
+      }, 0);
     },
     [taskIdx, draft]
   );

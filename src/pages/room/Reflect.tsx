@@ -4,18 +4,19 @@ import { Spinner } from "../../components/ui/spinner";
 import Board from "@/components/room/reflect/Board";
 import PhaseInfo from "@/components/room/common/PhaseInfo";
 import { TRoom } from "@/types/types";
+import ContentHeader from "@/components/room/common/ContentHeader";
 
 const Reflect = () => {
   const { room } = useOutletContext<{ room: TRoom }>();
 
   return (
-    <div className="h-full flex flex-col gap-[2rem]">
-      <div className="flex flex-col gap-[.5rem]">
-        <h1 className="font-bold">Reflect</h1>
-        <p className="text-gray-500 text-[0.9rem]">
+    <div className="h-full flex flex-col gap-[1.5rem]">
+      <ContentHeader.Wrapper>
+        <ContentHeader.Title>Reflect</ContentHeader.Title>
+        <ContentHeader.Description>
           Add a card and drag cards by topic.
-        </p>
-      </div>
+        </ContentHeader.Description>
+      </ContentHeader.Wrapper>
 
       <div className="flex-1 overflow-y-hidden flex flex-col">
         <ClientSideSuspense
