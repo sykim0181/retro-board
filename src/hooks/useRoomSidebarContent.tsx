@@ -2,9 +2,9 @@ import { LiveList, LiveMap, LiveObject, shallow } from "@liveblocks/client";
 import { useMutation, useStorage } from "@liveblocks/react/suspense";
 import { LucideIcon, MessageSquareTextIcon, SquarePenIcon } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
-import { Task } from "@/types/liveblocks";
-import { TCard, TRoom, TRoomPhase } from "@/types/types";
 import { useNavigate } from "react-router";
+import { Task } from "@/types/liveblocks";
+import { TRoom, TRoomPhase } from "@/types/types";
 
 export type TItem = {
   title: string;
@@ -40,7 +40,7 @@ const useRoomSidebarContent = (props: useRoomSidebarContentProps) => {
   const [items, setItems] = useState<TItem[]>(initialItems);
 
   const phase = useStorage((root) => root.phase);
-  const tasks = useStorage((root) => root.tasks);
+  const taskCards = useStorage((root) => root.tasks.map(task => task.card), shallow);
   const canDiscuss = useStorage((root) => root.cards.size > 0, shallow);
 
   const navigate = useNavigate();
@@ -80,9 +80,9 @@ const useRoomSidebarContent = (props: useRoomSidebarContentProps) => {
       if (item.phase === "DISCUSS") {
         if (phase === "DISCUSS") {
           // DISCUSS 단계 -> 서브아이템 추가
-          const newSubitems = tasks.map((task, idx) => {
+          const newSubitems = taskCards.map((card, idx) => {
             const item: TItem = {
-              title: task.card.content,
+              title: card.content,
               url: `discuss/${idx + 1}`,
             };
             return item;
@@ -99,7 +99,7 @@ const useRoomSidebarContent = (props: useRoomSidebarContentProps) => {
     });
 
     setItems(newItems);
-  }, [phase, tasks, isAccessibleItem]);
+  }, [phase, taskCards, isAccessibleItem]);
 
   const initiateDiscussion = useMutation(({ storage }) => {
     // cards -> task 리스트
