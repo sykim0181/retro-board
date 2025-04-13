@@ -7,6 +7,7 @@ import RoomLayout from "./components/layout/RoomLayout";
 import Reflect from "./pages/room/Reflect";
 import Discuss from "./pages/room/Discuss";
 import DefaultLayout from "./components/layout/DefaultLayout";
+import Vote from "./pages/room/Vote";
 
 const router = createBrowserRouter([
   {
@@ -25,6 +26,7 @@ const router = createBrowserRouter([
         children: [
           { index: true, element: <Navigate to="reflect" /> },
           { path: "reflect", Component: Reflect },
+          { path: "vote", Component: Vote },
           { path: "discuss/:taskIdx", Component: Discuss },
         ],
         loader: async ({ params }) => {

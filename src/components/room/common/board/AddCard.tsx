@@ -12,11 +12,7 @@ interface AddCardProps {
 const AddCard = (props: AddCardProps) => {
   const { column, close } = props;
 
-  const {
-    draft,
-    onChangeTextArea,
-    addCard 
-  } = useAddCard({ column })
+  const { draft, onChangeTextArea, addCard } = useAddCard({ column });
 
   return (
     <Card className="w-full p-[.5rem] gap-[.5rem]">
@@ -30,9 +26,10 @@ const AddCard = (props: AddCardProps) => {
       </CardContent>
 
       <CardFooter className="justify-end gap-[.5rem]">
-        <button 
-          onClick={close} 
-          className="text-(--border) hover:text-black cursor-pointer">
+        <button
+          onClick={close}
+          className="text-(--border) hover:text-black cursor-pointer"
+        >
           <XIcon width="1rem" />
         </button>
         <button

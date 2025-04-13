@@ -1,7 +1,6 @@
-import { ClientSideSuspense } from "@liveblocks/react/suspense";
-import { Spinner } from "@/components/ui/spinner";
 import DiscussContent from "@/components/room/discuss/DiscussContent";
 import ContentHeader from "@/components/room/common/ContentHeader";
+import ContentBody from "@/components/room/common/ContentBody";
 
 const Discuss = () => {
   return (
@@ -13,17 +12,9 @@ const Discuss = () => {
         </ContentHeader.Description>
       </ContentHeader.Wrapper>
 
-      <div className="flex-1 overflow-y-hidden">
-        <ClientSideSuspense
-          fallback={
-            <div className="w-full flex justify-center items-center">
-              <Spinner />
-            </div>
-          }
-        >
-          <DiscussContent />
-        </ClientSideSuspense>
-      </div>
+      <ContentBody>
+        <DiscussContent />
+      </ContentBody>
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import { useMutation, useStorage } from "@liveblocks/react/suspense";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { TRoom, TRoomPhase } from "@/types/types";
 import { getUser } from "@/utils";
 
@@ -17,13 +17,23 @@ const usePhaseInfo = (props: usePhaseInfoProps) => {
   const phase = useStorage((root) => root.phase);
 
   const isCompleted = useMemo(() => {
-    if (pagePhase === "REFLECT") {
-      if (phase === "DISCUSS") {
-        return true;
+    switch (pagePhase) {
+      case "REFLECT": {
+        if (phase === "VOTE" || phase === "DISCUSS") {
+          return true;
+        }
+        return false;
       }
-      return false;
+      case "VOTE": {
+        if (phase === "DISCUSS") {
+          return true;
+        }
+        return false;
+      }
+      default: {
+        return false;
+      }
     }
-    return false;
   }, [pagePhase, phase]);
 
   const changePhase = useMutation(

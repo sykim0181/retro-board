@@ -47,4 +47,4 @@ export type TReaction = {
   users: TUser[];
 };
 
-export type TRoomPhase = "REFLECT" | "DISCUSS";
+export type TRoomPhase = "REFLECT" | "VOTE" | "DISCUSS";

@@ -1,16 +1,11 @@
-import { useOutletContext } from "react-router";
-import { ClientSideSuspense } from "@liveblocks/react/suspense";
-import { Spinner } from "../../components/ui/spinner";
-import Board from "@/components/room/reflect/Board";
 import PhaseInfo from "@/components/room/common/PhaseInfo";
-import { TRoom } from "@/types/types";
 import ContentHeader from "@/components/room/common/ContentHeader";
+import ContentBody from "@/components/room/common/ContentBody";
+import ReflectBoard from "@/components/room/reflect/ReflectBoard";
 
 const Reflect = () => {
-  const { room } = useOutletContext<{ room: TRoom }>();
-
   return (
-    <div className="h-full flex flex-col gap-[1.5rem]">
+    <div className="h-full flex flex-col gap-[2rem]">
       <ContentHeader.Wrapper>
         <ContentHeader.Title>Reflect</ContentHeader.Title>
         <ContentHeader.Description>
@@ -18,18 +13,10 @@ const Reflect = () => {
         </ContentHeader.Description>
       </ContentHeader.Wrapper>
 
-      <div className="flex-1 overflow-y-hidden flex flex-col">
-        <ClientSideSuspense
-          fallback={
-            <div className="w-full flex justify-center items-center">
-              <Spinner />
-            </div>
-          }
-        >
-          <PhaseInfo pagePhase="REFLECT" room={room} />
-          <Board />
-        </ClientSideSuspense>
-      </div>
+      <ContentBody className="flex flex-col">
+        <PhaseInfo pagePhase="REFLECT" />
+        <ReflectBoard />
+      </ContentBody>
     </div>
   );
 };

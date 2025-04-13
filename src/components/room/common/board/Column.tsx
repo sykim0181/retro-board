@@ -3,8 +3,9 @@ import { PlusIcon } from "lucide-react";
 import { TColumnType } from "@/types/types";
 import AddCard from "./AddCard";
 import ColumnCardContainer from "./ColumnCardContainer";
-import { Card } from "../../ui/card";
+import { Card } from "../../../ui/card";
 import useColumn from "@/hooks/useColumn";
+import { useBoardContext } from "./Board";
 
 interface ColumnProps {
   type: TColumnType;
@@ -13,6 +14,7 @@ interface ColumnProps {
 const Column = (props: ColumnProps) => {
   const { type } = props;
 
+  const { editable } = useBoardContext();
   const { cardIdList } = useColumn({ type });
 
   const [showAddCard, setShowAddCard] = useState(false);
@@ -34,12 +36,14 @@ const Column = (props: ColumnProps) => {
     >
       <div className="sticky top-0 left-0 flex items-center p-[1rem] bg-[rgba(255,255,255,0.8)]">
         <p className="block flex-1 text-start font-bold">{type}</p>
-        <button
-          className="cursor-pointer hover:text-gray-500"
-          onClick={onClickAddButton}
-        >
-          <PlusIcon width="1rem" />
-        </button>
+        {editable && (
+          <button
+            className="cursor-pointer hover:text-gray-500"
+            onClick={onClickAddButton}
+          >
+            <PlusIcon width="1rem" />
+          </button>
+        )}
       </div>
 
       <div className="flex-1 flex flex-col gap-[1rem] p-[1rem]">

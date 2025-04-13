@@ -1,15 +1,16 @@
 import { PencilIcon } from "lucide-react";
 import usePhaseInfo from "@/hooks/usePhaseInfo";
-import { TRoom, TRoomPhase } from "@/types/types";
+import { TRoomPhase } from "@/types/types";
+import { useRoomContext } from "./ContentBody";
 
 interface PhaseInfoProps {
   pagePhase: TRoomPhase;
-  room: TRoom;
 }
 
 const PhaseInfo = (props: PhaseInfoProps) => {
-  const { pagePhase, room } = props;
+  const { pagePhase } = props;
 
+  const { room } = useRoomContext();
   const { isCompleted, changePhase, isOwnerOfRoom } = usePhaseInfo({
     pagePhase,
     room,

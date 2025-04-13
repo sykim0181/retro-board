@@ -1,6 +1,11 @@
 import { LiveList, LiveMap, LiveObject, shallow } from "@liveblocks/client";
 import { useMutation, useStorage } from "@liveblocks/react/suspense";
-import { LucideIcon, MessageSquareTextIcon, SquarePenIcon } from "lucide-react";
+import {
+  LucideIcon,
+  MessageSquareTextIcon,
+  SquarePenIcon,
+  VoteIcon,
+} from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { Task } from "@/types/liveblocks";
@@ -23,6 +28,12 @@ const initialItems: TItem[] = [
     icon: SquarePenIcon,
   },
   {
+    title: "Vote",
+    phase: "VOTE",
+    url: "vote",
+    icon: VoteIcon,
+  },
+  {
     title: "Discuss",
     phase: "DISCUSS",
     icon: MessageSquareTextIcon,
@@ -40,8 +51,11 @@ const useRoomSidebarContent = (props: useRoomSidebarContentProps) => {
   const [items, setItems] = useState<TItem[]>(initialItems);
 
   const phase = useStorage((root) => root.phase);
-  const taskCards = useStorage((root) => root.tasks.map(task => task.card), shallow);
-  const canDiscuss = useStorage((root) => root.cards.size > 0, shallow);
+  const taskCards = useStorage(
+    (root) => root.tasks.map((task) => task.card),
+    shallow
+  );
+  const hasCard = useStorage((root) => root.cards.size > 0, shallow);
 
   const navigate = useNavigate();
 
@@ -53,10 +67,18 @@ const useRoomSidebarContent = (props: useRoomSidebarContentProps) => {
 
       // 룸 주인은 phase와 관계 없이 모든 페이지 접근 가능
       if (isOwnerOfRoom) {
-        // 카드가 하나도 없으면 discuss 불가
-        if (navItem.phase === "DISCUSS" && !canDiscuss) {
+        // 카드가 하나도 없으면 vote, discuss 불가
+        if (
+          (navItem.phase === "DISCUSS" || navItem.phase === "VOTE") &&
+          !hasCard
+        ) {
           return false;
         }
+
+        if (navItem.phase === "DISCUSS" && phase !== "VOTE") {
+          return false;
+        }
+
         return true;
       }
 
@@ -66,7 +88,7 @@ const useRoomSidebarContent = (props: useRoomSidebarContentProps) => {
       }
       return false;
     },
-    [isOwnerOfRoom, phase, canDiscuss]
+    [isOwnerOfRoom, phase, hasCard]
   );
 
   useEffect(() => {
@@ -101,6 +123,10 @@ const useRoomSidebarContent = (props: useRoomSidebarContentProps) => {
     setItems(newItems);
   }, [phase, taskCards, isAccessibleItem]);
 
+  const initiateVote = useMutation(({ storage }) => {
+    storage.set("phase", "VOTE");
+  }, []);
+
   const initiateDiscussion = useMutation(({ storage }) => {
     // cards -> task 리스트
     const cards = storage.get("cards");
@@ -126,13 +152,18 @@ const useRoomSidebarContent = (props: useRoomSidebarContentProps) => {
         return;
       }
 
-      // 룸 주인이 DISCUSS 메뉴를 클릭하면, DISCUSS 단계로 변경
-      if (navItem.phase === "DISCUSS" && isOwnerOfRoom && phase !== "DISCUSS") {
-        initiateDiscussion();
-        navigate(`/room/${room.id}/discuss/1`);
+      if (isOwnerOfRoom) {
+        if (navItem.phase === "DISCUSS" && phase === "VOTE") {
+          // VOTE -> DISCUSS
+          initiateDiscussion();
+          navigate(`/room/${room.id}/discuss/1`);
+        } else if (navItem.phase === "VOTE" && phase === "REFLECT") {
+          // REFLECT -> VOTE
+          initiateVote();
+        }
       }
     },
-    [phase, isOwnerOfRoom, initiateDiscussion, navigate]
+    [phase, isOwnerOfRoom, initiateDiscussion, initiateVote, navigate]
   );
   return {
     items,

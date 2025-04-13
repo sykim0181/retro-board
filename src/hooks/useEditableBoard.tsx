@@ -2,7 +2,7 @@ import { DragEndEvent, DragOverEvent } from "@dnd-kit/core";
 import { useMutation } from "@liveblocks/react/suspense";
 import { TColumnType } from "@/types/types";
 
-const useBoard = () => {
+const useEditableBoard = () => {
   const moveCardColumn = useMutation(
     (
       { storage },
@@ -11,11 +11,6 @@ const useBoard = () => {
       nextColumn: TColumnType,
       nextCardId?: string // 뒤에 올 카드 아이디
     ) => {
-      const phase = storage.get("phase");
-      if (phase !== "REFLECT") {
-        return;
-      }
-
       const board = storage.get("board");
 
       if (prevColumn === nextColumn && nextCardId !== undefined) {
@@ -112,4 +107,4 @@ const useBoard = () => {
   };
 };
 
-export default useBoard;
+export default useEditableBoard;
