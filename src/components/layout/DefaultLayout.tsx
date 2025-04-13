@@ -6,6 +6,10 @@ const DefaultLayout = () => {
     <>
       <Outlet />
       <Toaster />
+      <div
+        id="portal"
+        className="absolute top-0 left-0"
+      />
     </>
   );
 };
