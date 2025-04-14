@@ -37,6 +37,7 @@ const initialItems: TItem[] = [
   {
     title: "Discuss",
     phase: "DISCUSS",
+    url: "discuss",
     icon: MessageSquareTextIcon,
   },
 ];
@@ -150,7 +151,7 @@ const useRoomSidebarContent = (props: useRoomSidebarContentProps) => {
     (e: React.MouseEvent, navItem: TItem) => {
       if (navItem.disabled === true) {
         e.preventDefault();
-        e.stopPropagation();
+        // e.stopPropagation();
         return;
       }
 
@@ -158,11 +159,14 @@ const useRoomSidebarContent = (props: useRoomSidebarContentProps) => {
         if (navItem.phase === "DISCUSS" && phase === "VOTE") {
           // VOTE -> DISCUSS
           initiateDiscussion();
-          navigate(`/room/${room.id}/discuss/1`);
         } else if (navItem.phase === "VOTE" && phase === "REFLECT") {
           // REFLECT -> VOTE
           initiateVote();
         }
+      }
+
+      if (navItem.url) {
+        navigate(`/room/${room.id}/${navItem.url}`);
       }
     },
     [phase, isOwnerOfRoom, initiateDiscussion, initiateVote, navigate]
