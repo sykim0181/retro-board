@@ -1,5 +1,6 @@
 #root {
   --max-width: 1280px;
-  
+
   position: relative;
+  font-family: "Pretendard-Regular";
 }
