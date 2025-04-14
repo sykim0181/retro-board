@@ -1,8 +1,9 @@
 import Avvvatars from "avvvatars-react";
-import CreateRoomDialog from "@/components/dashboard/CreateRoomDialog";
-import RoomList from "@/components/dashboard/RoomList";
-import { Card } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAppSelector } from "@/store/store";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import OwnedRoomList from "@/components/dashboard/OwnedRoomList";
+import AddedRoomList from "@/components/dashboard/AddedRoomList";
 
 const Dashboard = () => {
   const user = useAppSelector((state) => state.user.user);
@@ -17,12 +18,27 @@ const Dashboard = () => {
       </div>
 
       <Card className="p-[2rem]">
-        <div className="flex items-center">
-          <h2 className="text-start font-bold block flex-1">Rooms</h2>
-          <CreateRoomDialog />
+        <div className="flex">
+          <CardHeader className="flex-1">
+            <CardTitle>Rooms</CardTitle>
+          </CardHeader>
         </div>
 
-        <RoomList />
+        <div>
+          <Tabs defaultValue="owned">
+            <TabsList>
+              <TabsTrigger value="owned">Created</TabsTrigger>
+              <TabsTrigger value="added">Added</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="owned" className="flex flex-col gap-[1rem]">
+              <OwnedRoomList />
+            </TabsContent>
+            <TabsContent value="added" className="flex flex-col gap-[1rem]">
+              <AddedRoomList />
+            </TabsContent>
+          </Tabs>
+        </div>
       </Card>
     </>
   );

@@ -1,6 +1,6 @@
-import Avvvatars from "avvvatars-react";
 import { TChat } from "@/types/types";
 import { getDateDiff } from "@/utils";
+import UserAvatar from "@/components/common/UserAvatar";
 
 interface ChatItemProps {
   chat: TChat;
@@ -11,7 +11,7 @@ const ChatItem = (props: ChatItemProps) => {
 
   return (
     <li className="flex gap-[1rem] items-center">
-      <Avvvatars value={chat.user.name} />
+      <UserAvatar userName={chat.user.name} />
       <div>
         <div className="flex gap-[0.5rem]">
           <span className="text-[0.8rem]">{chat.user.name}</span>

@@ -1,9 +1,9 @@
-import Avvvatars from "avvvatars-react";
 import { ArrowUpIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import useChatInput from "@/hooks/useChatInput";
 import { RefObject } from "react";
 import { useAppSelector } from "@/store/store";
+import UserAvatar from "@/components/common/UserAvatar";
 
 interface ChatInputProps {
   taskIdx: number;
@@ -21,7 +21,7 @@ const ChatInput = (props: ChatInputProps) => {
 
   return (
     <>
-      <Avvvatars value={user.name} />
+      <UserAvatar userName={user.name} />
       <Input
         className="flex-1 text-[0.9rem]"
         value={draft}

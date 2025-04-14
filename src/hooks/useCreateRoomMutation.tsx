@@ -13,11 +13,12 @@ const useCreateRoomMutation = () => {
     mutationFn: ({ roomName, userId }) => createRoom(roomName, userId),
     onError: (error) => {
       console.log(error);
-      toast("Fail to create a room.");
+      toast.error("Fail to create a room.");
     },
-    onSuccess: () => {
+    onSuccess: (_, { userId }) => {
       toast("Succeed to create a room.");
       queryClient.invalidateQueries({ queryKey: ["rooms"] });
+      queryClient.invalidateQueries({ queryKey: ["rooms", "owned", userId] });
     },
   });
 

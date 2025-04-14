@@ -1,4 +1,3 @@
-import Avvvatars from "avvvatars-react";
 import { ClientSideSuspense } from "@liveblocks/react";
 import { useMemo } from "react";
 import {
@@ -11,6 +10,7 @@ import RoomSidebarContent from "./RoomSidebarContent";
 import { useLoaderData } from "react-router";
 import { TRoom } from "@/types/types";
 import { useAppSelector } from "@/store/store";
+import UserAvatar from "@/components/common/UserAvatar";
 
 const RoomSidebar = () => {
   const room = useLoaderData() as TRoom;
@@ -27,7 +27,7 @@ const RoomSidebar = () => {
       </ClientSideSuspense>
       <SidebarFooter>
         <div className="flex gap-[.5rem] items-center">
-          <Avvvatars value={user.name} />
+          <UserAvatar userName={user.name} />
           <span className="text-[0.9rem]">{user.name}</span>
         </div>
       </SidebarFooter>
