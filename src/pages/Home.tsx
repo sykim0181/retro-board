@@ -12,7 +12,7 @@ const Home = () => {
 
   return (
     <main className="min-h-dvh flex flex-col justify-center items-center gap-[2rem] p-[2rem]">
-      <h1 className="text-[2.5rem]">Retro Board</h1>
+      <h1 className="text-[2.5rem]">RetroBoard</h1>
 
       <Card className="w-full max-w-[500px] flex flex-col gap-[2rem] p-[2rem]">
         <div className="flex flex-col items-center gap-[1rem]">
