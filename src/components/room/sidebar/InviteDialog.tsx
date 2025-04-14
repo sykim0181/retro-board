@@ -1,4 +1,4 @@
-import { UserPlusIcon } from "lucide-react";
+import { UserPlusIcon, Copy } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -12,7 +12,6 @@ import { cn } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Copy } from "lucide-react";
 
 interface InviteDialogProps {
   roomId: string;
@@ -20,8 +19,6 @@ interface InviteDialogProps {
 
 const InviteDialog = (props: InviteDialogProps) => {
   const { roomId } = props;
-
-  const linkUrl = `httsp://${import.meta.env.VITE_BASE_URL}/room/${roomId}`;
 
   return (
     <Dialog>
@@ -36,7 +33,7 @@ const InviteDialog = (props: InviteDialogProps) => {
         <DialogHeader>
           <DialogTitle>Invite team mate</DialogTitle>
           <DialogDescription>
-            Anyone who has this link will be able to participate.
+            Share this room ID with your teammate so they can join.
           </DialogDescription>
         </DialogHeader>
 
@@ -46,11 +43,11 @@ const InviteDialog = (props: InviteDialogProps) => {
               <Label htmlFor="link" className="sr-only">
                 Link
               </Label>
-              <Input id="link" defaultValue={linkUrl} readOnly />
+              <Input id="link" defaultValue={roomId} readOnly />
             </div>
             <Button
               size="sm"
-              onClick={() => navigator.clipboard.writeText(linkUrl)}
+              onClick={() => navigator.clipboard.writeText(roomId)}
             >
               <span className="sr-only">Copy</span>
               <Copy />
