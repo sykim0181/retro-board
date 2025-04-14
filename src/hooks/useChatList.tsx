@@ -7,7 +7,7 @@ interface useChatListProps {
 const useChatList = (props: useChatListProps) => {
   const { taskIdx } = props;
 
-  const chats = useStorage(root => root.tasks.at(taskIdx)?.chats) ?? [];
+  const chats = useStorage(root => root.tasks[taskIdx]?.chats) ?? [];
 
   return {
     chats
