@@ -1,54 +1,22 @@
-# React + TypeScript + Vite
+# 프로젝트 소개
+팀원들과 함께 실시간으로 회고를 진행할 수 있는 웹 애플리케이션입니다.  
+[Parabol](https://www.parabol.co/)의 Retrospective Tool 디자인과 기능을 참고하여 개발하였습니다.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+🔗 https://retro-board-sage.vercel.app/
 
-Currently, two official plugins are available:
+# 기술 스택
+- React , Typescript , Redux, TailwindCSS, shadcn/ui, Tanstack Query
+- Firebase, Liveblocks
+- Vite, Vercel
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+# 주요 기능
+- 카드 작성 (Reflect): 카테고리별(Start, End, Continue) 실시간 카드 작성, 드래그를 통한 순서 및 카테고리 변경
+![image](https://github.com/user-attachments/assets/6d372f89-bcb6-48a4-afae-ebabba029f9d)
 
-## Expanding the ESLint configuration
+- 투표 (Vote): 각 카드에 대한 투표
+![image](https://github.com/user-attachments/assets/2a356f52-f8dd-4225-afce-872476f2365c)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+ 
+- 토론 (Discuss): 각 카드에 대한 실시간 의견 교환 및 이모지 리액션
+  ![image](https://github.com/user-attachments/assets/e08dde4d-5ee4-425f-a210-bcfbd4b0a36f)
