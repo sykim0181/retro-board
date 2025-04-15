@@ -10,7 +10,7 @@ const DiscussContent = () => {
   return (
     <div className="h-full flex flex-col gap-[2rem]">
       <div className="flex justify-center gap-[2rem]">
-        <span>{card.content}</span>
+        <span>{card.title}</span>
         <div className="flex gap-[0.5rem] py-[0.1rem] px-[1rem] rounded-xl bg-gray-400 text-white">
           <ThumbsUpIcon width="0.9rem" />
           <span className="text-[0.9rem]">{card.likes.length}</span>

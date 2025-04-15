@@ -3,6 +3,7 @@ export type TColumnType = "start" | "end" | "continue";
 export type TCard = {
   id: string;
   category: TColumnType;
+  title: string;
   content: string;
   likes: TLike[];
 };

@@ -15,7 +15,7 @@ const CardItem = (props: CardProps) => {
   const { cardId, column } = props;
 
   const { editable, showLikes } = useBoardContext();
-  const { content } = useCard({ cardId });
+  const { title, content } = useCard({ cardId });
 
   if (!content) {
     return null;
@@ -24,8 +24,11 @@ const CardItem = (props: CardProps) => {
   const cardContent = useMemo(
     () => (
       <>
-        <CardContent className="px-[.5rem] text-start break-words">
-          {content}
+        <CardContent 
+          className="flex flex-col gap-[1rem] px-[.5rem] text-start break-words"
+        >
+          <div>{title}</div>
+          <div>{content}</div>
         </CardContent>
         {showLikes && (
           <CardFooter className="text-sm justify-end gap-[1rem]">

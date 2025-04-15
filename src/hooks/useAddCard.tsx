@@ -1,30 +1,37 @@
 import { useMutation } from "@liveblocks/react";
 import { LiveObject } from "@liveblocks/client";
 import { nanoid } from "nanoid";
-import { useState } from "react";
+import { RefObject } from "react";
 import { TColumnType, TLike } from "@/types/types";
 import { Card } from "@/types/liveblocks";
 
 interface useAddCardProps {
   column: TColumnType;
+  titleRef: RefObject<HTMLInputElement | null>;
+  contentRef: RefObject<HTMLTextAreaElement | null>;
 }
 
 const useAddCard = (props: useAddCardProps) => {
-  const { column } = props;
-
-  const [draft, setDraft] = useState("");
-
-  const onChangeTextArea = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setDraft(e.target.value);
-  };
+  const { column, titleRef, contentRef } = props;
 
   const addCard = useMutation(
     ({ storage }) => {
+      if (!titleRef.current || !contentRef.current) {
+        return;
+      }
+
+      const title = titleRef.current.value;
+      const content = contentRef.current.value;
+      if (title === "" || content === "") {
+        return;
+      }
+
       const newId = nanoid();
       const newCard: Card = new LiveObject({
         id: newId,
         category: column,
-        content: draft,
+        title,
+        content,
         likes: new Array<TLike>(),
       });
 
@@ -34,14 +41,13 @@ const useAddCard = (props: useAddCardProps) => {
       const cards = storage.get("cards");
       cards.set(newId, newCard);
 
-      setDraft("");
+      titleRef.current.value = "";
+      contentRef.current.value = "";
     },
-    [draft, column]
+    [column, titleRef, contentRef]
   );
 
   return {
-    draft,
-    onChangeTextArea,
     addCard,
   };
 };
