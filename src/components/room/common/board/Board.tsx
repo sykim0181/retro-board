@@ -33,7 +33,7 @@ const Board = (props: BoardProps) => {
     () => (
       <>
         <Column type="start" />
-        <Column type="end" />
+        <Column type="stop" />
         <Column type="continue" />
       </>
     ),

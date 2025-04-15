@@ -14,7 +14,7 @@ import User from "../room/common/User";
 const initialStorage: Storage = {
   board: new LiveMap([
     ["start", new LiveList([])],
-    ["end", new LiveList([])],
+    ["stop", new LiveList([])],
     ["continue", new LiveList([])],
   ]),
   cards: new LiveMap(),

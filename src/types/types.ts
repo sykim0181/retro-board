@@ -1,4 +1,4 @@
-export type TColumnType = "start" | "end" | "continue";
+export type TColumnType = "start" | "stop" | "continue";
 
 export type TCard = {
   id: string;
