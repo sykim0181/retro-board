@@ -6,6 +6,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from "../ui/dialog";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
@@ -47,7 +48,7 @@ const EditProfileDialog = (props: EditProfileDialogProps) => {
 
   return (
     <Dialog>
-      {trigger}
+      <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Edit profile</DialogTitle>
@@ -61,6 +62,7 @@ const EditProfileDialog = (props: EditProfileDialogProps) => {
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="col-span-3 pr-[1.5rem]"
+              maxLength={30}
             />
             <button
               className="absolute top-1/2 right-[0.5rem] transform-[translateY(-50%)] cursor-pointer"

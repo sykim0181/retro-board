@@ -4,6 +4,8 @@ import { useAppSelector } from "@/store/store";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import OwnedRoomList from "@/components/dashboard/OwnedRoomList";
 import AddedRoomList from "@/components/dashboard/AddedRoomList";
+import { Button } from "@/components/ui/button";
+import EditProfileDialog from "@/components/common/EditProfileDialog";
 
 const Dashboard = () => {
   const user = useAppSelector((state) => state.user.user);
@@ -14,7 +16,9 @@ const Dashboard = () => {
 
       <div className="flex items-center gap-[1rem]">
         <Avvvatars value={user.name} />
-        <p>{user.name}</p>
+        <EditProfileDialog
+          trigger={<Button variant="ghost">{user.name}</Button>}
+        />
       </div>
 
       <Card className="p-[2rem]">
