@@ -11,13 +11,17 @@ import { TUser } from "./types/types";
 
 dayjs.extend(relativeTime);
 
-export function generateUser(): TUser {
+export function generateRandomName(): string {
   const randomName = uniqueNamesGenerator({
     dictionaries: [adjectives, colors, animals],
     separator: " ",
     style: "capital",
   });
+  return randomName;
+}
 
+export function generateUser(): TUser {
+  const randomName = generateRandomName();
   return {
     id: nanoid(),
     name: randomName,

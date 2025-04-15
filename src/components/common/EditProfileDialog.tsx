@@ -12,6 +12,8 @@ import { Input } from "../ui/input";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { Button } from "../ui/button";
 import { updateUserName } from "@/store/userSlice";
+import { RotateCcw } from "lucide-react";
+import { generateRandomName } from "@/utils";
 
 interface EditProfileDialogProps {
   trigger: React.ReactNode;
@@ -38,6 +40,11 @@ const EditProfileDialog = (props: EditProfileDialogProps) => {
     [name, dispatch]
   );
 
+  const onClickRecreateButton = useCallback(() => {
+    const newName = generateRandomName();
+    setName(newName);
+  }, [setName]);
+
   return (
     <Dialog>
       {trigger}
@@ -47,14 +54,20 @@ const EditProfileDialog = (props: EditProfileDialogProps) => {
         </DialogHeader>
 
         <div>
-          <div className="grid grid-cols-4">
+          <div className="grid grid-cols-4 relative">
             <Label htmlFor="name">Name</Label>
             <Input
               id="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="col-span-3"
+              className="col-span-3 pr-[1.5rem]"
             />
+            <button
+              className="absolute top-1/2 right-[0.5rem] transform-[translateY(-50%)] cursor-pointer"
+              onClick={onClickRecreateButton}
+            >
+              <RotateCcw width="1rem" />
+            </button>
           </div>
         </div>
 
