@@ -7,6 +7,7 @@ declare global {
   interface Liveblocks {
     // Each user's Presence, for useMyPresence, useOthers, etc.
     Presence: {
+      name: string;
       // Example, real-time cursor coordinates
       // cursor: { x: number; y: number };
     };

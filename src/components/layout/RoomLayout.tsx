@@ -9,6 +9,7 @@ import { TRoom } from "@/types/types";
 import { cn } from "@/lib/utils";
 import RoomAlert from "../room/common/RoomAlert";
 import RoomErrorBoundary from "../room/common/RoomErrorBoundary";
+import User from "../room/common/User";
 
 const initialStorage: Storage = {
   board: new LiveMap([
@@ -32,7 +33,13 @@ const RoomLayout = () => {
   const room = useLoaderData() as TRoom;
 
   return (
-    <RoomProvider id={roomId} initialStorage={initialStorage}>
+    <RoomProvider
+      id={roomId}
+      initialStorage={initialStorage}
+      initialPresence={{
+        name: "unknown",
+      }}
+    >
       <SidebarProvider className="h-dvh">
         <RoomSidebar />
         <SidebarInset className={cn(["overflow-hidden"])}>
@@ -46,6 +53,7 @@ const RoomLayout = () => {
 
       <ClientSideSuspense fallback={null}>
         <RoomAlert roomId={room.id} />
+        <User />
       </ClientSideSuspense>
     </RoomProvider>
   );
