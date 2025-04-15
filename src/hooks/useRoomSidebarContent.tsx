@@ -107,7 +107,7 @@ const useRoomSidebarContent = (props: useRoomSidebarContentProps) => {
           // DISCUSS 단계 -> 서브아이템 추가
           const newSubitems = taskCards.map((card, idx) => {
             const item: TItem = {
-              title: card.content,
+              title: card.title,
               url: `discuss/${idx + 1}`,
             };
             return item;
