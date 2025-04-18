@@ -28,7 +28,7 @@ const router = createBrowserRouter([
           { path: "reflect", Component: Reflect },
           { path: "vote", Component: Vote },
           { path: "discuss", element: <Navigate to="1" replace /> },
-          { path: "discuss/:taskIdx", Component: Discuss },
+          { path: "discuss/:topicIdx", Component: Discuss },
         ],
         loader: async ({ params }) => {
           const roomId = params.roomId;

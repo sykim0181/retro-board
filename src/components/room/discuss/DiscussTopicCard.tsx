@@ -2,20 +2,20 @@ import EmojiPicker, { EmojiStyle, EmojiClickData } from "emoji-picker-react";
 import { SmilePlusIcon } from "lucide-react";
 import React, { useState } from "react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import useDiscussTaskCard from "@/hooks/useDiscussTaskCard";
+import useDiscussTopicCard from "@/hooks/useDiscussTopicCard";
 import EmojiReaction from "./EmojiReaction";
 import { TCard } from "@/types/types";
 
-interface DiscussTaskCardProps {
-  taskIdx: number;
+interface DiscussTopicCardProps {
+  topicIdx: number;
   card: TCard;
 }
 
-const DiscussTaskCard = (props: DiscussTaskCardProps) => {
-  const { taskIdx, card } = props;
+const DiscussTopicCard = (props: DiscussTopicCardProps) => {
+  const { topicIdx, card } = props;
 
-  const { reactions, handleEmojiClicked } = useDiscussTaskCard({
-    taskIdx,
+  const { reactions, handleEmojiClicked } = useDiscussTopicCard({
+    topicIdx,
   });
 
   const [isOpen, setIsOpen] = useState(false);
@@ -75,4 +75,4 @@ const DiscussTaskCard = (props: DiscussTaskCardProps) => {
   );
 };
 
-export default React.memo(DiscussTaskCard);
+export default React.memo(DiscussTopicCard);

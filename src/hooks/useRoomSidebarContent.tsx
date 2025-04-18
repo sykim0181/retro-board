@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { Task } from "@/types/liveblocks";
+import { Topic } from "@/types/liveblocks";
 import { TRoom, TRoomPhase } from "@/types/types";
 import usePhase from "./usePhase";
 
@@ -52,8 +52,8 @@ const useRoomSidebarContent = (props: useRoomSidebarContentProps) => {
 
   const [items, setItems] = useState<TItem[]>(initialItems);
 
-  const taskCards = useStorage(
-    (root) => root.tasks.map((task) => task.card),
+  const topicCards = useStorage(
+    (root) => root.topics.map((topic) => topic.card),
     shallow
   );
   const hasCard = useStorage((root) => root.cards.size > 0, shallow);
@@ -105,7 +105,7 @@ const useRoomSidebarContent = (props: useRoomSidebarContentProps) => {
       if (item.phase === "DISCUSS") {
         if (phase === "DISCUSS") {
           // DISCUSS 단계 -> 서브아이템 추가
-          const newSubitems = taskCards.map((card, idx) => {
+          const newSubitems = topicCards.map((card, idx) => {
             const item: TItem = {
               title: card.title,
               url: `discuss/${idx + 1}`,
@@ -124,26 +124,26 @@ const useRoomSidebarContent = (props: useRoomSidebarContentProps) => {
     });
 
     setItems(newItems);
-  }, [phase, taskCards, isAccessibleItem]);
+  }, [phase, topicCards, isAccessibleItem]);
 
   const initiateVote = () => {
     changePhase("VOTE");
   };
 
   const initiateDiscussion = useMutation(({ storage }) => {
-    // cards -> task 리스트
+    // cards -> topic 리스트
     const cards = storage.get("cards");
     const cardArr = Array.from(cards.values());
-    const tasks = cardArr.map((card) => {
-      const task: Task = new LiveObject({
+    const topics = cardArr.map((card) => {
+      const topic: Topic = new LiveObject({
         card: card.toObject(),
         reactions: new LiveMap(),
         chats: new LiveList([]),
       });
-      return task;
+      return topic;
     });
-    const newTasks = new LiveList(tasks);
-    storage.set("tasks", newTasks);
+    const newTopics = new LiveList(topics);
+    storage.set("topics", newTopics);
     changePhase("DISCUSS");
   }, []);
 

@@ -1,13 +1,13 @@
 import { useStorage } from "@liveblocks/react/suspense";
 
 interface useChatListProps {
-  taskIdx: number;
+  topicIdx: number;
 }
 
 const useChatList = (props: useChatListProps) => {
-  const { taskIdx } = props;
+  const { topicIdx } = props;
 
-  const chats = useStorage(root => root.tasks[taskIdx]?.chats) ?? [];
+  const chats = useStorage(root => root.topics[topicIdx]?.chats) ?? [];
 
   return {
     chats

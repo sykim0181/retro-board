@@ -8,7 +8,7 @@ const Discuss = () => {
       <ContentHeader.Wrapper>
         <ContentHeader.Title>Discuss</ContentHeader.Title>
         <ContentHeader.Description>
-          Start the conversation about the task card.
+          Start the conversation about the topic.
         </ContentHeader.Description>
       </ContentHeader.Wrapper>
 

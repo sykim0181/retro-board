@@ -18,7 +18,7 @@ const initialStorage: Storage = {
     ["continue", new LiveList([])],
   ]),
   cards: new LiveMap(),
-  tasks: new LiveList([]),
+  topics: new LiveList([]),
   phase: "REFLECT",
 };
 

@@ -10,11 +10,11 @@ import ChatInput from "./ChatInput";
 import ChatList from "./ChatList";
 
 interface ChatBoxProps {
-  taskIdx: number;
+  topicIdx: number;
 }
 
 const ChatBox = (props: ChatBoxProps) => {
-  const { taskIdx } = props;
+  const { topicIdx } = props;
 
   const chatListRef = useRef<HTMLUListElement>(null);
 
@@ -23,11 +23,11 @@ const ChatBox = (props: ChatBoxProps) => {
       <CardHeader className="p-[1rem]">Discussion</CardHeader>
       <Separator />
       <CardContent className="flex-1 p-[1rem] flex flex-col overflow-y-hidden">
-        <ChatList taskIdx={taskIdx} ref={chatListRef} />
+        <ChatList topicIdx={topicIdx} ref={chatListRef} />
       </CardContent>
       <Separator />
       <CardFooter className="p-[1rem] gap-[1rem]">
-        <ChatInput taskIdx={taskIdx} chatListRef={chatListRef} />
+        <ChatInput topicIdx={topicIdx} chatListRef={chatListRef} />
       </CardFooter>
     </Card>
   );

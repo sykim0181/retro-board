@@ -4,13 +4,13 @@ import { TChat } from "@/types/types";
 import { ComponentPropsWithRef } from "react";
 
 interface ChatListProps extends ComponentPropsWithRef<"ul"> {
-  taskIdx: number;
+  topicIdx: number;
 }
 
 const ChatList = (props: ChatListProps) => {
-  const { taskIdx, ref } = props;
+  const { topicIdx, ref } = props;
 
-  const { chats } = useChatList({ taskIdx });
+  const { chats } = useChatList({ topicIdx });
 
   return (
     <ul

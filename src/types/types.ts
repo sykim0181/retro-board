@@ -32,7 +32,7 @@ export type TChat = {
   replies: Array<TChat>;
 };
 
-export type TTask = {
+export type TTopic = {
   card: TCard;
   reactions: Map<string, TReaction>;
   chats: Array<TChat>;

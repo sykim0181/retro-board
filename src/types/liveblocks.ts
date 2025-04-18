@@ -1,7 +1,7 @@
 import { LiveList, LiveMap, LiveObject } from "@liveblocks/client";
 import { TCard, TColumnType, TEmoji, TRoomPhase, TUser } from "./types";
 
-// key: type of column, value: id of task(card)
+// key: type of column, value: id of card
 export type Board = LiveMap<TColumnType, LiveList<string>>;
 
 export type Chat = LiveObject<{
@@ -18,7 +18,7 @@ export type Reaction = LiveObject<{
   users: TUser[];
 }>;
 
-export type Task = LiveObject<{
+export type Topic = LiveObject<{
   card: TCard;
   reactions: LiveMap<string, Reaction>;
   chats: LiveList<Chat>;
@@ -27,6 +27,6 @@ export type Task = LiveObject<{
 export type Storage = {
   board: Board;
   cards: LiveMap<string, Card>;
-  tasks: LiveList<Task>;
+  topics: LiveList<Topic>;
   phase: TRoomPhase;
 }

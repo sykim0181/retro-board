@@ -4,14 +4,14 @@ import { useMemo } from "react";
 import { TEmoji, TReaction } from "@/types/types";
 import { useAppSelector } from "@/store/store";
 
-interface useDiscussTaskCardProps {
-  taskIdx: number;
+interface useDiscussTopicCardProps {
+  topicIdx: number;
 }
 
-const useDiscussTaskCard = (props: useDiscussTaskCardProps) => {
-  const { taskIdx } = props;
+const useDiscussTopicCard = (props: useDiscussTopicCardProps) => {
+  const { topicIdx } = props;
 
-  const reactionMap = useStorage((root) => root.tasks.at(taskIdx)?.reactions);
+  const reactionMap = useStorage((root) => root.topics.at(topicIdx)?.reactions);
   const user = useAppSelector((state) => state.user.user);
 
   const reactions = useMemo(() => {
@@ -24,14 +24,14 @@ const useDiscussTaskCard = (props: useDiscussTaskCardProps) => {
 
   const handleEmojiClicked = useMutation(
     ({ storage }, emoji: TEmoji) => {
-      const task = storage.get("tasks").get(taskIdx);
-      const taskReactions = task?.get("reactions");
+      const topic = storage.get("topics").get(topicIdx);
+      const topicReactions = topic?.get("reactions");
 
-      if (taskReactions === undefined) {
+      if (topicReactions === undefined) {
         return;
       }
 
-      const emojiReactions = taskReactions.get(emoji.unified);
+      const emojiReactions = topicReactions.get(emoji.unified);
       if (
         emojiReactions !== undefined &&
         emojiReactions.get("users").some((val) => val.id === user.id)
@@ -41,7 +41,7 @@ const useDiscussTaskCard = (props: useDiscussTaskCardProps) => {
           .get("users")
           .filter((val) => val.id !== user.id);
         if (newUsers.length === 0) {
-          taskReactions.delete(emoji.unified);
+          topicReactions.delete(emoji.unified);
         } else {
           emojiReactions.set("users", newUsers);
         }
@@ -52,13 +52,13 @@ const useDiscussTaskCard = (props: useDiscussTaskCardProps) => {
             emoji,
             users: [user],
           });
-          taskReactions.set(emoji.unified, newReaction);
+          topicReactions.set(emoji.unified, newReaction);
         } else {
           emojiReactions.set("users", [...emojiReactions.get("users"), user]);
         }
       }
     },
-    [taskIdx, user]
+    [topicIdx, user]
   );
 
   return {
@@ -67,4 +67,4 @@ const useDiscussTaskCard = (props: useDiscussTaskCardProps) => {
   };
 };
 
-export default useDiscussTaskCard;
+export default useDiscussTopicCard;

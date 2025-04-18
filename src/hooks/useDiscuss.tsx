@@ -4,20 +4,20 @@ import { useParams } from "react-router";
 const useDiscuss = () => {
   const params = useParams();
 
-  if (!params.taskIdx) {
-    throw new Error("Invalid Task Index.");
+  if (!params.topicIdx) {
+    throw new Error("Invalid Topic Index.");
   }
 
-  const taskIdx = Number(params.taskIdx) - 1;
+  const topicIdx = Number(params.topicIdx) - 1;
 
-  const card = useStorage((root) => root.tasks.at(taskIdx)?.card);
+  const card = useStorage((root) => root.topics.at(topicIdx)?.card);
 
   if (card === undefined) {
-    throw new Error("Not Available Task.");
+    throw new Error("Not Available Topic.");
   }
 
   return {
-    taskIdx,
+    topicIdx,
     card,
   };
 };

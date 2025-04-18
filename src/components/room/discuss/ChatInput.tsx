@@ -6,15 +6,15 @@ import { useAppSelector } from "@/store/store";
 import UserAvatar from "@/components/common/UserAvatar";
 
 interface ChatInputProps {
-  taskIdx: number;
+  topicIdx: number;
   chatListRef: RefObject<HTMLUListElement | null>;
 }
 
 const ChatInput = (props: ChatInputProps) => {
-  const { taskIdx, chatListRef } = props;
+  const { topicIdx, chatListRef } = props;
 
   const { draft, onChangeInput, onKeyDownInput, sendChat } = useChatInput({
-    taskIdx,
+    topicIdx,
     chatListRef,
   });
   const user = useAppSelector((state) => state.user.user);

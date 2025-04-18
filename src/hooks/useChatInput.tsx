@@ -5,12 +5,12 @@ import { Chat } from "@/types/liveblocks";
 import { useAppSelector } from "@/store/store";
 
 interface useChatInputProps {
-  taskIdx: number;
+  topicIdx: number;
   chatListRef: RefObject<HTMLUListElement | null>;
 }
 
 const useChatInput = (props: useChatInputProps) => {
-  const { taskIdx, chatListRef } = props;
+  const { topicIdx, chatListRef } = props;
 
   const [draft, setDraft] = useState("");
 
@@ -32,7 +32,7 @@ const useChatInput = (props: useChatInputProps) => {
         return;
       }
 
-      const taskChats = storage.get("tasks").get(taskIdx)?.get("chats");
+      const topicChats = storage.get("topics").get(topicIdx)?.get("chats");
       const newReplies: LiveList<Chat> = new LiveList([]);
       const newChat: Chat = new LiveObject({
         user,
@@ -40,7 +40,7 @@ const useChatInput = (props: useChatInputProps) => {
         createdAt: new Date().toISOString(),
         replies: newReplies,
       });
-      taskChats?.push(newChat);
+      topicChats?.push(newChat);
 
       setDraft("");
 
@@ -51,7 +51,7 @@ const useChatInput = (props: useChatInputProps) => {
         });
       }, 0);
     },
-    [taskIdx, draft, user]
+    [topicIdx, draft, user]
   );
 
   return {
