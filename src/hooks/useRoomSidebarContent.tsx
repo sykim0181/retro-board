@@ -11,6 +11,7 @@ import { useNavigate } from "react-router";
 import { Topic } from "@/types/liveblocks";
 import { TRoom, TRoomPhase } from "@/types/types";
 import usePhase from "./usePhase";
+import useCheckAccess from "./useCheckAccess";
 
 export type TItem = {
   title: string;
@@ -56,43 +57,19 @@ const useRoomSidebarContent = (props: useRoomSidebarContentProps) => {
     (root) => root.topics.map((topic) => topic.card),
     shallow
   );
-  const hasCard = useStorage((root) => root.cards.size > 0, shallow);
 
   const { phase, changePhase } = usePhase();
+  const { canAccess } = useCheckAccess();
 
   const navigate = useNavigate();
 
-  const isAccessibleItem = useCallback(
-    (navItem: TItem) => {
-      if (navItem.phase === undefined) {
-        return true;
-      }
+  const isAccessibleItem = useCallback((navItem: TItem) => {
+    if (navItem.phase === undefined) {
+      return true;
+    }
 
-      // 룸 주인은 phase와 관계 없이 모든 페이지 접근 가능
-      if (isOwnerOfRoom) {
-        // 카드가 하나도 없으면 vote, discuss 불가
-        if (
-          (navItem.phase === "DISCUSS" || navItem.phase === "VOTE") &&
-          !hasCard
-        ) {
-          return false;
-        }
-
-        if (navItem.phase === "DISCUSS" && phase !== "VOTE") {
-          return false;
-        }
-
-        return true;
-      }
-
-      // 그외는 현재 단계(phase)에 해당하는 페이지만 접근 가능
-      if (navItem.phase === phase) {
-        return true;
-      }
-      return false;
-    },
-    [isOwnerOfRoom, phase, hasCard]
-  );
+    return canAccess(navItem.phase);
+  }, []);
 
   useEffect(() => {
     const newItems = initialItems.map((item) => {
@@ -151,7 +128,6 @@ const useRoomSidebarContent = (props: useRoomSidebarContentProps) => {
     (e: React.MouseEvent, navItem: TItem) => {
       if (navItem.disabled === true) {
         e.preventDefault();
-        // e.stopPropagation();
         return;
       }
 

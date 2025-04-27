@@ -27,7 +27,7 @@ const CardItem = (props: CardProps) => {
         <CardContent 
           className="flex flex-col gap-[1rem] px-[.5rem] text-start break-words"
         >
-          <div>{title}</div>
+          <div className="font-bold">{title}</div>
           <div>{content}</div>
         </CardContent>
         {showLikes && (

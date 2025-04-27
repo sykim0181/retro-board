@@ -48,4 +48,9 @@ export type TReaction = {
   users: TUser[];
 };
 
-export type TRoomPhase = "REFLECT" | "VOTE" | "DISCUSS";
+export type TRoomPhase = "REFLECT" | "VOTE" | "DISCUSS" | "END";
+
+export type TTask = {
+  user: TUser;
+  content: string;
+};

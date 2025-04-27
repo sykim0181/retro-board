@@ -19,13 +19,19 @@ const usePhaseInfo = (props: usePhaseInfoProps) => {
   const isCompleted = useMemo(() => {
     switch (pagePhase) {
       case "REFLECT": {
-        if (phase === "VOTE" || phase === "DISCUSS") {
+        if (phase === "VOTE" || phase === "DISCUSS" || phase === "END") {
           return true;
         }
         return false;
       }
       case "VOTE": {
-        if (phase === "DISCUSS") {
+        if (phase === "DISCUSS" || phase === "END") {
+          return true;
+        }
+        return false;
+      }
+      case "DISCUSS": {
+        if (phase === "END") {
           return true;
         }
         return false;

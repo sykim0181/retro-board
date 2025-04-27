@@ -1,6 +1,7 @@
 import DiscussContent from "@/components/room/discuss/DiscussContent";
 import ContentHeader from "@/components/room/common/ContentHeader";
 import ContentBody from "@/components/room/common/ContentBody";
+import PhaseInfo from "@/components/room/common/PhaseInfo";
 
 const Discuss = () => {
   return (
@@ -13,6 +14,7 @@ const Discuss = () => {
       </ContentHeader.Wrapper>
 
       <ContentBody>
+        <PhaseInfo pagePhase="DISCUSS" />
         <DiscussContent />
       </ContentBody>
     </div>

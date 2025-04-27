@@ -10,6 +10,8 @@ import { cn } from "@/lib/utils";
 import RoomAlert from "../room/common/RoomAlert";
 import RoomErrorBoundary from "../room/common/RoomErrorBoundary";
 import User from "../room/common/User";
+import FloatingButtonBar from "../room/common/FloatingButtonBar";
+import RoomAccessGuard from "../room/common/RoomAccessGuard";
 
 const initialStorage: Storage = {
   board: new LiveMap([
@@ -20,6 +22,7 @@ const initialStorage: Storage = {
   cards: new LiveMap(),
   topics: new LiveList([]),
   phase: "REFLECT",
+  tasks: new LiveList([]),
 };
 
 const RoomLayout = () => {
@@ -48,12 +51,17 @@ const RoomLayout = () => {
               <Outlet context={{ room }} />
             </RoomErrorBoundary>
           </Card>
+
+          <ClientSideSuspense fallback={null}>
+            <FloatingButtonBar room={room} />
+          </ClientSideSuspense>
         </SidebarInset>
       </SidebarProvider>
 
       <ClientSideSuspense fallback={null}>
         <RoomAlert roomId={room.id} />
         <User />
+        <RoomAccessGuard room={room} />
       </ClientSideSuspense>
     </RoomProvider>
   );
