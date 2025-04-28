@@ -1,5 +1,5 @@
-import { LiveList, LiveMap, LiveObject, shallow } from "@liveblocks/client";
-import { useMutation, useStorage } from "@liveblocks/react/suspense";
+import { shallow } from "@liveblocks/client";
+import { useStorage } from "@liveblocks/react/suspense";
 import {
   LucideIcon,
   MessageSquareTextIcon,
@@ -8,10 +8,8 @@ import {
 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { Topic } from "@/types/liveblocks";
 import { TRoom, TRoomPhase } from "@/types/types";
 import usePhase from "./usePhase";
-import useCheckAccess from "./useCheckAccess";
 
 export type TItem = {
   title: string;
@@ -58,18 +56,20 @@ const useRoomSidebarContent = (props: useRoomSidebarContentProps) => {
     shallow
   );
 
-  const { phase, changePhase } = usePhase();
-  const { canAccess } = useCheckAccess();
+  const { phase, changePhase, canChangePhase } = usePhase();
 
   const navigate = useNavigate();
 
-  const isAccessibleItem = useCallback((navItem: TItem) => {
-    if (navItem.phase === undefined) {
-      return true;
-    }
+  const isAccessibleItem = useCallback(
+    (navItem: TItem) => {
+      if (navItem.phase === undefined) {
+        return true;
+      }
 
-    return canAccess(navItem.phase);
-  }, []);
+      return canChangePhase(navItem.phase);
+    },
+    [canChangePhase]
+  );
 
   useEffect(() => {
     const newItems = initialItems.map((item) => {
@@ -103,27 +103,6 @@ const useRoomSidebarContent = (props: useRoomSidebarContentProps) => {
     setItems(newItems);
   }, [phase, topicCards, isAccessibleItem]);
 
-  const initiateVote = () => {
-    changePhase("VOTE");
-  };
-
-  const initiateDiscussion = useMutation(({ storage }) => {
-    // cards -> topic 리스트
-    const cards = storage.get("cards");
-    const cardArr = Array.from(cards.values());
-    const topics = cardArr.map((card) => {
-      const topic: Topic = new LiveObject({
-        card: card.toObject(),
-        reactions: new LiveMap(),
-        chats: new LiveList([]),
-      });
-      return topic;
-    });
-    const newTopics = new LiveList(topics);
-    storage.set("topics", newTopics);
-    changePhase("DISCUSS");
-  }, []);
-
   const onClickMenuItem = useCallback(
     (e: React.MouseEvent, navItem: TItem) => {
       if (navItem.disabled === true) {
@@ -134,10 +113,10 @@ const useRoomSidebarContent = (props: useRoomSidebarContentProps) => {
       if (isOwnerOfRoom) {
         if (navItem.phase === "DISCUSS" && phase === "VOTE") {
           // VOTE -> DISCUSS
-          initiateDiscussion();
+          changePhase("DISCUSS");
         } else if (navItem.phase === "VOTE" && phase === "REFLECT") {
           // REFLECT -> VOTE
-          initiateVote();
+          changePhase("VOTE");
         }
       }
 
@@ -145,7 +124,7 @@ const useRoomSidebarContent = (props: useRoomSidebarContentProps) => {
         navigate(`/room/${room.id}/${navItem.url}`);
       }
     },
-    [phase, isOwnerOfRoom, initiateDiscussion, initiateVote, navigate]
+    [phase, isOwnerOfRoom, navigate, changePhase]
   );
   return {
     items,
