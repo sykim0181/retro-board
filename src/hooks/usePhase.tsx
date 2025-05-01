@@ -48,7 +48,6 @@ const usePhase = () => {
     });
     const newTopics = new LiveList(topics);
     storage.set("topics", newTopics);
-    changePhase("DISCUSS");
   }, []);
 
   const canChangePhase = useCallback(

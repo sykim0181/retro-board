@@ -1,26 +1,28 @@
 import { ArrowUpIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import useChatInput from "@/hooks/useChatInput";
+import useMessageInput from "@/hooks/useMessageInput";
 import { RefObject } from "react";
 import { useAppSelector } from "@/store/store";
 import UserAvatar from "@/components/common/UserAvatar";
 
-interface ChatInputProps {
+interface MessageInputProps {
   topicIdx: number;
   chatListRef: RefObject<HTMLUListElement | null>;
 }
 
-const ChatInput = (props: ChatInputProps) => {
+const MessageInput = (props: MessageInputProps) => {
   const { topicIdx, chatListRef } = props;
 
-  const { draft, onChangeInput, onKeyDownInput, sendChat } = useChatInput({
-    topicIdx,
-    chatListRef,
-  });
+  const { draft, onChangeInput, onKeyDownInput, sendMessage } = useMessageInput(
+    {
+      topicIdx,
+      chatListRef,
+    }
+  );
   const user = useAppSelector((state) => state.user.user);
 
   return (
-    <>
+    <div className="flex gap-[1rem] py-[.7rem] px-[1rem]">
       <UserAvatar userName={user.name} />
       <Input
         className="flex-1 text-[0.9rem]"
@@ -30,12 +32,12 @@ const ChatInput = (props: ChatInputProps) => {
       />
       <button
         className="bg-gray-400 hover:opacity-80 text-white rounded-[50%] w-[32px] h-[32px] flex justify-center items-center cursor-pointer"
-        onClick={sendChat}
+        onClick={sendMessage}
       >
         <ArrowUpIcon width="1rem" />
       </button>
-    </>
+    </div>
   );
 };
 
-export default ChatInput;
+export default MessageInput;

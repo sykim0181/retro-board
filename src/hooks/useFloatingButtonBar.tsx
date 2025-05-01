@@ -1,6 +1,5 @@
 import { useAppSelector } from "@/store/store";
-import { TRoom, TTask } from "@/types/types";
-import { useMutation } from "@liveblocks/react/suspense";
+import { TRoom } from "@/types/types";
 import { useCallback, useMemo } from "react";
 import { useNavigate } from "react-router";
 import usePhase from "./usePhase";
@@ -20,7 +19,6 @@ const useFloatingButtonBar = (props: useFloatingButtonBarProps) => {
   const navigate = useNavigate();
 
   /* 버튼 표시 여부 */
-  const showAddTaskButton = useMemo(() => phase === "DISCUSS", [phase]);
   const showToNextPhaseButton = useMemo(() => {
     if (!isOwnerOfRoom) {
       return false;
@@ -46,18 +44,6 @@ const useFloatingButtonBar = (props: useFloatingButtonBarProps) => {
     }
   }, [phase, canChangePhase]);
 
-  /* 버튼 동작 */
-  const addTask = useMutation(
-    ({ storage }, content: string) => {
-      const newTask: TTask = {
-        user,
-        content,
-      };
-      storage.get("tasks").push(newTask);
-    },
-    [user]
-  );
-
   const toNextPhase = useCallback(() => {
     switch (phase) {
       case "REFLECT": {
@@ -78,14 +64,12 @@ const useFloatingButtonBar = (props: useFloatingButtonBarProps) => {
 
   const endMeeting = useCallback(() => {
     changePhase("END");
-    // TODO: navigate to summary page
-  }, [changePhase]);
+    navigate(`/summary/${room.id}`);
+  }, [changePhase, navigate]);
 
   return {
-    showAddTaskButton,
     showToNextPhaseButton,
     showEndMeetingButton,
-    addTask,
     toNextPhase,
     endMeeting,
     canChangeToNextPhase,

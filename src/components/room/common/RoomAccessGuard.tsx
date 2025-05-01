@@ -10,8 +10,8 @@ interface RoomAccessGuardProps {
 
 const RoomAccessGuard = (props: RoomAccessGuardProps) => {
   const { room } = props;
-  
-  const phase = useStorage(root => root.phase);
+
+  const phase = useStorage((root) => root.phase);
   const { canAccess } = useCheckAccess();
 
   const { pathname } = useLocation();
@@ -22,14 +22,14 @@ const RoomAccessGuard = (props: RoomAccessGuardProps) => {
     if (matchPath("/room/:roomId/reflect", pathname)) {
       return "REFLECT";
     } else if (matchPath("/room/:roomId/vote", pathname)) {
-      return "VOTE"
+      return "VOTE";
     } else if (matchPath("/room/:roomId/discuss", pathname)) {
-      return "DISCUSS"
+      return "DISCUSS";
     } else {
       return null;
     }
   }, [pathname]);
-  
+
   useEffect(() => {
     if (!pagePhase) {
       return;
@@ -38,7 +38,7 @@ const RoomAccessGuard = (props: RoomAccessGuardProps) => {
     if (!canAccess(pagePhase)) {
       // 접근할 수 없는 페이지 -> 현재 단계의 페이지로 리다이렉트
       const baseUrl = `/room/${room.id}`;
-      switch(phase) {
+      switch (phase) {
         case "REFLECT": {
           navigate(`${baseUrl}/reflect`);
           break;
@@ -52,7 +52,7 @@ const RoomAccessGuard = (props: RoomAccessGuardProps) => {
           break;
         }
         case "END": {
-          // TODO: navigate to summary page
+          navigate(`/summary/${room.id}`);
           break;
         }
         default: {

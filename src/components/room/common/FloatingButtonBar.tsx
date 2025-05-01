@@ -2,7 +2,6 @@ import { Card } from "@/components/ui/card";
 import useFloatingButtonBar from "@/hooks/useFloatingButtonBar";
 import { TRoom } from "@/types/types";
 import {
-  BadgePlusIcon,
   CircleArrowRightIcon,
   FlagIcon,
   LucideIcon,
@@ -17,19 +16,12 @@ const FloatingButtonBar = (props: FloatingButtonBarProps) => {
   const { room } = props;
 
   const {
-    showAddTaskButton,
     showToNextPhaseButton,
     showEndMeetingButton,
-    addTask,
     toNextPhase,
     endMeeting,
     canChangeToNextPhase,
   } = useFloatingButtonBar({ room });
-
-  const showAddTaskDialog = () => {
-    // show AddTaskDialog
-    addTask("");
-  };
 
   return (
     <Card className="absolute flex flex-row gap-0 bottom-[0.5rem] left-[50%] transform-[translateX(-50%)] overflow-hidden">
@@ -39,13 +31,6 @@ const FloatingButtonBar = (props: FloatingButtonBarProps) => {
           name="Next"
           onClick={toNextPhase}
           disabled={!canChangeToNextPhase}
-        />
-      )}
-      {showAddTaskButton && (
-        <Button
-          icon={BadgePlusIcon}
-          name="Add Task"
-          onClick={showAddTaskDialog}
         />
       )}
       {showEndMeetingButton && (
@@ -67,7 +52,7 @@ const Button = memo((props: ButtonProps) => {
 
   return (
     <button
-      className="flex-1 cursor-pointer flex flex-col items-center py-[0.5rem] px-[2rem] hover:bg-gray-100 disabled:hover:cursor-not-allowed disabled:hover:bg-white"
+      className="cursor-pointer flex flex-col items-center py-[0.5rem] w-[5rem] hover:bg-gray-100 disabled:hover:cursor-not-allowed disabled:hover:bg-white"
       {...otherProps}
     >
       <Icon height={"2rem"} />

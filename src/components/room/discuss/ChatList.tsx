@@ -1,7 +1,7 @@
 import useChatList from "@/hooks/useChatList";
-import ChatItem from "./ChatItem";
-import { TChat } from "@/types/types";
+import MessageItem from "./MessageItem";
 import { ComponentPropsWithRef } from "react";
+import TaskItem from "./TaskItem";
 
 interface ChatListProps extends ComponentPropsWithRef<"ul"> {
   topicIdx: number;
@@ -14,14 +14,18 @@ const ChatList = (props: ChatListProps) => {
 
   return (
     <ul
-      ref={ref} 
+      ref={ref}
       className="h-full flex flex-col gap-[1.5rem] overflow-y-scroll"
     >
-      {chats.map((chat, idx) => (
-        <ChatItem key={`chat-item-${idx}`} chat={chat as TChat} />
-      ))}
+      {chats.map((chat) =>
+        chat.type === "MESSAGE" ? (
+          <MessageItem messageId={chat.id} key={chat.id} />
+        ) : (
+          <TaskItem taskId={chat.id} key={chat.id} />
+        )
+      )}
     </ul>
   );
-}
+};
 
 export default ChatList;

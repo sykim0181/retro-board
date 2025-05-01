@@ -1,15 +1,17 @@
-import { LiveList, LiveObject } from "@liveblocks/client";
+import { LiveObject } from "@liveblocks/client";
 import { useMutation } from "@liveblocks/react";
 import { RefObject, useState } from "react";
-import { Chat } from "@/types/liveblocks";
+import { Message } from "@/types/liveblocks";
 import { useAppSelector } from "@/store/store";
+import { nanoid } from "nanoid";
+import { TChat } from "@/types/types";
 
-interface useChatInputProps {
+interface useMessageInputProps {
   topicIdx: number;
   chatListRef: RefObject<HTMLUListElement | null>;
 }
 
-const useChatInput = (props: useChatInputProps) => {
+const useMessageInput = (props: useMessageInputProps) => {
   const { topicIdx, chatListRef } = props;
 
   const [draft, setDraft] = useState("");
@@ -22,24 +24,30 @@ const useChatInput = (props: useChatInputProps) => {
 
   const onKeyDownInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      sendChat();
+      sendMessage();
     }
   };
 
-  const sendChat = useMutation(
+  const sendMessage = useMutation(
     ({ storage }) => {
       if (draft === "") {
         return;
       }
 
-      const topicChats = storage.get("topics").get(topicIdx)?.get("chats");
-      const newReplies: LiveList<Chat> = new LiveList([]);
-      const newChat: Chat = new LiveObject({
+      const newMessageId = nanoid();
+      const newMessage: Message = new LiveObject({
+        id: newMessageId,
         user,
         content: draft,
         createdAt: new Date().toISOString(),
-        replies: newReplies,
       });
+      const newChat: TChat = {
+        id: newMessageId,
+        type: "MESSAGE",
+      };
+
+      storage.get("messages").set(newMessageId, newMessage);
+      const topicChats = storage.get("topics").get(topicIdx)?.get("chats");
       topicChats?.push(newChat);
 
       setDraft("");
@@ -58,8 +66,8 @@ const useChatInput = (props: useChatInputProps) => {
     draft,
     onChangeInput,
     onKeyDownInput,
-    sendChat,
+    sendMessage,
   };
 };
 
-export default useChatInput;
+export default useMessageInput;

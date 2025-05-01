@@ -8,6 +8,8 @@ import Reflect from "./pages/room/Reflect";
 import Discuss from "./pages/room/Discuss";
 import DefaultLayout from "./components/layout/DefaultLayout";
 import Vote from "./pages/room/Vote";
+import Summary from "./pages/Summary";
+import SummaryLayout from "./components/layout/SummaryLayout";
 
 const router = createBrowserRouter([
   {
@@ -38,6 +40,11 @@ const router = createBrowserRouter([
           const room = await getRoomById(roomId);
           return room;
         },
+      },
+      {
+        path: "summary/:roomId",
+        Component: SummaryLayout,
+        children: [{ index: true, element: <Summary /> }],
       },
     ],
   },

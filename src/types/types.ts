@@ -26,10 +26,8 @@ export type TRoom = {
 };
 
 export type TChat = {
-  user: TUser;
-  content: string;
-  createdAt: string;
-  replies: Array<TChat>;
+  id: string;
+  type: "MESSAGE" | "TASK";
 };
 
 export type TTopic = {
@@ -50,7 +48,16 @@ export type TReaction = {
 
 export type TRoomPhase = "REFLECT" | "VOTE" | "DISCUSS" | "END";
 
-export type TTask = {
+export type TMessage = {
+  id: string;
   user: TUser;
   content: string;
+  createdAt: string;
+};
+
+export type TTask = {
+  id: string;
+  user: TUser;
+  content: string;
+  createdAt: string;
 };

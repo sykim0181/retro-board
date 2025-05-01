@@ -1,29 +1,16 @@
 import { ClientSideSuspense, RoomProvider } from "@liveblocks/react/suspense";
 import { Outlet, useLoaderData, useParams } from "react-router";
-import { LiveList, LiveMap } from "@liveblocks/client";
 import { SidebarInset, SidebarProvider } from "../ui/sidebar";
 import RoomSidebar from "../room/sidebar/RoomSidebar";
 import { Card } from "../ui/card";
-import { Storage } from "@/types/liveblocks";
 import { TRoom } from "@/types/types";
 import { cn } from "@/lib/utils";
 import RoomAlert from "../room/common/RoomAlert";
 import RoomErrorBoundary from "../room/common/RoomErrorBoundary";
 import User from "../room/common/User";
+import { initialRoomStorage } from "@/constants";
 import FloatingButtonBar from "../room/common/FloatingButtonBar";
 import RoomAccessGuard from "../room/common/RoomAccessGuard";
-
-const initialStorage: Storage = {
-  board: new LiveMap([
-    ["start", new LiveList([])],
-    ["stop", new LiveList([])],
-    ["continue", new LiveList([])],
-  ]),
-  cards: new LiveMap(),
-  topics: new LiveList([]),
-  phase: "REFLECT",
-  tasks: new LiveList([]),
-};
 
 const RoomLayout = () => {
   const params = useParams();
@@ -38,7 +25,7 @@ const RoomLayout = () => {
   return (
     <RoomProvider
       id={roomId}
-      initialStorage={initialStorage}
+      initialStorage={initialRoomStorage}
       initialPresence={{
         name: "unknown",
       }}
