@@ -2,9 +2,13 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import useSummary from "@/hooks/useSummary";
+import { TMeeting } from "@/types/types";
+import { useOutletContext } from "react-router";
 
 const Summary = () => {
-  const { topics, taskCnt, groupedTasks } = useSummary();
+  const { meeting } = useOutletContext<{ meeting: TMeeting }>();
+
+  const { name, topics, taskCnt, groupedTasks } = useSummary({ meeting });
 
   const handlePrint = () => {
     window.print();
@@ -13,7 +17,7 @@ const Summary = () => {
   return (
     <div className="flex flex-col items-center">
       <section className="flex flex-col gap-[1.5rem] items-center p-[2rem]">
-        <h1 className="text-[2rem]">팀 이름</h1>
+        <h1 className="text-[2rem]">{name}</h1>
         <div className="flex flex-row">
           <span className="text-gray-500">Wednesday, April 16, 2025</span>
         </div>
@@ -43,7 +47,7 @@ const Summary = () => {
             return (
               <div
                 key={userName}
-                className="flex flex-col gap-[1rem] items-center"
+                className="flex flex-col gap-[2rem] items-center"
               >
                 <div className="text-[1.2rem]">{userName}</div>
                 <div className="font-bold text-[0.9rem]">

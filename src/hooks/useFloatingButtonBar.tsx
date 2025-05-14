@@ -3,6 +3,7 @@ import { TRoom } from "@/types/types";
 import { useCallback, useMemo } from "react";
 import { useNavigate } from "react-router";
 import usePhase from "./usePhase";
+import useSaveMeeting from "./useSaveMeeting";
 
 interface useFloatingButtonBarProps {
   room: TRoom;
@@ -23,9 +24,12 @@ const useFloatingButtonBar = (props: useFloatingButtonBarProps) => {
     if (!isOwnerOfRoom) {
       return false;
     }
-    return phase !== "DISCUSS";
+    return phase !== "DISCUSS" && phase !== "END";
   }, [isOwnerOfRoom, phase]);
-  const showEndMeetingButton = useMemo(() => isOwnerOfRoom, [isOwnerOfRoom]);
+  const showEndMeetingButton = useMemo(
+    () => isOwnerOfRoom && phase !== "END",
+    [isOwnerOfRoom, phase]
+  );
 
   const canChangeToNextPhase = useMemo((): boolean => {
     switch (phase) {
@@ -62,10 +66,16 @@ const useFloatingButtonBar = (props: useFloatingButtonBarProps) => {
     }
   }, [phase, navigate, changePhase]);
 
+  /* 회의 마치기 */
+  const { saveMeeting } = useSaveMeeting({ roomId: room.id });
+
   const endMeeting = useCallback(() => {
-    changePhase("END");
-    navigate(`/summary/${room.id}`);
-  }, [changePhase, navigate]);
+    const onSuccess = () => {
+      changePhase("END");
+      navigate(`/summary/${room.id}`);
+    };
+    saveMeeting(onSuccess);
+  }, [changePhase, navigate, saveMeeting]);
 
   return {
     showToNextPhaseButton,

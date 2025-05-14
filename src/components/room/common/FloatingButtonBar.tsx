@@ -1,11 +1,7 @@
 import { Card } from "@/components/ui/card";
 import useFloatingButtonBar from "@/hooks/useFloatingButtonBar";
 import { TRoom } from "@/types/types";
-import {
-  CircleArrowRightIcon,
-  FlagIcon,
-  LucideIcon,
-} from "lucide-react";
+import { CircleArrowRightIcon, FlagIcon, LucideIcon } from "lucide-react";
 import { ComponentProps, memo } from "react";
 
 interface FloatingButtonBarProps {
@@ -22,6 +18,10 @@ const FloatingButtonBar = (props: FloatingButtonBarProps) => {
     endMeeting,
     canChangeToNextPhase,
   } = useFloatingButtonBar({ room });
+
+  if (!showToNextPhaseButton && !showEndMeetingButton) {
+    return null;
+  }
 
   return (
     <Card className="absolute flex flex-row gap-0 bottom-[0.5rem] left-[50%] transform-[translateX(-50%)] overflow-hidden">

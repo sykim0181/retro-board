@@ -1,3 +1,5 @@
+import { MeetingDB } from "./dbTypes";
+
 export type TColumnType = "start" | "stop" | "continue";
 
 export type TCard = {
@@ -61,3 +63,5 @@ export type TTask = {
   content: string;
   createdAt: string;
 };
+
+export type TMeeting = TRoom & MeetingDB;

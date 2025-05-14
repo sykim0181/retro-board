@@ -1,8 +1,6 @@
-import { initialRoomStorage } from "@/constants";
-import { ClientSideSuspense, RoomProvider } from "@liveblocks/react";
-import { Outlet, useParams } from "react-router";
+import { Outlet, useLoaderData, useParams } from "react-router";
 import { Card } from "../ui/card";
-import { Spinner } from "../ui/spinner";
+import { TMeeting } from "@/types/types";
 
 const SummaryLayout = () => {
   const params = useParams();
@@ -12,26 +10,12 @@ const SummaryLayout = () => {
     throw new Error("Invalid room id");
   }
 
+  const meeting = useLoaderData() as TMeeting;
+
   return (
-    <RoomProvider
-      id={roomId}
-      initialStorage={initialRoomStorage}
-      initialPresence={{
-        name: "unknown",
-      }}
-    >
-      <Card className="p-[1rem] m-[1rem]">
-        <ClientSideSuspense
-          fallback={
-            <div className="w-full min-h-dvh flex justify-center items-center">
-              <Spinner />
-            </div>
-          }
-        >
-          <Outlet />
-        </ClientSideSuspense>
-      </Card>
-    </RoomProvider>
+    <Card className="p-[1rem] m-[1rem]">
+      <Outlet context={{ meeting }} />
+    </Card>
   );
 };
 

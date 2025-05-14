@@ -52,7 +52,13 @@ export async function getRoomById(roomId: string): Promise<TRoom> {
   if (!docSnap.exists()) {
     throw new Error("No such room.");
   }
-  return docSnap.data() as TRoom;
+
+  const data = docSnap.data();
+  return {
+    name: data.name,
+    id: data.id,
+    ownerId: data.ownerId,
+  };
 }
 
 /* 사용자가 생성한 모든 room fetch */
@@ -62,7 +68,12 @@ export async function getRoomsByOwnerId(ownerId: string): Promise<TRoom[]> {
   const querySnapshot = await getDocs(q);
   const rooms: TRoom[] = [];
   querySnapshot.forEach((doc) => {
-    rooms.push(doc.data() as TRoom);
+    const data = doc.data();
+    rooms.push({
+      name: data.name,
+      id: data.id,
+      ownerId: data.ownerId,
+    });
   });
   return rooms;
 }
@@ -96,7 +107,12 @@ export async function getAddedRooms(): Promise<TRoom[]> {
   const querySnapshot = await getDocs(q);
   const rooms: TRoom[] = [];
   querySnapshot.forEach((doc) => {
-    rooms.push(doc.data() as TRoom);
+    const data = doc.data();
+    rooms.push({
+      name: data.name,
+      id: data.id,
+      ownerId: data.ownerId,
+    });
   });
   return rooms;
 }

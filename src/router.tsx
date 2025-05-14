@@ -2,7 +2,6 @@ import { createBrowserRouter, Navigate } from "react-router";
 import Home from "./pages/Home";
 import DashboardLayout from "./components/layout/DashboardLayout";
 import Dashboard from "./pages/Dashboard";
-import { getRoomById } from "./api/room";
 import RoomLayout from "./components/layout/RoomLayout";
 import Reflect from "./pages/room/Reflect";
 import Discuss from "./pages/room/Discuss";
@@ -10,6 +9,8 @@ import DefaultLayout from "./components/layout/DefaultLayout";
 import Vote from "./pages/room/Vote";
 import Summary from "./pages/Summary";
 import SummaryLayout from "./components/layout/SummaryLayout";
+import { roomLoader } from "./loaders/roomLoader";
+import { meetingLoader } from "./loaders/meetingLoader";
 
 const router = createBrowserRouter([
   {
@@ -32,19 +33,13 @@ const router = createBrowserRouter([
           { path: "discuss", element: <Navigate to="1" replace /> },
           { path: "discuss/:topicIdx", Component: Discuss },
         ],
-        loader: async ({ params }) => {
-          const roomId = params.roomId;
-          if (!roomId) {
-            throw new Error("Invalid room id");
-          }
-          const room = await getRoomById(roomId);
-          return room;
-        },
+        loader: roomLoader,
       },
       {
         path: "summary/:roomId",
         Component: SummaryLayout,
         children: [{ index: true, element: <Summary /> }],
+        loader: meetingLoader,
       },
     ],
   },
