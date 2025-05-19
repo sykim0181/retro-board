@@ -1,5 +1,6 @@
 import { saveMeeting } from "@/api/meeting";
-import { TTask, TTopic } from "@/types/types";
+import { TopicDB } from "@/types/dbTypes";
+import { TTask } from "@/types/types";
 import { useMutation } from "@tanstack/react-query";
 
 interface useSaveMeetingMutation {
@@ -13,7 +14,7 @@ const useSaveMeetingMutation = (props: useSaveMeetingMutation) => {
     void,
     Error,
     {
-      topicList: TTopic[];
+      topicList: TopicDB[];
       taskList: TTask[];
     }
   >({

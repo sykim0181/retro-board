@@ -1,9 +1,9 @@
-import { TCard, TChat, TReaction, TRoom, TTask } from "./types";
+import { TCard, TMessage, TReaction, TRoom, TTask } from "./types";
 
 export type TopicDB = {
   card: TCard;
   reactions: Array<TReaction>;
-  chats: Array<TChat>;
+  chats: Array<TMessage | TTask>;
 };
 
 export type MeetingDB = {

@@ -1,28 +1,17 @@
 import { db } from "@/lib/firebase";
 import { MeetingDB, RoomDB, TopicDB } from "@/types/dbTypes";
-import { TMeeting, TReaction, TTask, TTopic } from "@/types/types";
+import { TMeeting, TTask } from "@/types/types";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 
 export async function saveMeeting(
   roomId: string,
-  topics: TTopic[],
+  topics: TopicDB[],
   tasks: TTask[]
 ) {
-  const newTopics: TopicDB[] = topics.map((topic) => {
-    const reactionMap = topic.reactions;
-    const newReactions: TReaction[] = Array.from(reactionMap.values());
-
-    return {
-      card: topic.card,
-      reactions: newReactions,
-      chats: topic.chats,
-    };
-  });
-
   const roomRef = doc(db, "room", roomId);
   const data: MeetingDB = {
-    topics: newTopics,
-    tasks,
+    topics,
+    tasks
   };
   try {
     await updateDoc(roomRef, data);

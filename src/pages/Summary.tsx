@@ -41,7 +41,7 @@ const Summary = () => {
 
       <section className="p-[2rem]">
         <h2 className="text-center text-[1.5rem]">New Task</h2>
-        <div className="flex flex-col gap-[2rem] items-center mt-[2rem]">
+        <div className="flex flex-col gap-[3.5rem] items-center mt-[3rem]">
           {Array.from(groupedTasks.keys()).map((userName) => {
             const tasks = groupedTasks.get(userName)!;
             return (
@@ -73,11 +73,11 @@ const Summary = () => {
 
       <section className="p-[2rem]">
         <h2 className="text-center text-[1.5rem]">Topics</h2>
-        <div className="flex flex-col gap-[2rem] items-center mt-[2rem]">
+        <div className="flex flex-col gap-[3.5rem] items-center mt-[3rem]">
           {topics.map((topic) => (
             <div
               key={topic.card.id}
-              className="flex flex-col gap-[1rem] items-center"
+              className="flex flex-col gap-[2rem] items-center"
             >
               <h3 className="font-bold">{topic.card.title}</h3>
               <span>{`좋아요: ${topic.card.likes.length}`}</span>

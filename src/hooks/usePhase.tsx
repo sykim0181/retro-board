@@ -15,25 +15,6 @@ const usePhase = () => {
   const phase = useStorage((root) => root.phase);
   const hasCard = useStorage((root) => root.cards.size > 0, shallow);
 
-  const changePhase = useMutation(
-    ({ storage }, phase: TRoomPhase) => {
-      storage.set("phase", phase);
-
-      switch(phase) {
-        case "DISCUSS": {
-          initiateDiscussion();
-          break;
-        }
-        default: {
-          break;
-        }
-      }
-
-      broadcast({ type: "PHASE_CHANGE", phase });
-    },
-    [broadcast]
-  );
-
   const initiateDiscussion = useMutation(({ storage }) => {
     // cards -> topic 리스트
     const cards = storage.get("cards");
@@ -49,6 +30,48 @@ const usePhase = () => {
     const newTopics = new LiveList(topics);
     storage.set("topics", newTopics);
   }, []);
+
+  const clearDiscussion = useMutation(({ storage }) => {
+    storage.set("topics", new LiveList([]));
+    storage.set("tasks", new LiveMap());
+    storage.set("messages", new LiveMap());
+  }, []);
+
+  const changePhase = useMutation(
+    ({ storage }, phase: TRoomPhase) => {
+      const curPhase = storage.get("phase"); // 기존 phase
+
+      // 바뀔 phase
+      switch (phase) {
+        case "REFLECT": {
+          if (curPhase === "DISCUSS" || curPhase === "END") {
+            clearDiscussion();
+          }
+          break;
+        }
+        case "VOTE": {
+          if (curPhase === "DISCUSS" || curPhase === "END") {
+            clearDiscussion();
+          }
+          break;
+        }
+        case "DISCUSS": {
+          initiateDiscussion();
+          break;
+        }
+        case "END": {
+          break;
+        }
+        default: {
+          break;
+        }
+      }
+      storage.set("phase", phase); // phase 변경
+
+      broadcast({ type: "PHASE_CHANGE", phase });
+    },
+    [broadcast, initiateDiscussion, clearDiscussion]
+  );
 
   const canChangePhase = useCallback(
     (targetPhase: TRoomPhase): boolean => {
