@@ -25,6 +25,7 @@ export type TRoom = {
   name: string;
   id: string;
   ownerId: string;
+  date: Date;
 };
 
 export type TChat = {

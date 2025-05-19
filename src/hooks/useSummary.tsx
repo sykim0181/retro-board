@@ -8,7 +8,7 @@ interface useSummaryProps {
 const useSummary = (props: useSummaryProps) => {
   const { meeting } = props;
 
-  const { name, tasks, topics } = meeting;
+  const { name, tasks, topics, date } = meeting;
 
   const taskCnt = tasks.length;
 
@@ -25,11 +25,19 @@ const useSummary = (props: useSummaryProps) => {
     return map;
   }, [tasks]);
 
+  const formattedDate = new Intl.DateTimeFormat("en-US", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  }).format(date);
+
   return {
     name,
     topics,
     taskCnt,
     groupedTasks,
+    formattedDate,
   };
 };
 

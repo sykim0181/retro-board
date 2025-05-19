@@ -1,7 +1,7 @@
 import { db } from "@/lib/firebase";
 import { MeetingDB, RoomDB, TopicDB } from "@/types/dbTypes";
 import { TMeeting, TTask } from "@/types/types";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, Timestamp, updateDoc } from "firebase/firestore";
 
 export async function saveMeeting(
   roomId: string,
@@ -11,10 +11,13 @@ export async function saveMeeting(
   const roomRef = doc(db, "room", roomId);
   const data: MeetingDB = {
     topics,
-    tasks
+    tasks,
   };
   try {
-    await updateDoc(roomRef, data);
+    await updateDoc(roomRef, {
+      ...data,
+      date: Timestamp.now(),
+    });
   } catch (err) {
     console.log(err);
   }
@@ -41,5 +44,6 @@ export async function getRoomMeeting(roomId: string): Promise<TMeeting> {
     ownerId: data.ownerId,
     topics: data.topics,
     tasks: data.tasks,
+    date: data.date.toDate(),
   };
 }

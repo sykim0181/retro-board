@@ -8,7 +8,9 @@ import { useOutletContext } from "react-router";
 const Summary = () => {
   const { meeting } = useOutletContext<{ meeting: TMeeting }>();
 
-  const { name, topics, taskCnt, groupedTasks } = useSummary({ meeting });
+  const { name, topics, taskCnt, groupedTasks, formattedDate } = useSummary({
+    meeting,
+  });
 
   const handlePrint = () => {
     window.print();
@@ -19,7 +21,7 @@ const Summary = () => {
       <section className="flex flex-col gap-[1.5rem] items-center p-[2rem]">
         <h1 className="text-[2rem]">{name}</h1>
         <div className="flex flex-row">
-          <span className="text-gray-500">Wednesday, April 16, 2025</span>
+          <span className="text-gray-500">{formattedDate}</span>
         </div>
         <div className="flex flex-row gap-1">
           <div className="flex flex-col items-center p-[0.5rem] w-[100px]">

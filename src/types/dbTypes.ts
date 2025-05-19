@@ -1,4 +1,5 @@
-import { TCard, TMessage, TReaction, TRoom, TTask } from "./types";
+import { Timestamp } from "firebase/firestore";
+import { TCard, TMessage, TReaction, TTask } from "./types";
 
 export type TopicDB = {
   card: TCard;
@@ -11,4 +12,9 @@ export type MeetingDB = {
   tasks: TTask[];
 };
 
-export type RoomDB = TRoom & Partial<MeetingDB>;
+export type RoomDB = {
+  name: string;
+  id: string;
+  ownerId: string;
+  date: Timestamp;
+} & Partial<MeetingDB>;

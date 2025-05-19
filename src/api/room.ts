@@ -6,11 +6,13 @@ import {
   getDocs,
   query,
   setDoc,
+  Timestamp,
   where,
 } from "firebase/firestore";
 import { nanoid } from "nanoid";
 import { db } from "@/lib/firebase";
 import { TRoom } from "@/types/types";
+import { RoomDB } from "@/types/dbTypes";
 
 /* room 생성 */
 export async function createRoom(roomName: string, ownerId: string) {
@@ -20,6 +22,7 @@ export async function createRoom(roomName: string, ownerId: string) {
     id: roomId,
     name: roomName,
     ownerId,
+    date: Timestamp.now(),
   };
   await setDoc(roomRef, newRoom);
 }
@@ -35,11 +38,12 @@ export async function getAllRooms(): Promise<TRoom[]> {
   const roomRef = collection(db, "room");
   const querySnapShot = await getDocs(roomRef);
   return querySnapShot.docs.map((doc) => {
-    const data = doc.data();
+    const data = doc.data() as RoomDB;
     return {
       id: data.id,
       name: data.name,
       ownerId: data.ownerId,
+      date: data.date.toDate(),
     };
   });
 }
@@ -53,11 +57,12 @@ export async function getRoomById(roomId: string): Promise<TRoom> {
     throw new Error("No such room.");
   }
 
-  const data = docSnap.data();
+  const data = docSnap.data() as RoomDB;
   return {
     name: data.name,
     id: data.id,
     ownerId: data.ownerId,
+    date: data.date.toDate(),
   };
 }
 
@@ -68,11 +73,12 @@ export async function getRoomsByOwnerId(ownerId: string): Promise<TRoom[]> {
   const querySnapshot = await getDocs(q);
   const rooms: TRoom[] = [];
   querySnapshot.forEach((doc) => {
-    const data = doc.data();
+    const data = doc.data() as RoomDB;
     rooms.push({
       name: data.name,
       id: data.id,
       ownerId: data.ownerId,
+      date: data.date.toDate(),
     });
   });
   return rooms;
@@ -107,11 +113,12 @@ export async function getAddedRooms(): Promise<TRoom[]> {
   const querySnapshot = await getDocs(q);
   const rooms: TRoom[] = [];
   querySnapshot.forEach((doc) => {
-    const data = doc.data();
+    const data = doc.data() as RoomDB;
     rooms.push({
       name: data.name,
       id: data.id,
       ownerId: data.ownerId,
+      date: data.date.toDate(),
     });
   });
   return rooms;
