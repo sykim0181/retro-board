@@ -77,7 +77,7 @@ const useEditableBoard = () => {
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
 
-    const activeId = active.id as string;
+    const activeId = active.id.toString();
     const activeData = active.data.current;
     const activeColumn = activeData!.column as TColumnType;
 
