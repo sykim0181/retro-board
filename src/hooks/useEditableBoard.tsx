@@ -14,6 +14,10 @@ const useEditableBoard = () => {
       nextColumn: TColumnType,
       nextCardId?: string // 뒤에 올 카드 아이디
     ) => {
+      if (prevColumn !== nextColumn) {
+        storage.get("cards").get(cardId)?.set("category", nextColumn);
+      }
+
       const board = storage.get("board");
 
       if (prevColumn === nextColumn && nextCardId !== undefined) {
