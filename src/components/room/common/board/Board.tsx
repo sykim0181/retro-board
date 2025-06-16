@@ -3,7 +3,7 @@ import Column from "./Column";
 import EditableBoardWrapper from "./EditableBoardWrapper";
 
 type BoardContext = {
-  editable: boolean;
+  editable: boolean; // 이동, 추가, 삭제 가능
   showLikes: boolean;
   votable: boolean;
 };

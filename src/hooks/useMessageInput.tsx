@@ -28,12 +28,8 @@ const useMessageInput = (props: useMessageInputProps) => {
     }
   };
 
-  const sendMessage = useMutation(
-    ({ storage }) => {
-      if (draft === "") {
-        return;
-      }
-
+  const addMessage = useMutation(
+    ({ storage }, draft: string) => {
       const newMessageId = nanoid();
       const newMessage: Message = new LiveObject({
         id: newMessageId,
@@ -49,18 +45,25 @@ const useMessageInput = (props: useMessageInputProps) => {
       storage.get("messages").set(newMessageId, newMessage);
       const topicChats = storage.get("topics").get(topicIdx)?.get("chats");
       topicChats?.push(newChat);
-
-      setDraft("");
-
-      setTimeout(() => {
-        chatListRef.current?.scrollTo({
-          top: chatListRef.current.scrollHeight,
-          behavior: "smooth",
-        });
-      }, 0);
     },
-    [topicIdx, draft, user]
+    [topicIdx, user]
   );
+
+  const sendMessage = () => {
+    if (draft === "") {
+      return;
+    }
+
+    addMessage(draft);
+    setDraft("");
+
+    setTimeout(() => {
+      chatListRef.current?.scrollTo({
+        top: chatListRef.current.scrollHeight,
+        behavior: "smooth",
+      });
+    }, 0);
+  };
 
   return {
     draft,
