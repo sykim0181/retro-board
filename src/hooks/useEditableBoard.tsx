@@ -1,8 +1,11 @@
-import { DragEndEvent, DragOverEvent } from "@dnd-kit/core";
+import { DragEndEvent, DragOverEvent, DragStartEvent } from "@dnd-kit/core";
 import { useMutation } from "@liveblocks/react/suspense";
 import { TColumnType } from "@/types/types";
+import { useState } from "react";
 
 const useEditableBoard = () => {
+  const [activeCardId, setActiveCardId] = useState<string | null>(null);
+
   const moveCardColumn = useMutation(
     (
       { storage },
@@ -45,10 +48,14 @@ const useEditableBoard = () => {
     []
   );
 
+  const handleDragStart = (event: DragStartEvent) => {
+    setActiveCardId(event.active.id.toString());
+  };
+
   const handleDragOver = (event: DragOverEvent) => {
     const { active, over } = event;
 
-    const activeId = active.id as string;
+    const activeId = active.id.toString();
     const activeData = active.data.current;
     const activeColumn = activeData!.column as TColumnType;
 
@@ -56,7 +63,7 @@ const useEditableBoard = () => {
       return;
     }
 
-    const overId = over.id as string;
+    const overId = over.id.toString();
     if (overId.startsWith("column-")) {
       // 다른 컬럼 영역에 들어감 -> 컬럼 제일 마지막에 추가
       const overColumn = overId.slice("column-".length) as TColumnType;
@@ -75,6 +82,8 @@ const useEditableBoard = () => {
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
+    setActiveCardId(null);
+
     const { active, over } = event;
 
     const activeId = active.id.toString();
@@ -85,7 +94,7 @@ const useEditableBoard = () => {
       return;
     }
 
-    const overId = over.id as string;
+    const overId = over.id.toString();
     if (overId.startsWith("column-")) {
       return;
     }
@@ -102,6 +111,8 @@ const useEditableBoard = () => {
   };
 
   return {
+    activeCardId,
+    handleDragStart,
     handleDragOver,
     handleDragEnd,
   };
