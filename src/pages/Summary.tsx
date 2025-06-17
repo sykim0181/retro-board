@@ -63,7 +63,7 @@ const Summary = () => {
                   {tasks.map((task, idx) => (
                     <Card
                       key={`task-${idx}`}
-                      className="w-[250px] min-h-[100px] p-[1rem]"
+                      className="w-[350px] min-h-[100px] p-[1rem]"
                     >
                       <CardContent>{task.content}</CardContent>
                     </Card>
@@ -87,7 +87,7 @@ const Summary = () => {
             >
               <h3 className="font-bold">{topic.card.title}</h3>
               <span>{`좋아요: ${topic.card.likes.length}`}</span>
-              <Card className="w-[250px] min-h-[100px] p-[1rem]">
+              <Card className="w-[350px] min-h-[100px] p-[1rem]">
                 <div>{topic.card.content}</div>
                 <CardFooter>
                   <span className="text-[0.8rem] text-gray-500">
