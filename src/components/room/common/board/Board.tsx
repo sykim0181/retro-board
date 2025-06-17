@@ -48,7 +48,7 @@ const Board = (props: BoardProps) => {
         votable: votable ?? false,
       }}
     >
-      <div className="flex-1 grid grid-cols-3 gap-[1rem] overflow-hidden">
+      <div className="flex-1 flex flex-col md:grid md:grid-cols-3 gap-[1rem] overflow-hidden">
         {editable ? (
           <EditableBoardWrapper>{columns}</EditableBoardWrapper>
         ) : (

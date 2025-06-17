@@ -21,7 +21,7 @@ const Dashboard = () => {
         />
       </div>
 
-      <Card className="p-[2rem]">
+      <Card className="p-[1rem] md:p-[2rem]">
         <div className="flex">
           <CardHeader className="flex-1">
             <CardTitle>Rooms</CardTitle>
