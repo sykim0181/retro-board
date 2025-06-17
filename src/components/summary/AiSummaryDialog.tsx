@@ -31,7 +31,7 @@ const AiSummaryDialog = (props: AiSummaryDialogProps) => {
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="max-h-dvh grid-rows-[auto_1fr]">
+      <DialogContent className="min-h-[500px] max-h-dvh grid-rows-[auto_1fr]">
         <DialogHeader>
           <DialogTitle>AI 요약</DialogTitle>
           <DialogDescription>
