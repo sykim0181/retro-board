@@ -13,14 +13,21 @@ const RoomAlert = (props: RoomAlertProps) => {
 
   useEventListener(({ event }) => {
     if (event.type === "PHASE_CHANGE") {
-      const phase = event.phase.toLowerCase();
-      toast(`Phase has been changed to "${phase}"`, {
-        description: `Please move to ${phase} page!`,
+      const phase = event.phase;
+      let phaseStr = phase === "END" ? "summary" : phase.toLowerCase();
+      toast(`Phase has been changed to "${phaseStr}"`, {
+        description: `Please move to ${phaseStr} page!`,
         action: {
           label: "Move",
-          onClick: () => navigate(`/room/${roomId}/${phase}`),
+          onClick: () => {
+            if (phase === "END") {
+              navigate(`/summary/${roomId}`);
+            } else {
+              navigate(`/room/${roomId}/${phase}`);
+            }
+          },
         },
-        duration: Infinity
+        duration: Infinity,
       });
     }
   });
