@@ -1,6 +1,6 @@
-import { getDateDiff } from "@/utils";
 import UserAvatar from "@/components/common/UserAvatar";
 import useMessageItem from "@/hooks/useMessageItem";
+import { getDateDiff } from "@/utils/date";
 
 interface MessageItemProps {
   messageId: string;

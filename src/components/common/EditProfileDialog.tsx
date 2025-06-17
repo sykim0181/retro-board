@@ -14,7 +14,7 @@ import { useAppDispatch, useAppSelector } from "@/store/store";
 import { Button } from "../ui/button";
 import { updateUserName } from "@/store/userSlice";
 import { RotateCcw } from "lucide-react";
-import { generateRandomName } from "@/utils";
+import { generateRandomName } from "@/utils/user";
 
 interface EditProfileDialogProps {
   trigger: React.ReactNode;

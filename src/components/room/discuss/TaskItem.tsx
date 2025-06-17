@@ -1,8 +1,8 @@
 import UserAvatar from "@/components/common/UserAvatar";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import useTaskItem from "@/hooks/useTaskItem";
-import { getDateDiff } from "@/utils";
 import TaskTextarea from "./TaskTextarea";
+import { getDateDiff } from "@/utils/date";
 
 interface TaskItemProps {
   taskId: string;

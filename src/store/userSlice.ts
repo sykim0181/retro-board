@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { TUser } from "@/types/types";
-import { getUser } from "@/utils";
+import { getUser } from "@/utils/user";
 
 type State = {
   user: TUser;
