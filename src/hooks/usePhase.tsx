@@ -1,5 +1,4 @@
 import {
-  shallow,
   useBroadcastEvent,
   useMutation,
   useStorage,
@@ -13,7 +12,7 @@ const usePhase = () => {
   const broadcast = useBroadcastEvent();
 
   const phase = useStorage((root) => root.phase);
-  const hasCard = useStorage((root) => root.cards.size > 0, shallow);
+  const hasCard = useStorage((root) => root.cards.size > 0);
 
   const initiateDiscussion = useMutation(({ storage }) => {
     // cards -> topic 리스트

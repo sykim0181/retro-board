@@ -7,6 +7,6 @@ export const meetingLoader: LoaderFunction = async ({ params }) => {
     throw new Error("Invalid room id");
   }
   const meeting = await getRoomMeeting(roomId);
-  console.log("meeting:", meeting);
+  // console.log("meeting:", meeting);
   return meeting;
 };

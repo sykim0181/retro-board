@@ -22,7 +22,7 @@ const PresentUsers = () => {
         onMouseLeave={() => setShowUserList(false)}
       >
         <div className="relative rounded-[50%] shadow-sm text-[0.8rem] w-[1.5rem] h-[1.5rem] bg-white flex justify-center items-center">
-          {`+${others.length}`}
+          {`${others.length}`}
         </div>
         {showUserList && (
           <Card 
@@ -31,7 +31,7 @@ const PresentUsers = () => {
           >
             <CardContent>
               <span className="text-[0.8rem] text-gray-500 text-nowrap">
-                {`members (${others.length})`}
+                {`users (${others.length})`}
               </span>
               <ul>
                 {others.map(([_, name], idx) => (

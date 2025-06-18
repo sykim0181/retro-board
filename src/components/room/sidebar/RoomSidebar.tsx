@@ -14,6 +14,7 @@ import UserAvatar from "@/components/common/UserAvatar";
 
 const RoomSidebar = () => {
   const room = useLoaderData() as TRoom;
+  
   const user = useAppSelector((state) => state.user.user);
   const isOwnerOfRoom = useMemo(() => user.id === room.ownerId, [user, room]);
 

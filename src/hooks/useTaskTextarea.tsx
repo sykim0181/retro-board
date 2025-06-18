@@ -12,13 +12,17 @@ const useTaskTextarea = (props: useTaskTextareaProps) => {
 
   const [draft, setDraft] = useState<string>(taskContent ?? "");
 
-  const updateTaskContent = useMutation(
-    ({ storage }) => {
+  const setTaskContent = useMutation(
+    ({ storage }, draft: string) => {
       const task = storage.get("tasks").get(taskId);
       task?.set("content", draft);
     },
-    [taskId, draft]
+    [taskId]
   );
+
+  const updateTaskContent = () => {
+    setTaskContent(draft);
+  };
 
   return {
     draft,

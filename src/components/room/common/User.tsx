@@ -10,7 +10,7 @@ const User = () => {
     updateMyPresence({
       name: userName,
     });
-  }, [userName]);
+  }, [userName, updateMyPresence]);
 
   return null;
 };

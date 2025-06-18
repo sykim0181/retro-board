@@ -20,6 +20,10 @@ interface InviteDialogProps {
 const InviteDialog = (props: InviteDialogProps) => {
   const { roomId } = props;
 
+  const copyRoomId = () => {
+    navigator.clipboard.writeText(roomId);
+  };
+
   return (
     <Dialog>
       <DialogTrigger
@@ -47,7 +51,7 @@ const InviteDialog = (props: InviteDialogProps) => {
             </div>
             <Button
               size="sm"
-              onClick={() => navigator.clipboard.writeText(roomId)}
+              onClick={copyRoomId}
             >
               <span className="sr-only">Copy</span>
               <Copy />
