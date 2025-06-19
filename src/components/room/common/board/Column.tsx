@@ -1,12 +1,12 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { PlusIcon } from "lucide-react";
 import { TColumnType } from "@/types/types";
 import AddCard from "./AddCard";
 import { Card } from "../../../ui/card";
 import useColumn from "@/hooks/useColumn";
 import { useBoardContext } from "./Board";
-import EditableCardListWrapper from "./EditableCardListWrapper";
-import BoardCard from "./BoardCard";
+import EditableCardList from "./EditableCardList";
+import FixedCardList from "./FixedCardList";
 
 interface ColumnProps {
   type: TColumnType;
@@ -29,14 +29,6 @@ const Column = (props: ColumnProps) => {
     ref.current?.scrollTo({ top: 0, behavior: "smooth" });
     setShowAddCard(true);
   };
-
-  const cardList = useMemo(
-    () =>
-      cardIdList.map((cardId) => (
-        <BoardCard key={cardId} cardId={cardId} cardColumn={type} />
-      )),
-    [cardIdList, type]
-  );
 
   const cardListWrapperStyle = "flex flex-col gap-[1rem] h-full";
 
@@ -63,15 +55,17 @@ const Column = (props: ColumnProps) => {
         )}
 
         {editable ? (
-          <EditableCardListWrapper
+          <EditableCardList
             columnType={type}
             cardIdList={cardIdList as string[]}
             className={cardListWrapperStyle}
-          >
-            {cardList}
-          </EditableCardListWrapper>
+          />
         ) : (
-          <div className={cardListWrapperStyle}>{cardList}</div>
+          <FixedCardList
+            columnType={type}
+            cardIdList={cardIdList as string[]}
+            className={cardListWrapperStyle}
+          />
         )}
       </div>
     </Card>

@@ -20,6 +20,7 @@ const useEditableBoard = () => {
 
       const board = storage.get("board");
 
+      // 같은 컬럼에서 이동 (순서만 변경)
       if (prevColumn === nextColumn && nextCardId !== undefined) {
         const container = board.get(prevColumn);
         if (container === undefined) {
@@ -33,6 +34,7 @@ const useEditableBoard = () => {
         return;
       }
 
+      // 다른 컬럼으로 이동
       const prevContainer = board.get(prevColumn);
       const nextContainer = board.get(nextColumn);
 
@@ -41,7 +43,9 @@ const useEditableBoard = () => {
       }
 
       const index = prevContainer.findIndex((val) => val === cardId);
-      prevContainer.delete(index);
+      if (index !== -1) {
+        prevContainer.delete(index);
+      }
 
       let targetIdx = nextContainer.length;
       if (nextCardId !== undefined) {
@@ -76,10 +80,6 @@ const useEditableBoard = () => {
       // 다른 컬럼의 "카드 영역"에 들어감 -> 해당 컬럼 앞에 추가
       const overData = over.data.current;
       const overColumn = overData!.column as TColumnType;
-
-      if (overColumn === activeColumn) {
-        return;
-      }
 
       moveCardColumn(activeId, activeColumn, overColumn, overId);
     }
