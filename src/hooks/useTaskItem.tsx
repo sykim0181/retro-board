@@ -12,7 +12,6 @@ const useTaskItem = (props: useTaskItemProps) => {
 
   const task = useStorage((root) => root.tasks.get(taskId));
   const taskUser = useStorage((root) => root.tasks.get(taskId)?.user);
-  const taskContent = useStorage((root) => root.tasks.get(taskId)?.content);
 
   const user = useAppSelector((state) => state.user.user);
   const { phase } = usePhase();
@@ -29,7 +28,6 @@ const useTaskItem = (props: useTaskItemProps) => {
 
   return {
     task,
-    taskContent,
     isEditable,
   };
 };

@@ -1,7 +1,7 @@
-import useChatList from "@/hooks/useChatList";
 import MessageItem from "./MessageItem";
 import { ComponentPropsWithRef } from "react";
 import TaskItem from "./TaskItem";
+import { useStorage } from "@liveblocks/react";
 
 interface ChatListProps extends ComponentPropsWithRef<"ul"> {
   topicIdx: number;
@@ -10,7 +10,7 @@ interface ChatListProps extends ComponentPropsWithRef<"ul"> {
 const ChatList = (props: ChatListProps) => {
   const { topicIdx, ref } = props;
 
-  const { chats } = useChatList({ topicIdx });
+  const chats = useStorage(root => root.topics[topicIdx]?.chats) ?? [];
 
   return (
     <ul

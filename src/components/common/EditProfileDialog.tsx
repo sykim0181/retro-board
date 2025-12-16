@@ -28,18 +28,15 @@ const EditProfileDialog = (props: EditProfileDialogProps) => {
 
   const dispatch = useAppDispatch();
 
-  const onClickSaveButton = useCallback(
-    (e: React.MouseEvent) => {
-      if (name === "") {
-        e.stopPropagation();
-        return;
-      }
+  const onClickSaveButton = (e: React.MouseEvent) => {
+    if (name === "") {
+      e.stopPropagation();
+      return;
+    }
 
-      // 이름 변경
-      dispatch(updateUserName(name));
-    },
-    [name, dispatch]
-  );
+    // 이름 변경
+    dispatch(updateUserName(name));
+  };
 
   const onClickRecreateButton = useCallback(() => {
     const newName = generateRandomName();

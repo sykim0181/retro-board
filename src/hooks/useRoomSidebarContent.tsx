@@ -82,13 +82,10 @@ const useRoomSidebarContent = (props: useRoomSidebarContentProps) => {
       if (item.phase === "DISCUSS") {
         if (phase === "DISCUSS") {
           // DISCUSS 단계 -> 서브아이템 추가
-          const newSubitems = topicCards.map((card, idx) => {
-            const item: TItem = {
-              title: card.title,
-              url: `discuss/${idx + 1}`,
-            };
-            return item;
-          });
+          const newSubitems: TItem[] = topicCards.map((card, idx) => ({
+            title: card.title,
+            url: `discuss/${idx + 1}`,
+          }));
 
           newItem = {
             ...newItem,

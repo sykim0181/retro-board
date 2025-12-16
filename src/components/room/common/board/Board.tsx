@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo } from "react";
+import { createContext, memo, useContext } from "react";
 import Column from "./Column";
 import EditableBoardWrapper from "./EditableBoardWrapper";
 
@@ -29,15 +29,12 @@ interface BoardProps {
 const Board = (props: BoardProps) => {
   const { editable, votable, showLikes } = props;
 
-  const columns = useMemo(
-    () => (
-      <>
-        <Column type="start" />
-        <Column type="stop" />
-        <Column type="continue" />
-      </>
-    ),
-    []
+  const columns = (
+    <>
+      <Column type="start" />
+      <Column type="stop" />
+      <Column type="continue" />
+    </>
   );
 
   return (
@@ -59,4 +56,4 @@ const Board = (props: BoardProps) => {
   );
 };
 
-export default Board;
+export default memo(Board);

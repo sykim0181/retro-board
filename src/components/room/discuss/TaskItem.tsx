@@ -11,7 +11,7 @@ interface TaskItemProps {
 const TaskItem = (props: TaskItemProps) => {
   const { taskId } = props;
 
-  const { task, taskContent, isEditable } = useTaskItem({ taskId });
+  const { task, isEditable } = useTaskItem({ taskId });
 
   if (!task) {
     return null;
@@ -35,7 +35,7 @@ const TaskItem = (props: TaskItemProps) => {
             {isEditable ? (
               <TaskTextarea taskId={taskId} />
             ) : (
-              <div>{taskContent}</div>
+              <div>{task.content}</div>
             )}
           </CardContent>
         </Card>
