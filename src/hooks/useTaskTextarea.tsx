@@ -1,5 +1,5 @@
-import { useMutation, useStorage } from "@liveblocks/react/suspense";
 import { useState } from "react";
+import { useRoomContext } from "@/context/RoomContext";
 
 interface useTaskTextareaProps {
   taskId: string;
@@ -7,28 +7,16 @@ interface useTaskTextareaProps {
 
 const useTaskTextarea = (props: useTaskTextareaProps) => {
   const { taskId } = props;
+  const { state, send } = useRoomContext();
 
-  const taskContent = useStorage((root) => root.tasks.get(taskId)?.content);
-
-  const [draft, setDraft] = useState<string>(taskContent ?? "");
-
-  const setTaskContent = useMutation(
-    ({ storage }, draft: string) => {
-      const task = storage.get("tasks").get(taskId);
-      task?.set("content", draft);
-    },
-    [taskId]
-  );
+  const taskContent = state.tasks[taskId]?.content ?? "";
+  const [draft, setDraft] = useState<string>(taskContent);
 
   const updateTaskContent = () => {
-    setTaskContent(draft);
+    send({ type: "UPDATE_TASK", taskId, content: draft });
   };
 
-  return {
-    draft,
-    setDraft,
-    updateTaskContent,
-  };
+  return { draft, setDraft, updateTaskContent };
 };
 
 export default useTaskTextarea;

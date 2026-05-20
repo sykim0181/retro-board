@@ -1,4 +1,4 @@
-import { useStorage } from "@liveblocks/react/suspense";
+import { useRoomContext } from "@/context/RoomContext";
 
 interface useMessageItemProps {
   messageId: string;
@@ -6,12 +6,10 @@ interface useMessageItemProps {
 
 const useMessageItem = (props: useMessageItemProps) => {
   const { messageId } = props;
+  const { state } = useRoomContext();
+  const message = state.messages[messageId];
 
-  const message = useStorage((root) => root.messages.get(messageId));
-
-  return {
-    message,
-  };
+  return { message };
 };
 
 export default useMessageItem;

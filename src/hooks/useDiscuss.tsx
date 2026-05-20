@@ -1,4 +1,4 @@
-import { useStorage } from "@liveblocks/react/suspense";
+import { useRoomContext } from "@/context/RoomContext";
 import { useParams } from "react-router";
 
 const useDiscuss = () => {
@@ -10,16 +10,14 @@ const useDiscuss = () => {
 
   const topicIdx = Number(params.topicIdx) - 1;
 
-  const card = useStorage((root) => root.topics.at(topicIdx)?.card);
+  const { state } = useRoomContext();
+  const card = state.topics[topicIdx]?.card;
 
   if (card === undefined) {
     throw new Error("Not Available Topic.");
   }
 
-  return {
-    topicIdx,
-    card,
-  };
+  return { topicIdx, card };
 };
 
 export default useDiscuss;

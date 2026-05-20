@@ -1,8 +1,6 @@
 import { useAppSelector } from "@/store/store";
-import { Task } from "@/types/liveblocks";
-import { TChat } from "@/types/types";
-import { LiveObject } from "@liveblocks/client";
-import { useMutation } from "@liveblocks/react/suspense";
+import { TTask } from "@/types/types";
+import { useRoomContext } from "@/context/RoomContext";
 import { nanoid } from "nanoid";
 
 interface useChatBoxProps {
@@ -11,33 +9,20 @@ interface useChatBoxProps {
 
 const useChatBox = (props: useChatBoxProps) => {
   const { topicIdx } = props;
-
+  const { send } = useRoomContext();
   const user = useAppSelector((state) => state.user.user);
 
-  const addTask = useMutation(
-    ({ storage }) => {
-      const newTaskId = nanoid();
-      const newChat: TChat = {
-        id: newTaskId,
-        type: "TASK",
-      };
-      const newTask: Task = new LiveObject({
-        id: newTaskId,
-        user,
-        content: "",
-        createdAt: new Date().toISOString(),
-      });
-
-      storage.get("tasks").set(newTaskId, newTask);
-      const topic = storage.get("topics").get(topicIdx);
-      topic?.get("chats").push(newChat);
-    },
-    [topicIdx, user]
-  );
-
-  return {
-    addTask,
+  const addTask = () => {
+    const newTask: TTask = {
+      id: nanoid(),
+      user,
+      content: "",
+      createdAt: new Date().toISOString(),
+    };
+    send({ type: "ADD_TASK", topicIndex: topicIdx, task: newTask });
   };
+
+  return { addTask };
 };
 
 export default useChatBox;

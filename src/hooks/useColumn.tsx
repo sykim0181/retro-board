@@ -1,5 +1,5 @@
 import { TColumnType } from "@/types/types";
-import { useStorage } from "@liveblocks/react/suspense";
+import { useRoomContext } from "@/context/RoomContext";
 
 interface useColumnProps {
   type: TColumnType;
@@ -7,12 +7,10 @@ interface useColumnProps {
 
 const useColumn = (props: useColumnProps) => {
   const { type } = props;
+  const { state } = useRoomContext();
+  const cardIdList = state.board[type] ?? [];
 
-  const cardIdList = useStorage((root) => root.board.get(type)) ?? [];
-
-  return {
-    cardIdList,
-  };
+  return { cardIdList };
 };
 
 export default useColumn;

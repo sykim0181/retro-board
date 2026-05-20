@@ -1,104 +1,33 @@
-import {
-  useBroadcastEvent,
-  useMutation,
-  useStorage,
-} from "@liveblocks/react/suspense";
 import { TRoomPhase } from "@/types/types";
 import { useCallback } from "react";
-import { Topic } from "@/types/liveblocks";
-import { LiveList, LiveMap, LiveObject } from "@liveblocks/client";
+import { useRoomContext } from "@/context/RoomContext";
 
 const usePhase = () => {
-  const broadcast = useBroadcastEvent();
+  const { state, send } = useRoomContext();
+  const phase = state.phase;
+  const hasCard = Object.keys(state.cards).length > 0;
 
-  const phase = useStorage((root) => root.phase);
-  const hasCard = useStorage((root) => root.cards.size > 0);
-
-  const initiateDiscussion = useMutation(({ storage }) => {
-    // cards -> topic 리스트
-    const cards = storage.get("cards");
-    const cardArr = Array.from(cards.values());
-    const topics = cardArr.map((card) => {
-      const topic: Topic = new LiveObject({
-        card: card.toObject(),
-        reactions: new LiveMap(),
-        chats: new LiveList([]),
-      });
-      return topic;
-    });
-    const newTopics = new LiveList(topics);
-    storage.set("topics", newTopics);
-  }, []);
-
-  const clearDiscussion = useMutation(({ storage }) => {
-    storage.set("topics", new LiveList([]));
-    storage.set("tasks", new LiveMap());
-    storage.set("messages", new LiveMap());
-  }, []);
-
-  const changePhase = useMutation(
-    ({ storage }, phase: TRoomPhase) => {
-      const curPhase = storage.get("phase"); // 기존 phase
-
-      // 바뀔 phase
-      switch (phase) {
-        case "REFLECT": {
-          if (curPhase === "DISCUSS" || curPhase === "END") {
-            clearDiscussion();
-          }
-          break;
-        }
-        case "VOTE": {
-          if (curPhase === "DISCUSS" || curPhase === "END") {
-            clearDiscussion();
-          }
-          break;
-        }
-        case "DISCUSS": {
-          initiateDiscussion();
-          break;
-        }
-        case "END": {
-          break;
-        }
-        default: {
-          break;
-        }
-      }
-      storage.set("phase", phase); // phase 변경
-
-      broadcast({ type: "PHASE_CHANGE", phase });
+  const changePhase = useCallback(
+    (targetPhase: TRoomPhase) => {
+      send({ type: "CHANGE_PHASE", phase: targetPhase });
     },
-    [broadcast, initiateDiscussion, clearDiscussion]
+    [send]
   );
 
   const canChangePhase = useCallback(
     (targetPhase: TRoomPhase): boolean => {
-      const currentPhase = phase;
-
-      if (targetPhase === "REFLECT") {
-        return true;
-      }
-      if (targetPhase === "VOTE") {
-        return hasCard;
-      }
+      if (targetPhase === "REFLECT") return true;
+      if (targetPhase === "VOTE") return hasCard;
       if (targetPhase === "DISCUSS") {
-        if (currentPhase === "REFLECT") {
-          return false;
-        }
+        if (phase === "REFLECT") return false;
         return hasCard;
       }
-      // targetPhase === "END"
       return true;
     },
     [phase, hasCard]
   );
 
-  return {
-    phase,
-    changePhase,
-    canChangePhase,
-  };
+  return { phase, changePhase, canChangePhase };
 };
 
 export default usePhase;

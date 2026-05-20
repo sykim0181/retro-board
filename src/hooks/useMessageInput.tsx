@@ -1,10 +1,8 @@
-import { LiveObject } from "@liveblocks/client";
-import { useMutation } from "@liveblocks/react";
 import { RefObject, useState } from "react";
-import { Message } from "@/types/liveblocks";
+import { TMessage } from "@/types/types";
 import { useAppSelector } from "@/store/store";
+import { useRoomContext } from "@/context/RoomContext";
 import { nanoid } from "nanoid";
-import { TChat } from "@/types/types";
 
 interface useMessageInputProps {
   topicIdx: number;
@@ -13,10 +11,9 @@ interface useMessageInputProps {
 
 const useMessageInput = (props: useMessageInputProps) => {
   const { topicIdx, chatListRef } = props;
-
-  const [draft, setDraft] = useState("");
-
+  const { send } = useRoomContext();
   const user = useAppSelector((state) => state.user.user);
+  const [draft, setDraft] = useState("");
 
   const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDraft(e.target.value);
@@ -28,33 +25,17 @@ const useMessageInput = (props: useMessageInputProps) => {
     }
   };
 
-  const addMessage = useMutation(
-    ({ storage }, draft: string) => {
-      const newMessageId = nanoid();
-      const newMessage: Message = new LiveObject({
-        id: newMessageId,
-        user,
-        content: draft,
-        createdAt: new Date().toISOString(),
-      });
-      const newChat: TChat = {
-        id: newMessageId,
-        type: "MESSAGE",
-      };
-
-      storage.get("messages").set(newMessageId, newMessage);
-      const topicChats = storage.get("topics").get(topicIdx)?.get("chats");
-      topicChats?.push(newChat);
-    },
-    [topicIdx, user]
-  );
-
   const sendMessage = () => {
-    if (draft === "") {
-      return;
-    }
+    if (draft === "") return;
 
-    addMessage(draft);
+    const newMessage: TMessage = {
+      id: nanoid(),
+      user,
+      content: draft,
+      createdAt: new Date().toISOString(),
+    };
+
+    send({ type: "ADD_MESSAGE", topicIndex: topicIdx, message: newMessage });
     setDraft("");
 
     setTimeout(() => {
@@ -65,12 +46,7 @@ const useMessageInput = (props: useMessageInputProps) => {
     }, 0);
   };
 
-  return {
-    draft,
-    onChangeInput,
-    onKeyDownInput,
-    sendMessage,
-  };
+  return { draft, onChangeInput, onKeyDownInput, sendMessage };
 };
 
 export default useMessageInput;

@@ -1,7 +1,6 @@
 import { useAppSelector } from "@/store/store";
-import { useStorage } from "@liveblocks/react/suspense";
+import { useRoomContext } from "@/context/RoomContext";
 import { useMemo } from "react";
-import usePhase from "./usePhase";
 
 interface useTaskItemProps {
   taskId: string;
@@ -9,27 +8,20 @@ interface useTaskItemProps {
 
 const useTaskItem = (props: useTaskItemProps) => {
   const { taskId } = props;
+  const { state } = useRoomContext();
 
-  const task = useStorage((root) => root.tasks.get(taskId));
-  const taskUser = useStorage((root) => root.tasks.get(taskId)?.user);
-
-  const user = useAppSelector((state) => state.user.user);
-  const { phase } = usePhase();
+  const task = state.tasks[taskId];
+  const taskUser = task?.user;
+  const user = useAppSelector((s) => s.user.user);
+  const phase = state.phase;
 
   const isEditable = useMemo(() => {
-    if (phase !== "DISCUSS") {
-      return false;
-    }
-    if (taskUser?.id !== user.id) {
-      return false;
-    }
+    if (phase !== "DISCUSS") return false;
+    if (taskUser?.id !== user.id) return false;
     return true;
   }, [taskUser, user, phase]);
 
-  return {
-    task,
-    isEditable,
-  };
+  return { task, isEditable };
 };
 
 export default useTaskItem;
