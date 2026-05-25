@@ -35,7 +35,7 @@ const AiSummaryDialog = (props: AiSummaryDialogProps) => {
         <DialogHeader>
           <DialogTitle>AI 요약</DialogTitle>
           <DialogDescription>
-            구글 Gemini 2.0 Flash 모델을 사용한 요약 결과입니다.
+            구글 Gemini 3.5 Flash 모델을 사용한 요약 결과입니다.
           </DialogDescription>
         </DialogHeader>
         <div className="overflow-y-auto prose">
