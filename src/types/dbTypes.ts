@@ -1,5 +1,5 @@
 import { Timestamp } from "firebase/firestore";
-import { TCard, TMessage, TReaction, TTask } from "./types";
+import { SummaryResult, TCard, TMessage, TReaction, TTask } from "./types";
 
 export type TopicDB = {
   card: TCard;
@@ -10,6 +10,7 @@ export type TopicDB = {
 export type MeetingDB = {
   topics: TopicDB[];
   tasks: TTask[];
+  summary?: SummaryResult;
 };
 
 export type RoomDB = {

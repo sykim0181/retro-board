@@ -48,6 +48,7 @@ const AiSummaryDialog = (props: AiSummaryDialogProps) => {
     queryKey: ["summary", meeting.id],
     queryFn: () => getAiSummary(meeting),
     staleTime: Infinity,
+    initialData: meeting.summary,
   });
 
   return (
