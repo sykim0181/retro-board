@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 const DashboardSidebar = () => {
   const user = useAppSelector((state) => state.user.user);
   const location = useLocation();
-  const isActive = location.pathname === "/dashboard";
+  const isActive = location.pathname === "/";
 
   return (
     <aside className="hidden md:flex flex-col w-[256px] shrink-0 border-r p-[1rem] gap-16">
@@ -26,7 +26,7 @@ const DashboardSidebar = () => {
       </div>
       <nav>
         <Link
-          to="/dashboard"
+          to="/"
           className={cn(
             sidebarMenuButtonVariants({ size: "default" }),
             isActive &&

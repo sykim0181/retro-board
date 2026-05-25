@@ -1,5 +1,4 @@
 import { createBrowserRouter, Navigate } from "react-router";
-import Home from "./pages/Home";
 import DashboardLayout from "./components/layout/DashboardLayout";
 import Dashboard from "./pages/Dashboard";
 import RoomLayout from "./components/layout/RoomLayout";
@@ -17,9 +16,7 @@ const router = createBrowserRouter([
     path: "/",
     Component: DefaultLayout,
     children: [
-      { index: true, Component: Home },
       {
-        path: "dashboard",
         Component: DashboardLayout,
         children: [{ index: true, Component: Dashboard }],
       },
