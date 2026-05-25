@@ -19,11 +19,13 @@ const RoomSidebar = () => {
 
   return (
     <Sidebar variant="inset">
-      <SidebarHeader className="flex flex-col gap-4">
+      <SidebarHeader className="h-[60px] flex justify-center flex-col border-b">
         <AppLogo />
-        <span className="font-bold">{room.name}</span>
       </SidebarHeader>
       <SidebarContent>
+        <div className="px-[0.5rem] py-[0.75rem]">
+          <span className="font-bold text-sm">{room.name}</span>
+        </div>
         <RoomSidebarContent room={room} isOwnerOfRoom={isOwnerOfRoom} />
       </SidebarContent>
       <SidebarFooter>
