@@ -1,4 +1,4 @@
-import AiSummaryDialog from "@/components/summary/AiSummaryDialog";
+import AiSummary from "@/components/summary/AiSummary";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -35,11 +35,8 @@ const Summary = () => {
           </div>
         </div>
 
-        <div className="print:hidden grid grid-cols-2 gap-[1rem]">
-          <Button className="" onClick={handlePrint}>PDF 변환</Button>
-          <AiSummaryDialog meeting={meeting}>
-            <Button className="">AI 요약</Button>
-          </AiSummaryDialog>
+        <div className="print:hidden">
+          <Button onClick={handlePrint}>PDF 변환</Button>
         </div>
       </section>
 
@@ -99,6 +96,10 @@ const Summary = () => {
           ))}
         </div>
       </section>
+
+      <Separator className="my-[1rem]" />
+
+      <AiSummary meeting={meeting} />
     </div>
   );
 };
