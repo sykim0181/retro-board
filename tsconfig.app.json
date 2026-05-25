@@ -27,5 +27,5 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src", "liveblocks.config.ts"]
+  "include": ["src"]
 }

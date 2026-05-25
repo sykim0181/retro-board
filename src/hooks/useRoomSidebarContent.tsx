@@ -1,15 +1,14 @@
-import { shallow } from "@liveblocks/client";
-import { useStorage } from "@liveblocks/react/suspense";
 import {
   LucideIcon,
   MessageSquareTextIcon,
   SquarePenIcon,
   VoteIcon,
 } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router";
 import { TRoom, TRoomPhase } from "@/types/types";
 import usePhase from "./usePhase";
+import { useRoomContext } from "@/context/RoomContext";
 
 export type TItem = {
   title: string;
@@ -48,24 +47,20 @@ interface useRoomSidebarContentProps {
 
 const useRoomSidebarContent = (props: useRoomSidebarContentProps) => {
   const { room, isOwnerOfRoom } = props;
+  const { state } = useRoomContext();
+  const { phase, changePhase, canChangePhase } = usePhase();
+  const navigate = useNavigate();
 
   const [items, setItems] = useState<TItem[]>(initialItems);
 
-  const topicCards = useStorage(
-    (root) => root.topics.map((topic) => topic.card),
-    shallow
+  const topicCards = useMemo(
+    () => state.topics.map((topic) => topic.card),
+    [state.topics]
   );
-
-  const { phase, changePhase, canChangePhase } = usePhase();
-
-  const navigate = useNavigate();
 
   const isAccessibleItem = useCallback(
     (navItem: TItem) => {
-      if (navItem.phase === undefined) {
-        return true;
-      }
-
+      if (navItem.phase === undefined) return true;
       return canChangePhase(navItem.phase);
     },
     [canChangePhase]
@@ -74,26 +69,16 @@ const useRoomSidebarContent = (props: useRoomSidebarContentProps) => {
   useEffect(() => {
     const newItems = initialItems.map((item) => {
       const isAccessible = isAccessibleItem(item);
-      let newItem: TItem = {
-        ...item,
-        disabled: !isAccessible,
-      };
+      let newItem: TItem = { ...item, disabled: !isAccessible };
 
-      if (item.phase === "DISCUSS") {
-        if (phase === "DISCUSS") {
-          // DISCUSS 단계 -> 서브아이템 추가
-          const newSubitems: TItem[] = topicCards.map((card, idx) => ({
-            title: card.title,
-            url: `discuss/${idx + 1}`,
-          }));
-
-          newItem = {
-            ...newItem,
-            disabled: true,
-            items: newSubitems,
-          };
-        }
+      if (item.phase === "DISCUSS" && phase === "DISCUSS") {
+        const newSubitems: TItem[] = topicCards.map((card, idx) => ({
+          title: card.title,
+          url: `discuss/${idx + 1}`,
+        }));
+        newItem = { ...newItem, disabled: true, items: newSubitems };
       }
+
       return newItem;
     });
 
@@ -109,10 +94,8 @@ const useRoomSidebarContent = (props: useRoomSidebarContentProps) => {
 
       if (isOwnerOfRoom) {
         if (navItem.phase === "DISCUSS" && phase === "VOTE") {
-          // VOTE -> DISCUSS
           changePhase("DISCUSS");
         } else if (navItem.phase === "VOTE" && phase === "REFLECT") {
-          // REFLECT -> VOTE
           changePhase("VOTE");
         }
       }
@@ -121,12 +104,10 @@ const useRoomSidebarContent = (props: useRoomSidebarContentProps) => {
         navigate(`/room/${room.id}/${navItem.url}`);
       }
     },
-    [phase, isOwnerOfRoom, navigate, changePhase]
+    [phase, isOwnerOfRoom, navigate, changePhase, room.id]
   );
-  return {
-    items,
-    onClickMenuItem,
-  };
+
+  return { items, onClickMenuItem };
 };
 
 export default useRoomSidebarContent;

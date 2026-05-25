@@ -1,10 +1,9 @@
-import { useStorage } from "@liveblocks/react/suspense";
+import { useRoomContext } from "@/context/RoomContext";
 import Board from "../common/board/Board";
 
 const VoteBoard = () => {
-  const isVotePhase = useStorage((root) => root.phase === "VOTE");
-
-  return <Board votable={isVotePhase} showLikes />;
+  const { state } = useRoomContext();
+  return <Board votable={state.phase === "VOTE"} showLikes />;
 };
 
 export default VoteBoard;

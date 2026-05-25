@@ -1,4 +1,3 @@
-import { ClientSideSuspense } from "@liveblocks/react";
 import { useMemo } from "react";
 import {
   Sidebar,
@@ -14,7 +13,6 @@ import UserAvatar from "@/components/common/UserAvatar";
 
 const RoomSidebar = () => {
   const room = useLoaderData() as TRoom;
-  
   const user = useAppSelector((state) => state.user.user);
   const isOwnerOfRoom = useMemo(() => user.id === room.ownerId, [user, room]);
 
@@ -23,9 +21,9 @@ const RoomSidebar = () => {
       <SidebarHeader>
         <span className="font-bold">{room.name}</span>
       </SidebarHeader>
-      <ClientSideSuspense fallback={<SidebarContent />}>
+      <SidebarContent>
         <RoomSidebarContent room={room} isOwnerOfRoom={isOwnerOfRoom} />
-      </ClientSideSuspense>
+      </SidebarContent>
       <SidebarFooter>
         <div className="flex gap-[.5rem] items-center">
           <UserAvatar userName={user.name} />

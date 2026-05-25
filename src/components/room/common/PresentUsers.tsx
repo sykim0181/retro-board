@@ -1,17 +1,17 @@
-import { useOthersMapped } from "@liveblocks/react/suspense";
 import { useState } from "react";
 import UserAvatar from "@/components/common/UserAvatar";
 import { Card, CardContent } from "@/components/ui/card";
+import { useRoomContext } from "@/context/RoomContext";
 
 const PresentUsers = () => {
-  const others = useOthersMapped((other) => other.presence.name);
+  const { others } = useRoomContext();
   const [showUserList, setShowUserList] = useState(false);
 
   if (others.length === 0) {
     return null;
   }
 
-  const [_, firstName] = others[0];
+  const firstName = others[0].name;
 
   return (
     <div className="relative">
@@ -25,8 +25,8 @@ const PresentUsers = () => {
           {`${others.length}`}
         </div>
         {showUserList && (
-          <Card 
-            id="other-user-list" 
+          <Card
+            id="other-user-list"
             className="absolute right-0 z-100 py-[0.5rem] px-[1rem]"
           >
             <CardContent>
@@ -34,12 +34,12 @@ const PresentUsers = () => {
                 {`users (${others.length})`}
               </span>
               <ul>
-                {others.map(([_, name], idx) => (
-                  <li 
-                    key={`other-user-${idx}`} 
+                {others.map((user, idx) => (
+                  <li
+                    key={`other-user-${idx}`}
                     className="text-nowrap text-[0.8rem]"
                   >
-                    {name}
+                    {user.name}
                   </li>
                 ))}
               </ul>

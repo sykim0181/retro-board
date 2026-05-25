@@ -1,4 +1,4 @@
-import { useStorage } from "@liveblocks/react/suspense";
+import { useRoomContext } from "@/context/RoomContext";
 import CardItem from "./CardItem";
 
 interface FloatingBoardCardProps {
@@ -7,14 +7,10 @@ interface FloatingBoardCardProps {
 
 const FloatingBoardCard = (props: FloatingBoardCardProps) => {
   const { cardId } = props;
+  const { state } = useRoomContext();
+  const card = state.cards[cardId];
 
-  const card = useStorage((root) => root.cards.get(cardId));
-
-  if (!card) {
-    return null;
-  }
-
-  const { title, content } = card;
+  if (!card) return null;
 
   return (
     <CardItem className="opacity-60">
@@ -22,7 +18,7 @@ const FloatingBoardCard = (props: FloatingBoardCardProps) => {
         <CardItem.DragHandle />
         <CardItem.DeleteButton />
       </CardItem.Header>
-      <CardItem.Content title={title} content={content} />
+      <CardItem.Content title={card.title} content={card.content} />
     </CardItem>
   );
 };

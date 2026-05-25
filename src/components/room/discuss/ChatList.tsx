@@ -1,7 +1,7 @@
 import MessageItem from "./MessageItem";
 import { ComponentPropsWithRef } from "react";
 import TaskItem from "./TaskItem";
-import { useStorage } from "@liveblocks/react";
+import { useRoomContext } from "@/context/RoomContext";
 
 interface ChatListProps extends ComponentPropsWithRef<"ul"> {
   topicIdx: number;
@@ -9,8 +9,8 @@ interface ChatListProps extends ComponentPropsWithRef<"ul"> {
 
 const ChatList = (props: ChatListProps) => {
   const { topicIdx, ref } = props;
-
-  const chats = useStorage(root => root.topics[topicIdx]?.chats) ?? [];
+  const { state } = useRoomContext();
+  const chats = state.topics[topicIdx]?.chats ?? [];
 
   return (
     <ul

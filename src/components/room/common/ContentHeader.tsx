@@ -1,5 +1,4 @@
 import React from "react";
-import { ClientSideSuspense } from "@liveblocks/react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import PresentUsers from "./PresentUsers";
 
@@ -16,9 +15,7 @@ const Wrapper = ({ children }: { children: React.ReactNode }) => {
     <div className="flex gap-[1rem]">
       <SidebarTrigger className="cursor-pointer" />
       <div className="flex flex-col gap-[.5rem] flex-1">{children}</div>
-      <ClientSideSuspense fallback={null}>
-        <PresentUsers />
-      </ClientSideSuspense>
+      <PresentUsers />
     </div>
   );
 };

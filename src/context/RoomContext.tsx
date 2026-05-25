@@ -186,6 +186,7 @@ type RoomContextValue = {
   state: ClientRoomState;
   others: TUser[];
   isConnected: boolean;
+  isSynced: boolean;
   send: (msg: ClientMessage) => void;
   saveMeeting: (onSuccess?: () => void, onError?: (msg: string) => void) => void;
 };
@@ -203,6 +204,7 @@ export function RoomContextProvider({ roomId, children }: RoomContextProviderPro
   const [state, dispatch] = useReducer(reducer, initialRoomState);
   const [others, setOthers] = useState<TUser[]>([]);
   const [isConnected, setIsConnected] = useState(false);
+  const [isSynced, setIsSynced] = useState(false);
 
   const wsRef = useRef<WebSocket | null>(null);
   const meetingSavedCbRef = useRef<(() => void) | undefined>(undefined);
@@ -231,6 +233,9 @@ export function RoomContextProvider({ roomId, children }: RoomContextProviderPro
       if (msg.type === "MEETING_SAVE_ERROR") {
         meetingSaveErrorCbRef.current?.(msg.message);
         return;
+      }
+      if (msg.type === "STATE_SYNC") {
+        setIsSynced(true);
       }
 
       dispatch(msg);
@@ -265,7 +270,7 @@ export function RoomContextProvider({ roomId, children }: RoomContextProviderPro
   );
 
   return (
-    <RoomContext.Provider value={{ state, others, isConnected, send, saveMeeting }}>
+    <RoomContext.Provider value={{ state, others, isConnected, isSynced, send, saveMeeting }}>
       {children}
     </RoomContext.Provider>
   );

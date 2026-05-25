@@ -1,10 +1,9 @@
-import { useStorage } from "@liveblocks/react/suspense";
+import { useRoomContext } from "@/context/RoomContext";
 import Board from "../common/board/Board";
 
 const ReflectBoard = () => {
-  const isReflectPhase = useStorage((root) => root.phase === "REFLECT");
-
-  return <Board editable={isReflectPhase} />;
+  const { state } = useRoomContext();
+  return <Board editable={state.phase === "REFLECT"} />;
 };
 
 export default ReflectBoard;

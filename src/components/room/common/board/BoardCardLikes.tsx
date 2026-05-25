@@ -27,9 +27,9 @@ const BoardCardLikes = (props: BoardCardLikesProps) => {
 
   const onClickLikeButton = () => {
     if (hasLiked) {
-      cancelLikeCard(user);
+      cancelLikeCard();
     } else {
-      likeCard(user);
+      likeCard();
     }
   };
 
