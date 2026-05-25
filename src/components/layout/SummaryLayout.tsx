@@ -1,7 +1,7 @@
 import { Outlet, useLoaderData, useParams } from "react-router";
 import { Card } from "../ui/card";
 import { TMeeting } from "@/types/types";
-import AppLogo from "../common/AppLogo";
+import AppHeader from "../common/AppHeader";
 
 const SummaryLayout = () => {
   const params = useParams();
@@ -15,9 +15,7 @@ const SummaryLayout = () => {
 
   return (
     <div className="min-h-dvh flex flex-col">
-      <header className="flex items-center px-[1rem] py-[0.5rem] border-b bg-white">
-        <AppLogo />
-      </header>
+      <AppHeader />
       <Card className="p-[1rem] m-[1rem]">
         <Outlet context={{ meeting }} />
       </Card>
