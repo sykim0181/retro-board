@@ -24,6 +24,13 @@ export function generateUser(): TUser {
   };
 }
 
+export function checkFirstVisit(): boolean {
+  const key = "retro-user-visited";
+  if (localStorage.getItem(key)) return false;
+  localStorage.setItem(key, "true");
+  return true;
+}
+
 export function getUser(): TUser {
   const key = "retro-user";
   const user = localStorage.getItem(key);

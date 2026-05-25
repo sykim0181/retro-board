@@ -1,11 +1,21 @@
+import { useEffect, useState } from "react";
 import { CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import OwnedRoomList from "@/components/dashboard/OwnedRoomList";
 import AddedRoomList from "@/components/dashboard/AddedRoomList";
+import WelcomeDialog from "@/components/common/WelcomeDialog";
+import { checkFirstVisit } from "@/utils/user";
 
 const Dashboard = () => {
+  const [welcomeOpen, setWelcomeOpen] = useState(false);
+
+  useEffect(() => {
+    if (checkFirstVisit()) setWelcomeOpen(true);
+  }, []);
+
   return (
     <>
+      <WelcomeDialog open={welcomeOpen} onOpenChange={setWelcomeOpen} />
       <CardHeader className="px-0 pt-0">
         <CardTitle>Rooms</CardTitle>
       </CardHeader>

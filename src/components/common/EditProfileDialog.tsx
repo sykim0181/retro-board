@@ -17,11 +17,13 @@ import { RotateCcw } from "lucide-react";
 import { generateRandomName } from "@/utils/user";
 
 interface EditProfileDialogProps {
-  trigger: React.ReactNode;
+  trigger?: React.ReactNode;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
 const EditProfileDialog = (props: EditProfileDialogProps) => {
-  const { trigger } = props;
+  const { trigger, open, onOpenChange } = props;
 
   const user = useAppSelector((state) => state.user.user);
   const [name, setName] = useState(() => user.name);
@@ -44,8 +46,8 @@ const EditProfileDialog = (props: EditProfileDialogProps) => {
   }, [setName]);
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>{trigger}</DialogTrigger>
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Edit profile</DialogTitle>
