@@ -14,6 +14,14 @@ import {
 import { TRoom } from "@/types/types";
 import DeleteRoomAlertDialog from "./DeleteRoomAlertDialog";
 
+const SectionDivider = ({ label }: { label: string }) => (
+  <div className="flex items-center gap-2 text-xs text-muted-foreground py-1">
+    <div className="flex-1 h-px bg-border" />
+    <span>{label}</span>
+    <div className="flex-1 h-px bg-border" />
+  </div>
+);
+
 const OwnedRoomList = () => {
   const userId = useAppSelector((state) => state.user.user.id);
   const { data, isFetching, error } = useOwnedRoomQuery({ userId });
@@ -21,7 +29,7 @@ const OwnedRoomList = () => {
   const list = useMemo(() => {
     if (error) {
       console.log(error);
-      return <p>Oops! Somthing got wrong...</p>;
+      return <p>Oops! Something got wrong...</p>;
     }
 
     if (isFetching || data === undefined) {
@@ -32,12 +40,29 @@ const OwnedRoomList = () => {
       return <p>There is no room you've created.</p>
     }
 
+    const activeRooms = data.filter((r) => !r.isFinished);
+    const finishedRooms = data.filter((r) => r.isFinished);
+
     return (
-      <ul className="flex flex-col gap-[1rem]">
-        {data.map((room) => (
-          <ListItem key={room.id} room={room} />
-        ))}
-      </ul>
+      <div className="flex flex-col gap-[0.5rem]">
+        {activeRooms.length > 0 && (
+          <ul className="flex flex-col gap-[0.5rem]">
+            {activeRooms.map((room) => (
+              <ListItem key={room.id} room={room} />
+            ))}
+          </ul>
+        )}
+        {finishedRooms.length > 0 && (
+          <>
+            <SectionDivider label="Finished" />
+            <ul className="flex flex-col gap-[0.5rem]">
+              {finishedRooms.map((room) => (
+                <ListItem key={room.id} room={room} />
+              ))}
+            </ul>
+          </>
+        )}
+      </div>
     );
   }, [data, isFetching, error]);
 
@@ -61,12 +86,11 @@ const ListItem = memo((props: ListItemProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const closeDialog = () => setIsDialogOpen(false);
 
+  const to = room.isFinished ? `/summary/${room.id}` : `/room/${room.id}`;
+
   return (
-    <li
-      key={room.id}
-      className="flex p-[1rem] text-start cursor-pointer hover:bg-gray-100 rounded-xl"
-    >
-      <NavLink to={`/room/${room.id}`} className="flex-1 block">
+    <li className="flex p-[1rem] text-start cursor-pointer hover:bg-gray-100 rounded-xl">
+      <NavLink to={to} className="flex-1 block">
         <span>{room.name}</span>
       </NavLink>
 

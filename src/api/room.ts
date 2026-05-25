@@ -44,6 +44,7 @@ export async function getAllRooms(): Promise<TRoom[]> {
       name: data.name,
       ownerId: data.ownerId,
       date: data.date.toDate(),
+      isFinished: data.isFinished,
     };
   });
 }
@@ -63,6 +64,7 @@ export async function getRoomById(roomId: string): Promise<TRoom> {
     id: data.id,
     ownerId: data.ownerId,
     date: data.date.toDate(),
+    isFinished: data.isFinished,
   };
 }
 
@@ -79,6 +81,7 @@ export async function getRoomsByOwnerId(ownerId: string): Promise<TRoom[]> {
       id: data.id,
       ownerId: data.ownerId,
       date: data.date.toDate(),
+      isFinished: data.isFinished,
     });
   });
   return rooms;
@@ -119,6 +122,7 @@ export async function getAddedRooms(): Promise<TRoom[]> {
       id: data.id,
       ownerId: data.ownerId,
       date: data.date.toDate(),
+      isFinished: data.isFinished,
     });
   });
   return rooms;

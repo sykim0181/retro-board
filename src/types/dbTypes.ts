@@ -18,4 +18,5 @@ export type RoomDB = {
   id: string;
   ownerId: string;
   date: Timestamp;
+  isFinished?: boolean;
 } & Partial<MeetingDB>;

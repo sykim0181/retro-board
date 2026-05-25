@@ -7,6 +7,14 @@ import { Button } from "../ui/button";
 import useAddRoomMutation from "@/hooks/useAddRoomMutation";
 import { Spinner } from "../ui/spinner";
 
+const SectionDivider = ({ label }: { label: string }) => (
+  <div className="flex items-center gap-2 text-xs text-muted-foreground py-1">
+    <div className="flex-1 h-px bg-border" />
+    <span>{label}</span>
+    <div className="flex-1 h-px bg-border" />
+  </div>
+);
+
 const AddedRoomList = () => {
   const { data, isFetching, error } = useAddedRoomQuery();
   const { mutate } = useAddRoomMutation();
@@ -37,19 +45,37 @@ const AddedRoomList = () => {
       return <p>There is no room you've added.</p>;
     }
 
+    const activeRooms = data.filter((r) => !r.isFinished);
+    const finishedRooms = data.filter((r) => r.isFinished);
+
     return (
-      <ul className="flex flex-col gap-[1rem]">
-        {data.map((room) => (
-          <li
-            key={room.id}
-            className="text-start cursor-pointer hover:bg-gray-100 rounded-xl"
-          >
-            <NavLink to={`/room/${room.id}`} className="block p-[1rem]">
-              <span>{room.name}</span>
-            </NavLink>
-          </li>
-        ))}
-      </ul>
+      <div className="flex flex-col gap-[0.5rem]">
+        {activeRooms.length > 0 && (
+          <ul className="flex flex-col gap-[0.5rem]">
+            {activeRooms.map((room) => (
+              <li key={room.id} className="text-start cursor-pointer hover:bg-gray-100 rounded-xl">
+                <NavLink to={`/room/${room.id}`} className="block p-[1rem]">
+                  <span>{room.name}</span>
+                </NavLink>
+              </li>
+            ))}
+          </ul>
+        )}
+        {finishedRooms.length > 0 && (
+          <>
+            <SectionDivider label="Finished" />
+            <ul className="flex flex-col gap-[0.5rem]">
+              {finishedRooms.map((room) => (
+                <li key={room.id} className="text-start cursor-pointer hover:bg-gray-100 rounded-xl">
+                  <NavLink to={`/room/${room.id}/summary`} className="block p-[1rem]">
+                    <span>{room.name}</span>
+                  </NavLink>
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
+      </div>
     );
   }, [data, isFetching, error]);
 

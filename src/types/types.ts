@@ -26,6 +26,7 @@ export type TRoom = {
   id: string;
   ownerId: string;
   date: Date;
+  isFinished?: boolean;
 };
 
 export type TChat = {
