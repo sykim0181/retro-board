@@ -10,6 +10,7 @@ import { useLoaderData } from "react-router";
 import { TRoom } from "@/types/types";
 import { useAppSelector } from "@/store/store";
 import UserAvatar from "@/components/common/UserAvatar";
+import AppLogo from "@/components/common/AppLogo";
 
 const RoomSidebar = () => {
   const room = useLoaderData() as TRoom;
@@ -18,7 +19,8 @@ const RoomSidebar = () => {
 
   return (
     <Sidebar variant="inset">
-      <SidebarHeader>
+      <SidebarHeader className="flex flex-col gap-4">
+        <AppLogo />
         <span className="font-bold">{room.name}</span>
       </SidebarHeader>
       <SidebarContent>
