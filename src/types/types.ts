@@ -66,3 +66,11 @@ export type TTask = {
 };
 
 export type TMeeting = TRoom & MeetingDB;
+
+export type SummaryResult = {
+  keyPoints: string[];
+  commonConcerns: string[];
+  issues: string[];
+  implicitIssues: string[];
+  followUps: string[];
+};
